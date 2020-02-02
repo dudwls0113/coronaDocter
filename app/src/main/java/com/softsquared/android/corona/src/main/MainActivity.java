@@ -127,21 +127,29 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                 switch (position) {
                     case MAP_FRAGMENT:
                         mRelativeTopBar.setVisibility(View.GONE);
+                        mTextViewTitle.setVisibility(View.VISIBLE);
                         mTextViewTitle.setText("지도");
                         IS_WEBVIEW_MODE = 0;
                         break;
 
                     case NEWS_FRAGMENT:
                         mRelativeTopBar.setVisibility(View.VISIBLE);
+                        mTextViewTitle.setVisibility(View.VISIBLE);
                         mTextViewTitle.setText("뉴스");
                         IS_WEBVIEW_MODE = 1;
                         break;
 
                     case ORDER_FRAGMENT:
+                        mRelativeTopBar.setVisibility(View.VISIBLE);
+                        mTextViewTitle.setVisibility(View.VISIBLE);
+                        mTextViewTitle.setText("구매");
                         IS_WEBVIEW_MODE = 0;
 
                         break;
                     case INFO_FRAGMENT:
+                        mRelativeTopBar.setVisibility(View.VISIBLE);
+                        mTextViewTitle.setVisibility(View.VISIBLE);
+                        mTextViewTitle.setText("감염 정보");
                         IS_WEBVIEW_MODE = 0;
 
                         break;
