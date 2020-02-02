@@ -1,11 +1,7 @@
 package com.softsquared.android.corona.src.main.news;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +14,8 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.naver.maps.map.MapView;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseFragment;
-import com.softsquared.android.corona.src.main.MainActivity;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Objects;
 
 
 public class NewsFragment extends BaseFragment  {
@@ -65,8 +55,8 @@ public class NewsFragment extends BaseFragment  {
             public void onClick(View view) {
                 KakaoShareCustomDialog kakaoShareCustomDialog = new KakaoShareCustomDialog(getContext(), mWebView.getUrl());
                 kakaoShareCustomDialog.show();
-                Snackbar.make(view, mWebView.getUrl(), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, mWebView.getUrl(), Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
 
