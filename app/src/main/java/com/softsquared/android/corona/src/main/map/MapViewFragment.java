@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,12 +50,16 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     ZoomControlView zoomControlView;
     private MapView mapView;
     NaverMap naverMap;
-    Button mBtn, mBtn2, mBtn3;
+    ImageView mBtn, mBtn2, mBtn3;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationSource locationSource;
     ArrayList<PathOverlay> pathOverlays = new ArrayList<>();
     ArrayList<RouteResponse> routeResponses = new ArrayList<>();
     ArrayList<Marker> markers = new ArrayList<>();
+
+    private boolean route1 = true;
+    private boolean route2 = false;
+    private boolean route3 = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -124,47 +129,52 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         mBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(37.5666102, 126.9783881))
-                        .animate(CameraAnimation.Easing);
-                naverMap.moveCamera(cameraUpdate);
+                if(route1){
+                    for(int i=0; i<markers.size(); i++){
+                        markers.get(i).setMap(null);
+                    }
+                    for(int i=0; i<pathOverlays.size(); i++){
+                        pathOverlays.get(i).setMap(null);
+                    }
+                    routeResponses.clear();
+                    markers.clear();
+                    pathOverlays.clear();
+                    mBtn.setImageResource(R.drawable.ic_route1_off);
+                    route1 = false;
+                }
+                else{
+                    mBtn.setImageResource(R.drawable.ic_route1);
+                    getRoute();
+                    route1 = true;
+                }
             }
         });
         mBtn2 = v.findViewById(R.id.fragment_map_btn2); // 선별 진료소
         mBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for(int i=0; i<pathOverlays.size(); i++){
-                    pathOverlays.get(i).setMap(null);
+                if(route2){
+                    mBtn2.setImageResource(R.drawable.ic_route2);
+                    route2 = false;
                 }
-                PathOverlay path = new PathOverlay();
-                ArrayList<LatLng> latLngs = new ArrayList<>();
-                latLngs.add(new LatLng(37.4601904, 126.4319409));
-                latLngs.add(new LatLng(37.56607, 126.98268));
-                latLngs.add(new LatLng(37.56445, 126.97707));
-                latLngs.add(new LatLng(37.55855, 126.97822));
-                path.setCoords(latLngs);
-                path.setWidth(30);
-                path.setMap(naverMap);
-                pathOverlays.add(path);
+                else{
+                    mBtn2.setImageResource(R.drawable.ic_route2_on);
+                    route2 = true;
+                }
             }
         });
         mBtn3 = v.findViewById(R.id.fragment_map_btn3); // 격리병원
         mBtn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for(int i=0; i<pathOverlays.size(); i++){
-                    pathOverlays.get(i).setMap(null);
+                if(route3){
+                    mBtn3.setImageResource(R.drawable.ic_route3);
+                    route3 = false;
                 }
-                PathOverlay path = new PathOverlay();
-                ArrayList<LatLng> latLngs = new ArrayList<>();
-                latLngs.add(new LatLng(35.9658449, 126.6760305));
-                latLngs.add(new LatLng(37.56607, 126.98268));
-                latLngs.add(new LatLng(37.56445, 126.97707));
-                latLngs.add(new LatLng(37.55855, 126.97822));
-                path.setCoords(latLngs);
-                path.setWidth(10);
-                path.setMap(naverMap);
-                pathOverlays.add(path);
+                else{
+                    mBtn3.setImageResource(R.drawable.ic_route3_on);
+                    route3 = true;
+                }
             }
         });
         locationSource =

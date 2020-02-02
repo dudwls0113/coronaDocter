@@ -34,6 +34,13 @@ public class RouteRes {
     @SerializedName("age")
     int age;
 
+    @SerializedName("routeName")
+    String routeName;
+
+    public String getRouteName() {
+        return routeName;
+    }
+
     public int getInfectedNo() {
         return infectedNo;
     }

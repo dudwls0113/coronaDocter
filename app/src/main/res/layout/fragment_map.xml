@@ -27,22 +27,60 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <Button
+        android:orientation="vertical"
+        android:layout_marginStart="20dp">
+        <ImageView
             android:id="@+id/fragment_map_btn"
+            android:layout_marginTop="51dp"
+            android:src="@drawable/ic_route1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="버튼"/>
-        <Button
+            android:text="감염자 경로"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="10sp"
+            android:textColor="#000000"
+            android:lineSpacingExtra="4sp"/>
+        <ImageView
             android:id="@+id/fragment_map_btn2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="버튼2"/>
-        <Button
+            android:src="@drawable/ic_route2"/>
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="선별 진료소"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:lineSpacingExtra="4sp"/>
+        <ImageView
             android:id="@+id/fragment_map_btn3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="버튼3"/>
+            android:src="@drawable/ic_route3" />
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="격리 병원"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:lineSpacingExtra="4sp"/>
     </LinearLayout>
 
 
