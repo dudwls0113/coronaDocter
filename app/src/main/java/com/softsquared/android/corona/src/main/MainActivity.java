@@ -13,6 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseActivity;
 import com.softsquared.android.corona.src.BaseFragment;
+import com.softsquared.android.corona.src.main.info.InfoFragment;
 import com.softsquared.android.corona.src.main.interfaces.MainActivityView;
 import com.softsquared.android.corona.src.main.map.MapViewFragment;
 import com.softsquared.android.corona.src.main.news.NewsFragment;
@@ -25,13 +26,15 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     private TextView mTextViewTitle;
 
     final int MAP_FRAGMENT = 0;
-    final int BASKET_FRAGMENT = 1;
+    final int NEWS_FRAGMENT = 1;
     final int ORDER_FRAGMENT = 2;
+    final int INFO_FRAGMENT = 3;
 
     public static MainViewPager mViewPagerMain;
     BaseFragment mDealingFragments;
     BaseFragment mNewsFragments;
     BaseFragment mOrderFragment;
+    BaseFragment mInfoFragment;
     MainFragmentPagerAdapter mMainFragmentPagerAdapter;
 
     private RelativeLayout mRelativeTopBar;
@@ -50,6 +53,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mDealingFragments = new MapViewFragment();
         mNewsFragments = new NewsFragment();
         mOrderFragment = new NewsFragment();
+        mInfoFragment = new InfoFragment();
 
         mTextViewTitle = findViewById(R.id.activity_main_tv);
         mRelativeTopBar = findViewById(R.id.activity_main_relative_top);
@@ -60,6 +64,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mMainFragmentPagerAdapter.addFragment(mDealingFragments, "1");
         mMainFragmentPagerAdapter.addFragment(mNewsFragments, "2");
         mMainFragmentPagerAdapter.addFragment(mOrderFragment, "3");
+        mMainFragmentPagerAdapter.addFragment(mInfoFragment, "4");
 
         mViewPagerMain = findViewById(R.id.vpMainViewPager);
         mViewPagerMain.setAdapter(mMainFragmentPagerAdapter);
@@ -69,7 +74,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mNavigationTabBarModels = new ArrayList<>();
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_launcher_background),
+                        getResources().getDrawable(R.drawable.ic_off_maps2),
                         getResources().getColor(R.color.colorWhite)
                 )
                         .title("지도")
@@ -79,7 +84,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_launcher_background),
+                        getResources().getDrawable(R.drawable.ic_news_off2),
                         getResources().getColor(R.color.colorWhite)
                 )
                         .title("뉴스")
@@ -88,10 +93,19 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_launcher_background),
+                        getResources().getDrawable(R.drawable.ic_order_off2),
                         getResources().getColor(R.color.colorWhite)
                 )
                         .title("구매")
+                        .build()
+        );
+
+        mNavigationTabBarModels.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_info_off2),
+                        getResources().getColor(R.color.colorWhite)
+                )
+                        .title("감염 정보")
                         .build()
         );
 
@@ -112,11 +126,13 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         mRelativeTopBar.setVisibility(View.GONE);
                         mTextViewTitle.setText("지도");
                         break;
-                    case 1:
+                    case NEWS_FRAGMENT:
                         mRelativeTopBar.setVisibility(View.VISIBLE);
                         mTextViewTitle.setText("뉴스");
                         break;
-                    case 2:
+                    case ORDER_FRAGMENT:
+                        break;
+                    case INFO_FRAGMENT:
                         break;
                 }
             }
