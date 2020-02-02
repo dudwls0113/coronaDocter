@@ -3,12 +3,13 @@
     <color name="colorPrimary">#357dd3</color>
     <color name="colorPrimaryDark">#357dd3</color>
     <color name="colorAccent">#357dd3</color>
+    <color name="colorDeepBlue">#0802c1</color>
 
     <color name="colorWhiteGray">#f9fafa</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlueTrans">#87B1DB</color>
 
-    <color name="colorSkyBlue">#e3f2ff</color>
+    <color name="colorSkyBlue">#E3F2FF</color>
     <color name="colorWhiteSkyBlue">#f8fcff</color>
 
     <color name="colorErrorRed">#fc6d70</color>

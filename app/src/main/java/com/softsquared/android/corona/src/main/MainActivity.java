@@ -2,7 +2,9 @@ package com.softsquared.android.corona.src.main;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 import devlight.io.library.ntb.NavigationTabBar;
 
 public class MainActivity extends BaseActivity implements MainActivityView {
-    private TextView mTvHelloWorld;
+    private TextView mTextViewTitle;
 
     final int MAP_FRAGMENT = 0;
     final int BASKET_FRAGMENT = 1;
@@ -28,9 +30,11 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
     public static MainViewPager mViewPagerMain;
     BaseFragment mDealingFragments;
-    BaseFragment mBasketFragments;
+    BaseFragment mNewsFragments;
     BaseFragment mOrderFragment;
     MainFragmentPagerAdapter mMainFragmentPagerAdapter;
+
+    private RelativeLayout mRelativeTopBar;
 
     public static NavigationTabBar mNavigationTabBar;
     private ArrayList<NavigationTabBar.Model> mNavigationTabBarModels;
@@ -44,15 +48,17 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
     private void initView() {
         mDealingFragments = new MapViewFragment();
-        mBasketFragments = new NewsFragment();
+        mNewsFragments = new NewsFragment();
         mOrderFragment = new NewsFragment();
 
+        mTextViewTitle = findViewById(R.id.activity_main_tv);
+        mRelativeTopBar = findViewById(R.id.activity_main_relative_top);
 //        mTextViewTitle = findViewById(R.id.activity_main_tv);
 //        mImageViewTitle = findViewById(R.id.activity_main_iv_title);
 
         mMainFragmentPagerAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager());
         mMainFragmentPagerAdapter.addFragment(mDealingFragments, "1");
-        mMainFragmentPagerAdapter.addFragment(mBasketFragments, "2");
+        mMainFragmentPagerAdapter.addFragment(mNewsFragments, "2");
         mMainFragmentPagerAdapter.addFragment(mOrderFragment, "3");
 
         mViewPagerMain = findViewById(R.id.vpMainViewPager);
@@ -103,8 +109,12 @@ public class MainActivity extends BaseActivity implements MainActivityView {
             public void onPageSelected(int position) {
                 switch (position) {
                     case MAP_FRAGMENT:
+                        mRelativeTopBar.setVisibility(View.GONE);
+                        mTextViewTitle.setText("지도");
                         break;
                     case 1:
+                        mRelativeTopBar.setVisibility(View.VISIBLE);
+                        mTextViewTitle.setText("뉴스");
                         break;
                     case 2:
                         break;
@@ -131,7 +141,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     @Override
     public void validateSuccess(String text) {
         hideProgressDialog();
-        mTvHelloWorld.setText(text);
+        mTextViewTitle.setText(text);
     }
 
     @Override
@@ -139,6 +149,16 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         hideProgressDialog();
         showCustomToast(message == null || message.isEmpty() ? getString(R.string.network_error) : message);
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ((NewsFragment)mNewsFragments).myOnKeyDown();
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
 
     public void customOnClick(View view) {
         switch (view.getId()) {
