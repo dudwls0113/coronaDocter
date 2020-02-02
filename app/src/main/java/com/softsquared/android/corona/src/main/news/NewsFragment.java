@@ -18,7 +18,7 @@ import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseFragment;
 
 
-public class NewsFragment extends BaseFragment  {
+public class NewsFragment extends BaseFragment {
 
     Context mContext;
     WebView mWebView;
@@ -63,13 +63,12 @@ public class NewsFragment extends BaseFragment  {
         mWebView.loadUrl(URL);
     }
 
-    public int webViewBack(){
-        if(mWebView.canGoBack()){
+    public int webViewBack() {
+        if (mWebView.canGoBack()) {
 //            Log.d("웹뷰 뒤로가기", " ");
             mWebView.goBack();
             return 1;
-        }
-        else{
+        } else {
             return 0;
         }
     }

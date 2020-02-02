@@ -18,6 +18,7 @@ import com.softsquared.android.corona.src.main.info.InfoFragment;
 import com.softsquared.android.corona.src.main.interfaces.MainActivityView;
 import com.softsquared.android.corona.src.main.map.MapViewFragment;
 import com.softsquared.android.corona.src.main.news.NewsFragment;
+import com.softsquared.android.corona.src.main.order.OrderFragment;
 
 import java.util.ArrayList;
 
@@ -58,7 +59,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     private void initView() {
         mDealingFragments = new MapViewFragment();
         mNewsFragments = new NewsFragment();
-        mOrderFragment = new NewsFragment();
+        mOrderFragment = new OrderFragment();
         mInfoFragment = new InfoFragment();
         mFaqFragment = new FaqFragment();
 

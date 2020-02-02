@@ -65,7 +65,8 @@ public class BannerFragment extends BaseFragment {
 //                            .setAction("Action", null).show();
                 }
                 else{
-
+                    BannerLongDialog bannerLongDialog = new BannerLongDialog(getContext());
+                    bannerLongDialog.show();
                 }
             }
         });
