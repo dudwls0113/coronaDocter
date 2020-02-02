@@ -32,12 +32,14 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     private long backPressedTime = 0;
     private final long FINISH_INTERVAL_TIME = 2000;
     final int INFO_FRAGMENT = 3;
+    final int FAQ_FRAGMENT = 4;
 
     public static MainViewPager mViewPagerMain;
     BaseFragment mDealingFragments;
     NewsFragment mNewsFragments;
     BaseFragment mOrderFragment;
     BaseFragment mInfoFragment;
+    BaseFragment mFaqFragment;
     MainFragmentPagerAdapter mMainFragmentPagerAdapter;
 
     private RelativeLayout mRelativeTopBar;
@@ -57,6 +59,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mNewsFragments = new NewsFragment();
         mOrderFragment = new NewsFragment();
         mInfoFragment = new InfoFragment();
+        mFaqFragment = new InfoFragment();
 
         mTextViewTitle = findViewById(R.id.activity_main_tv);
         mRelativeTopBar = findViewById(R.id.activity_main_relative_top);
@@ -68,6 +71,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mMainFragmentPagerAdapter.addFragment(mNewsFragments, "2");
         mMainFragmentPagerAdapter.addFragment(mOrderFragment, "3");
         mMainFragmentPagerAdapter.addFragment(mInfoFragment, "4");
+        mMainFragmentPagerAdapter.addFragment(mFaqFragment, "5");
 
         mViewPagerMain = findViewById(R.id.vpMainViewPager);
         mViewPagerMain.setAdapter(mMainFragmentPagerAdapter);
@@ -77,38 +81,47 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mNavigationTabBarModels = new ArrayList<>();
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_off_maps2),
+                        getResources().getDrawable(R.drawable.ic_tab_map),
                         getResources().getColor(R.color.colorWhite)
                 )
-                        .title("지도")
+                        .title("")
                         .build()
         );
 
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_news_off2),
+                        getResources().getDrawable(R.drawable.ic_tab_news),
                         getResources().getColor(R.color.colorWhite)
                 )
-                        .title("뉴스")
+                        .title("")
                         .build()
         );
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_order_off2),
+                        getResources().getDrawable(R.drawable.ic_tab_order),
                         getResources().getColor(R.color.colorWhite)
                 )
-                        .title("구매")
+                        .title("")
                         .build()
         );
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_info_off2),
+                        getResources().getDrawable(R.drawable.ic_tab_info),
                         getResources().getColor(R.color.colorWhite)
                 )
-                        .title("감염 정보")
+                        .title("")
+                        .build()
+        );
+
+        mNavigationTabBarModels.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_tab_faq),
+                        getResources().getColor(R.color.colorWhite)
+                )
+                        .title("")
                         .build()
         );
 
@@ -143,7 +156,9 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         break;
                     case INFO_FRAGMENT:
                         IS_WEBVIEW_MODE = 0;
-
+                        break;
+                    case FAQ_FRAGMENT:
+                        IS_WEBVIEW_MODE = 0;
                         break;
                 }
             }
