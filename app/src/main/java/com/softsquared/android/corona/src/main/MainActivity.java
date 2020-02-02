@@ -221,4 +221,5 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                 break;
         }
     }
+
 }

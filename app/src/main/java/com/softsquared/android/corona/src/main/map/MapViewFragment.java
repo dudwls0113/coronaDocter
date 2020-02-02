@@ -34,9 +34,13 @@ import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.widget.ZoomControlView;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseFragment;
+import com.softsquared.android.corona.src.CustomClinicDialog;
+import com.softsquared.android.corona.src.CustomHospitalDialog;
 import com.softsquared.android.corona.src.CustomPatientDialog;
 import com.softsquared.android.corona.src.GpsTracker;
 import com.softsquared.android.corona.src.main.map.interfaces.MapViewView;
+import com.softsquared.android.corona.src.main.map.models.ClinicInfo;
+import com.softsquared.android.corona.src.main.map.models.HospitalInfo;
 import com.softsquared.android.corona.src.main.map.models.RouteRes;
 import com.softsquared.android.corona.src.main.map.models.RouteResponse;
 
@@ -60,6 +64,14 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     private boolean route1 = true;
     private boolean route2 = false;
     private boolean route3 = false;
+
+    ArrayList<ClinicInfo> clinicInfos = new ArrayList<>();
+    ArrayList<Marker> markerClinic = new ArrayList<>();
+    private boolean isFirstRoute2 = true;
+
+    ArrayList<HospitalInfo> hospitalInfos = new ArrayList<>();
+    ArrayList<Marker> markerHospital = new ArrayList<>();
+    private boolean isFirstRoute3 = true;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -136,15 +148,21 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                     for(int i=0; i<pathOverlays.size(); i++){
                         pathOverlays.get(i).setMap(null);
                     }
-                    routeResponses.clear();
-                    markers.clear();
-                    pathOverlays.clear();
+//                    routeResponses.clear();
+//                    markers.clear();
+//                    pathOverlays.clear();
                     mBtn.setImageResource(R.drawable.ic_route1_off);
                     route1 = false;
                 }
                 else{
+                    for(int i=0; i<markers.size(); i++){
+                        markers.get(i).setMap(naverMap);
+                    }
+                    for(int i=0; i<pathOverlays.size(); i++){
+                        pathOverlays.get(i).setMap(naverMap);
+                    }
                     mBtn.setImageResource(R.drawable.ic_route1);
-                    getRoute();
+//                    getRoute();
                     route1 = true;
                 }
             }
@@ -156,10 +174,22 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                 if(route2){
                     mBtn2.setImageResource(R.drawable.ic_route2);
                     route2 = false;
+                    for(int i=0; i<markerClinic.size(); i++){
+                        markerClinic.get(i).setMap(null);
+                    }
                 }
                 else{
                     mBtn2.setImageResource(R.drawable.ic_route2_on);
                     route2 = true;
+                    if (isFirstRoute2){
+                        getClinic();
+                        isFirstRoute2 = false;
+                    }
+                    else{
+                        for(int i=0; i<markerClinic.size(); i++){
+                            markerClinic.get(i).setMap(naverMap);
+                        }
+                    }
                 }
             }
         });
@@ -170,10 +200,22 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                 if(route3){
                     mBtn3.setImageResource(R.drawable.ic_route3);
                     route3 = false;
+                    for(int i=0; i<markerHospital.size(); i++){
+                        markerHospital.get(i).setMap(null);
+                    }
                 }
                 else{
                     mBtn3.setImageResource(R.drawable.ic_route3_on);
                     route3 = true;
+                    if (isFirstRoute3){
+                        getHospital();
+                        isFirstRoute3 = false;
+                    }
+                    else{
+                        for(int i=0; i<markerHospital.size(); i++){
+                            markerHospital.get(i).setMap(naverMap);
+                        }
+                    }
                 }
             }
         });
@@ -248,6 +290,18 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         mapViewService.getRoute();
     }
 
+    void getClinic(){
+        showProgressDialog(getActivity());
+        final MapViewService mapViewService = new MapViewService(this);
+        mapViewService.getClinic();
+    }
+
+    void getHospital(){
+        showProgressDialog(getActivity());
+        final MapViewService mapViewService = new MapViewService(this);
+        mapViewService.getHospital();
+    }
+
     @Override
     public void validateGetRouteSuccess(ArrayList<RouteResponse> arrayList) {
         hideProgressDialog();
@@ -290,5 +344,57 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     public void validateGetRouteFail(String message) {
         hideProgressDialog();
         showCustomToast(message == null || message.isEmpty() ? getString(R.string.network_error) : message);
+    }
+
+    @Override
+    public void validateGetClinicSuccess(ArrayList<ClinicInfo> clinicInfos) {
+        hideProgressDialog();
+        this.clinicInfos.addAll(clinicInfos);
+        for(int i=0; i<clinicInfos.size(); i++){
+            Marker marker = new Marker();
+            marker.setPosition(new LatLng(clinicInfos.get(i).getLatitude(), clinicInfos.get(i).getLongitude()));
+            marker.setIcon(OverlayImage.fromResource(R.drawable.ic_clinic2));
+            marker.setAnchor(new PointF((float)0.5,(float)0.5));
+            marker.setWidth(120);
+            marker.setHeight(120);
+            marker.setMap(naverMap);
+            final ClinicInfo clinicInfo = clinicInfos.get(i);
+            marker.setOnClickListener(new Overlay.OnClickListener() {
+                @Override
+                public boolean onClick(@NonNull Overlay overlay) {
+                    //다이얼 로그 이동
+                    CustomClinicDialog customClinicDialog = new CustomClinicDialog(mContext, clinicInfo);
+                    customClinicDialog.show();
+                    return false;
+                }
+            });
+            markerClinic.add(marker);
+        }
+    }
+
+    @Override
+    public void validateGetHospitalSuccess(ArrayList<HospitalInfo> arrayList) {
+        hideProgressDialog();
+        hospitalInfos.addAll(arrayList);
+        for(int i=0; i<hospitalInfos.size(); i++){
+            Marker marker = new Marker();
+            marker.setPosition(new LatLng(hospitalInfos.get(i).getLatitude(), hospitalInfos.get(i).getLongitude()));
+            marker.setIcon(OverlayImage.fromResource(R.drawable.ic_hospital));
+            marker.setAnchor(new PointF((float)0.5,(float)0.5));
+            marker.setWidth(120);
+            marker.setHeight(120);
+            marker.setMap(naverMap);
+            final HospitalInfo hospitalInfo = hospitalInfos.get(i);
+            marker.setOnClickListener(new Overlay.OnClickListener() {
+                @Override
+                public boolean onClick(@NonNull Overlay overlay) {
+                    //다이얼로그 이동
+                    CustomHospitalDialog customHospitalDialog = new CustomHospitalDialog(mContext, hospitalInfo);
+                    customHospitalDialog.show();
+                    return false;
+                }
+            });
+            markerHospital.add(marker);
+        }
     }
 }
