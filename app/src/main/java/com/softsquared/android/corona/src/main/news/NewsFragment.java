@@ -25,13 +25,13 @@ import com.softsquared.android.corona.src.main.MainActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Objects;
 
 
 public class NewsFragment extends BaseFragment  {
 
     Context mContext;
-    private MapView mapView;
-    public WebView mWebView;
+    WebView mWebView;
     FloatingActionButton mFlatingBtn;
     public static String URL = "https://news.google.com/search?q=%EC%BD%94%EB%A1%9C%EB%82%98&hl=ko&gl=KR&ceid=KR%3Ako";
 
@@ -71,6 +71,17 @@ public class NewsFragment extends BaseFragment  {
         });
 
         mWebView.loadUrl(URL);
+    }
+
+    public int webViewBack(){
+        if(mWebView.canGoBack()){
+//            Log.d("웹뷰 뒤로가기", " ");
+            mWebView.goBack();
+            return 1;
+        }
+        else{
+            return 0;
+        }
     }
 
 }
