@@ -43,7 +43,7 @@ public class KakaoShareCustomDialog extends Dialog {
                 kakaoIntent.setAction(Intent.ACTION_SEND);
                 kakaoIntent.setType("text/plain");
                 kakaoIntent.setPackage("com.kakao.talk");
-                kakaoIntent.putExtra(Intent.EXTRA_SUBJECT, "[베럽 이벤트 알림]\n");
+//                kakaoIntent.putExtra(Intent.EXTRA_SUBJECT, "[베럽 이벤트 알림]\n");
                 kakaoIntent.putExtra(Intent.EXTRA_TEXT, mShareUrl);
                 try {
                     mContext.startActivity(kakaoIntent);

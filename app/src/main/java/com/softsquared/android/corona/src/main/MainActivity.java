@@ -25,10 +25,9 @@ import java.util.ArrayList;
 
 import devlight.io.library.ntb.NavigationTabBar;
 
-import static com.softsquared.android.corona.src.main.news.NewsFragment.URL;
-
 public class MainActivity extends BaseActivity implements MainActivityView {
     private TextView mTextViewTitle;
+    public static int IS_WEBVIEW_MODE = 0;
 
     final int MAP_FRAGMENT = 0;
     final int NEWS_FRAGMENT = 1;
@@ -132,14 +131,22 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                     case MAP_FRAGMENT:
                         mRelativeTopBar.setVisibility(View.GONE);
                         mTextViewTitle.setText("지도");
+                        IS_WEBVIEW_MODE = 0;
                         break;
+
                     case NEWS_FRAGMENT:
                         mRelativeTopBar.setVisibility(View.VISIBLE);
                         mTextViewTitle.setText("뉴스");
+                        IS_WEBVIEW_MODE = 1;
                         break;
+
                     case ORDER_FRAGMENT:
+                        IS_WEBVIEW_MODE = 0;
+
                         break;
                     case INFO_FRAGMENT:
+                        IS_WEBVIEW_MODE = 0;
+
                         break;
                 }
             }
@@ -176,17 +183,20 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     // 뒤로가기 버튼을 눌렀을 때의 오버라이드 메소드
     @Override
     public void onBackPressed() {
-        Log.d("뒤로가기", " ");
+//        Log.d("뒤로가기", " ");
 
-        if (mNewsFragments.mWebView.canGoBack()) {
-            Log.d("웹뷰 뒤로가기", " ");
+        if (IS_WEBVIEW_MODE == 1) {
             try {
-                mNewsFragments.mWebView.goBack();  //only webview back-key code
+                int backResult = mNewsFragments.webViewBack();
+                if (backResult == 1) { //웹뷰 뒤로가기 상공
+                } else {//뒤로갈곳 없음
+                    closeApp();
+                }
             } catch (Exception e) {
                 //back-key code of another fragment
             }
         } else {
-            Log.d("앱 뒤로가기", " ");
+//            Log.d("앱 뒤로가기", " ");
             closeApp();
         }
     }
