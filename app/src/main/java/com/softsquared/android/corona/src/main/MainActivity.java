@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseActivity;
 import com.softsquared.android.corona.src.BaseFragment;
+import com.softsquared.android.corona.src.main.faq.FaqFragment;
 import com.softsquared.android.corona.src.main.info.InfoFragment;
 import com.softsquared.android.corona.src.main.interfaces.MainActivityView;
 import com.softsquared.android.corona.src.main.map.MapViewFragment;
@@ -28,11 +29,11 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
     final int MAP_FRAGMENT = 0;
     final int NEWS_FRAGMENT = 1;
-    final int ORDER_FRAGMENT = 2;
+    final int INFO_FRAGMENT = 2;
+    final int FAQ_FRAGMENT = 3;
+    final int ORDER_FRAGMENT = 4;
     private long backPressedTime = 0;
     private final long FINISH_INTERVAL_TIME = 2000;
-    final int INFO_FRAGMENT = 3;
-    final int FAQ_FRAGMENT = 4;
 
     public static MainViewPager mViewPagerMain;
     BaseFragment mDealingFragments;
@@ -59,7 +60,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mNewsFragments = new NewsFragment();
         mOrderFragment = new NewsFragment();
         mInfoFragment = new InfoFragment();
-        mFaqFragment = new InfoFragment();
+        mFaqFragment = new FaqFragment();
 
         mTextViewTitle = findViewById(R.id.activity_main_tv);
         mRelativeTopBar = findViewById(R.id.activity_main_relative_top);
@@ -69,9 +70,9 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mMainFragmentPagerAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager());
         mMainFragmentPagerAdapter.addFragment(mDealingFragments, "1");
         mMainFragmentPagerAdapter.addFragment(mNewsFragments, "2");
-        mMainFragmentPagerAdapter.addFragment(mOrderFragment, "3");
-        mMainFragmentPagerAdapter.addFragment(mInfoFragment, "4");
-        mMainFragmentPagerAdapter.addFragment(mFaqFragment, "5");
+        mMainFragmentPagerAdapter.addFragment(mInfoFragment, "3");
+        mMainFragmentPagerAdapter.addFragment(mFaqFragment, "4");
+        mMainFragmentPagerAdapter.addFragment(mOrderFragment, "5");
 
         mViewPagerMain = findViewById(R.id.vpMainViewPager);
         mViewPagerMain.setAdapter(mMainFragmentPagerAdapter);
@@ -100,15 +101,6 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_tab_order),
-                        getResources().getColor(R.color.colorWhite)
-                )
-                        .title("")
-                        .build()
-        );
-
-        mNavigationTabBarModels.add(
-                new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_tab_info),
                         getResources().getColor(R.color.colorWhite)
                 )
@@ -119,6 +111,15 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_tab_faq),
+                        getResources().getColor(R.color.colorWhite)
+                )
+                        .title("")
+                        .build()
+        );
+
+        mNavigationTabBarModels.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_tab_order),
                         getResources().getColor(R.color.colorWhite)
                 )
                         .title("")
@@ -166,6 +167,9 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         IS_WEBVIEW_MODE = 0;
                         break;
                     case FAQ_FRAGMENT:
+                        mRelativeTopBar.setVisibility(View.VISIBLE);
+                        mTextViewTitle.setVisibility(View.VISIBLE);
+                        mTextViewTitle.setText("질문 답변");
                         IS_WEBVIEW_MODE = 0;
                         break;
                 }
