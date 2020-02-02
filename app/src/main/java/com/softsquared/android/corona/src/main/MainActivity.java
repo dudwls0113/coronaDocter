@@ -181,6 +181,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     }
 
     // 뒤로가기 버튼을 눌렀을 때의 오버라이드 메소드
+    // 뒤로가기 버튼을 눌렀을 때의 오버라이드 메소드
     @Override
     public void onBackPressed() {
 //        Log.d("뒤로가기", " ");
@@ -224,5 +225,4 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                 break;
         }
     }
-
 }
