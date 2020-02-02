@@ -2,8 +2,10 @@ package com.softsquared.android.corona.src.main.faq;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ public class FaqFragment extends BaseFragment {
     WebView mWebView;
     private static String URL2 = "http://www.cdc.go.kr/linkCheck.es?mid=a21111050400";
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,9 +37,20 @@ public class FaqFragment extends BaseFragment {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void setComponentView(View v) {
         mWebView = v.findViewById(R.id.fragment_faq_web_view);
+
+        mWebView.setOnScrollChangeListener(new View.OnScrollChangeListener(){
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                scroll = scrollY;
+            }
+        });
+
+
+
 
         WebSettings mws = mWebView.getSettings();//Mobile Web Setting
         mws.setJavaScriptEnabled(true);//자바스크립트 허용
@@ -51,5 +65,8 @@ public class FaqFragment extends BaseFragment {
         });
 
         mWebView.loadUrl(URL2);
+        mWebView.scrollTo(0,2300);
+
+
     }
 }
