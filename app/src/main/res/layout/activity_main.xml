@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".src.main.MainActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="14dp">
+
+
+            <TextView
+                android:id="@+id/activity_main_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
+                android:text="지도"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <com.softsquared.android.corona.src.main.MainViewPager
+        android:id="@+id/vpMainViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/colorWhite" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorPrimary"/>
+
+
+    <devlight.io.library.ntb.NavigationTabBar
+        android:id="@+id/ntb"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="10dp"
+        android:background="@color/colorWhite"
+        app:ntb_active_color="@color/colorPrimary"
+        app:ntb_animation_duration="0"
+        app:ntb_badge_use_typeface="false"
+        app:ntb_badged="false"
+            app:ntb_bg_color="@color/colorWhite"
+        app:ntb_icon_size_fraction="0.6"
+        app:ntb_inactive_color="@color/colorPrimary"
+        app:ntb_scaled="false"
+        app:ntb_swiped="false"
+        app:ntb_tinted="true"
+        app:ntb_title_mode="all"
+        app:ntb_title_size="9sp"
+        app:ntb_titled="true" />
+
+
+
+</LinearLayout>
