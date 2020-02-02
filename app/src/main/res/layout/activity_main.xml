@@ -46,33 +46,28 @@
         android:background="@color/colorWhite" />
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/colorPrimary"/>
-
 
     <devlight.io.library.ntb.NavigationTabBar
+        android:elevation="20dp"
         android:id="@+id/ntb"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:paddingTop="8dp"
-        android:paddingBottom="-5dp"
-        android:layout_marginBottom="-10dp"
+        android:paddingBottom="8dp"
         android:background="@color/colorWhite"
         app:ntb_active_color="@color/colorDeepBlue"
         app:ntb_animation_duration="0"
         app:ntb_badge_use_typeface="false"
         app:ntb_badged="false"
         app:ntb_bg_color="@color/colorWhite"
-        app:ntb_icon_size_fraction="0.7"
+        app:ntb_icon_size_fraction="0.8"
         app:ntb_inactive_color="#797979"
         app:ntb_scaled="false"
         app:ntb_swiped="false"
         app:ntb_tinted="true"
         app:ntb_title_mode="all"
-        app:ntb_title_size="9sp"
-        app:ntb_titled="true" />
+        app:ntb_title_size="0sp"
+        app:ntb_titled="false" />
 
 
 
