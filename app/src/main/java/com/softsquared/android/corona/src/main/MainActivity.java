@@ -178,7 +178,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     public void onBackPressed() {
         Log.d("뒤로가기", " ");
 
-        if (mNewsFragments.mWebView.canGoBack()) {
+        if (mNewsFragments.mWebView!=null && mNewsFragments.mWebView.canGoBack()) {
             Log.d("웹뷰 뒤로가기", " ");
             try {
                 mNewsFragments.mWebView.goBack();  //only webview back-key code

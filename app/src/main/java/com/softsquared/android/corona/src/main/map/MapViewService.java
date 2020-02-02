@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.softsquared.android.corona.src.main.map.interfaces.MapViewRetrofitInterface;
 import com.softsquared.android.corona.src.main.map.interfaces.MapViewView;
+import com.softsquared.android.corona.src.main.map.models.ClinicResponse;
+import com.softsquared.android.corona.src.main.map.models.HospitalResponse;
 import com.softsquared.android.corona.src.main.map.models.MapViewResponse;
 
 import retrofit2.Call;
@@ -42,6 +44,54 @@ public class MapViewService {
             public void onFailure(Call<MapViewResponse> call, Throwable t) {
                 mMapViewView.validateGetRouteFail(null);
                 Log.e("에러", t.toString());
+            }
+        });
+    }
+
+    void getClinic(){
+        final MapViewRetrofitInterface mapViewRetrofitInterface = getRetrofit().create(MapViewRetrofitInterface.class);
+        mapViewRetrofitInterface.getClinic().enqueue(new Callback<ClinicResponse>() {
+            @Override
+            public void onResponse(Call<ClinicResponse> call, Response<ClinicResponse> response) {
+                final ClinicResponse clinicResponse = response.body();
+                if(clinicResponse==null){
+                    mMapViewView.validateGetRouteFail(null);
+                }
+                else if(clinicResponse.getCode()==100){
+                    mMapViewView.validateGetClinicSuccess(clinicResponse.getClinicInfos());
+                }
+                else{
+                    mMapViewView.validateGetRouteFail(clinicResponse.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ClinicResponse> call, Throwable t) {
+                mMapViewView.validateGetRouteFail(null);
+            }
+        });
+    }
+
+    void getHospital(){
+        final MapViewRetrofitInterface mapViewRetrofitInterface = getRetrofit().create(MapViewRetrofitInterface.class);
+        mapViewRetrofitInterface.getHospital().enqueue(new Callback<HospitalResponse>() {
+            @Override
+            public void onResponse(Call<HospitalResponse> call, Response<HospitalResponse> response) {
+                final HospitalResponse hospitalResponse = response.body();
+                if(hospitalResponse==null){
+                    mMapViewView.validateGetRouteFail(null);
+                }
+                else if(hospitalResponse.getCode()==100){
+                    mMapViewView.validateGetHospitalSuccess(hospitalResponse.getHospitalInfos());
+                }
+                else{
+                    mMapViewView.validateGetRouteFail(hospitalResponse.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<HospitalResponse> call, Throwable t) {
+                mMapViewView.validateGetRouteFail(null);
             }
         });
     }

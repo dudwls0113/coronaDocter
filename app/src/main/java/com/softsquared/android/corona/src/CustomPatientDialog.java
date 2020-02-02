@@ -2,6 +2,8 @@ package com.softsquared.android.corona.src;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.view.Window;
@@ -25,6 +27,7 @@ public class CustomPatientDialog extends Dialog {
         mContext = context;
         this.routeRes = routeRes;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setContentView(R.layout.custom_patient_dialog);
         mView = findViewById(R.id.patient_dialog);
         GradientDrawable drawable = (GradientDrawable) mContext.getDrawable(R.drawable.bg_round);
