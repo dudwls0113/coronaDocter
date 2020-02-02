@@ -13,7 +13,7 @@ public class RouteRes {
     @SerializedName("latitude")
     double latitude;
 
-    @SerializedName("longtitude")
+    @SerializedName("longitude")
     double longtitude;
 
     @SerializedName("content")

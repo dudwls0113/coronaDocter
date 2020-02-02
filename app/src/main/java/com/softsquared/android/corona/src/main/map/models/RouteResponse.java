@@ -7,9 +7,9 @@ import java.util.ArrayList;
 public class RouteResponse {
 
     @SerializedName("route")
-    ArrayList<RouteRes> arrayList;
+    ArrayList<RouteRes> routeRes;
 
-    public ArrayList<RouteRes> getArrayList() {
-        return arrayList;
+    public ArrayList<RouteRes> getRouteRes() {
+        return routeRes;
     }
 }

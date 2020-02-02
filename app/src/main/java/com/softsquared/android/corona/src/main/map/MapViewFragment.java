@@ -27,13 +27,16 @@ import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.CircleOverlay;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
+import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.overlay.PathOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
+import com.naver.maps.map.widget.ZoomControlView;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseFragment;
 import com.softsquared.android.corona.src.CustomPatientDialog;
 import com.softsquared.android.corona.src.GpsTracker;
 import com.softsquared.android.corona.src.main.map.interfaces.MapViewView;
+import com.softsquared.android.corona.src.main.map.models.RouteRes;
 import com.softsquared.android.corona.src.main.map.models.RouteResponse;
 
 import java.util.ArrayList;
@@ -43,6 +46,7 @@ import java.util.concurrent.Executor;
 public class MapViewFragment extends BaseFragment implements OnMapReadyCallback, MapViewView {
 
     Context mContext;
+    ZoomControlView zoomControlView;
     private MapView mapView;
     NaverMap naverMap;
     Button mBtn, mBtn2, mBtn3;
@@ -50,7 +54,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     private FusedLocationSource locationSource;
     ArrayList<PathOverlay> pathOverlays = new ArrayList<>();
     ArrayList<RouteResponse> routeResponses = new ArrayList<>();
-
+    ArrayList<Marker> markers = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -114,6 +118,8 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 
     @Override
     public void setComponentView(View v) {
+        zoomControlView = v.findViewById(R.id.zoom);
+
         mBtn = v.findViewById(R.id.fragment_map_btn); // 감염자 경로
         mBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,33 +146,6 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                 path.setWidth(30);
                 path.setMap(naverMap);
                 pathOverlays.add(path);
-                CircleOverlay circle = new CircleOverlay();
-                circle.setCenter(new LatLng(37.4601904, 126.4319409));
-                circle.setRadius(3000);
-                circle.setColor(Color.GREEN);
-                circle.setMap(naverMap);
-                circle.setOnClickListener(patientClick);
-
-                CircleOverlay circle2 = new CircleOverlay();
-                circle2.setCenter(new LatLng(37.56607, 126.98268));
-                circle2.setRadius(3000);
-                circle2.setColor(Color.GREEN);
-                circle2.setMap(naverMap);
-                circle2.setOnClickListener(patientClick);
-
-                CircleOverlay circle3 = new CircleOverlay();
-                circle3.setCenter(new LatLng(37.56445, 126.97707));
-                circle3.setRadius(3000);
-                circle3.setColor(Color.GREEN);
-                circle3.setMap(naverMap);
-                circle3.setOnClickListener(patientClick);
-
-                CircleOverlay circle4 = new CircleOverlay();
-                circle4.setCenter(new LatLng(337.55855, 126.97822));
-                circle4.setRadius(3000);
-                circle4.setColor(Color.GREEN);
-                circle4.setMap(naverMap);
-                circle4.setOnClickListener(patientClick);
             }
         });
         mBtn3 = v.findViewById(R.id.fragment_map_btn3); // 격리병원
@@ -183,7 +162,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                 latLngs.add(new LatLng(37.56445, 126.97707));
                 latLngs.add(new LatLng(37.55855, 126.97822));
                 path.setCoords(latLngs);
-                path.setWidth(30);
+                path.setWidth(10);
                 path.setMap(naverMap);
                 pathOverlays.add(path);
             }
@@ -232,12 +211,16 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 
         System.out.println(gpsTracker.getLatitude()+", " +  gpsTracker.getLongitude());
 
-        CameraPosition cameraPosition = new CameraPosition(new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude()), 8);
+        CameraPosition cameraPosition = new CameraPosition(new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude()), 9);
         naverMap.setCameraPosition(cameraPosition);
 
         naverMap.setLocationSource(locationSource);
+
+        zoomControlView.setMap(naverMap);
+
         UiSettings uiSettings = naverMap.getUiSettings();
         uiSettings.setLocationButtonEnabled(true);
+        uiSettings.setZoomControlEnabled(false);
         naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
 
 //        Marker marker = new Marker();
@@ -248,15 +231,6 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 
         getRoute();
     }
-
-    private Overlay.OnClickListener patientClick = new Overlay.OnClickListener() {
-        @Override
-        public boolean onClick(@NonNull Overlay overlay) {
-            CustomPatientDialog customPatientDialog = new CustomPatientDialog(mContext);
-            customPatientDialog.show();
-            return false;
-        }
-    };
 
     void getRoute(){
         showProgressDialog(getActivity());
@@ -270,12 +244,33 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         routeResponses.addAll(arrayList);
         for(int i=0; i<routeResponses.size(); i++){
             ArrayList<LatLng> latLngs = new ArrayList<>();
-            for(int j=0; j<routeResponses.get(i).getArrayList().size(); i++){
-                latLngs.add(new LatLng(routeResponses.get(i).getArrayList().get(j).getLatitude(), routeResponses.get(i).getArrayList().get(j).getLongtitude()));
+            for(int j=0; j<routeResponses.get(i).getRouteRes().size(); j++){
+                System.out.println(routeResponses.get(i).getRouteRes().get(j).getLatitude()+", "+routeResponses.get(i).getRouteRes().get(j).getLongtitude());
+                latLngs.add(new LatLng(routeResponses.get(i).getRouteRes().get(j).getLatitude(), routeResponses.get(i).getRouteRes().get(j).getLongtitude()));
+                Marker marker = new Marker();
+                marker.setPosition(new LatLng(routeResponses.get(i).getRouteRes().get(j).getLatitude(), routeResponses.get(i).getRouteRes().get(j).getLongtitude()));
+                marker.setIcon(OverlayImage.fromResource(R.drawable.corona_marker));
+                marker.setAnchor(new PointF((float)0.5,(float)0.5));
+                marker.setWidth(90);
+                marker.setHeight(90);
+                marker.setMap(naverMap);
+                final RouteRes routeRes = routeResponses.get(i).getRouteRes().get(j);
+                marker.setOnClickListener(new Overlay.OnClickListener() {
+                    @Override
+                    public boolean onClick(@NonNull Overlay overlay) {
+                        CustomPatientDialog customPatientDialog = new CustomPatientDialog(mContext,routeRes);
+                        customPatientDialog.show();
+                        return false;
+                    }
+                });
+                markers.add(marker);
             }
             PathOverlay path = new PathOverlay();
             path.setCoords(latLngs);
-            path.setWidth(30);
+            path.setWidth(10);
+            path.setColor(Color.parseColor("#ff4700"));
+            path.setOutlineWidth(5);
+            path.setOutlineColor(Color.parseColor("#99ff8353"));
             path.setMap(naverMap);
             pathOverlays.add(path);
         }

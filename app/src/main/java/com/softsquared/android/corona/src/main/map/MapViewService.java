@@ -1,5 +1,7 @@
 package com.softsquared.android.corona.src.main.map;
 
+import android.util.Log;
+
 import com.softsquared.android.corona.src.main.map.interfaces.MapViewRetrofitInterface;
 import com.softsquared.android.corona.src.main.map.interfaces.MapViewView;
 import com.softsquared.android.corona.src.main.map.models.MapViewResponse;
@@ -25,6 +27,7 @@ public class MapViewService {
             public void onResponse(Call<MapViewResponse> call, Response<MapViewResponse> response) {
                 final MapViewResponse mapViewResponse = response.body();
                 if(mapViewResponse==null){
+                    Log.e("에러2", "에러2");
                     mMapViewView.validateGetRouteFail(null);
                 }
                 else if(mapViewResponse.getCode()==100){
@@ -38,6 +41,7 @@ public class MapViewService {
             @Override
             public void onFailure(Call<MapViewResponse> call, Throwable t) {
                 mMapViewView.validateGetRouteFail(null);
+                Log.e("에러", t.toString());
             }
         });
     }
