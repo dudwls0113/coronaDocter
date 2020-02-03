@@ -329,14 +329,17 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                 });
                 markers.add(marker);
             }
-            PathOverlay path = new PathOverlay();
-            path.setCoords(latLngs);
-            path.setWidth(10);
-            path.setColor(Color.parseColor("#ff4700"));
-            path.setOutlineWidth(5);
-            path.setOutlineColor(Color.parseColor("#99ff8353"));
-            path.setMap(naverMap);
-            pathOverlays.add(path);
+            if (latLngs.size()>=2){
+                PathOverlay path = new PathOverlay();
+                path.setCoords(latLngs);
+                path.setWidth(10);
+//            path.setColor(Color.TRANSPARENT);
+                path.setColor(Color.parseColor("#30ff8353"));
+                path.setOutlineWidth(1);
+                path.setOutlineColor(Color.parseColor("#30ff8353"));
+                path.setMap(naverMap);
+                pathOverlays.add(path);
+            }
         }
     }
 
@@ -355,8 +358,8 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
             marker.setPosition(new LatLng(clinicInfos.get(i).getLatitude(), clinicInfos.get(i).getLongitude()));
             marker.setIcon(OverlayImage.fromResource(R.drawable.ic_clinic2));
             marker.setAnchor(new PointF((float)0.5,(float)0.5));
-            marker.setWidth(120);
-            marker.setHeight(120);
+            marker.setWidth(90);
+            marker.setHeight(90);
             marker.setMap(naverMap);
             final ClinicInfo clinicInfo = clinicInfos.get(i);
             marker.setOnClickListener(new Overlay.OnClickListener() {
@@ -381,8 +384,8 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
             marker.setPosition(new LatLng(hospitalInfos.get(i).getLatitude(), hospitalInfos.get(i).getLongitude()));
             marker.setIcon(OverlayImage.fromResource(R.drawable.ic_hospital));
             marker.setAnchor(new PointF((float)0.5,(float)0.5));
-            marker.setWidth(120);
-            marker.setHeight(120);
+            marker.setWidth(90);
+            marker.setHeight(90);
             marker.setMap(naverMap);
             final HospitalInfo hospitalInfo = hospitalInfos.get(i);
             marker.setOnClickListener(new Overlay.OnClickListener() {
