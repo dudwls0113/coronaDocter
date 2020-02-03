@@ -181,6 +181,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                 else{
                     mBtn2.setImageResource(R.drawable.ic_route2_on);
                     route2 = true;
+                    showCustomToast("선별진료소란 일반환자와 선별하여 진료하고 유행 병원 외부에 설치된 음압진료소에서 별도로 진료를 시행하는 공간입니다.");
                     if (isFirstRoute2){
                         getClinic();
                         isFirstRoute2 = false;
