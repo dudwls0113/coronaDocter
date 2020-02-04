@@ -112,7 +112,12 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
+        if(mapView != null){
+            mapView.onSaveInstanceState(outState);
+        }
+        else{
+            showCustomToast("알 수 없는 오류가 발생했습니다. 재접속을 부탁드립니다;");
+        }
     }
 
     @Override
