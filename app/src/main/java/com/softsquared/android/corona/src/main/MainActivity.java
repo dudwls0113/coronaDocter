@@ -83,7 +83,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mNavigationTabBarModels = new ArrayList<>();
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_tab_map),
+                        getResources().getDrawable(R.drawable.ic_tab_map2),
                         getResources().getColor(R.color.colorWhite)
                 )
                         .title("")
@@ -93,7 +93,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_tab_news),
+                        getResources().getDrawable(R.drawable.ic_tab_news2),
                         getResources().getColor(R.color.colorWhite)
                 )
                         .title("")
@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_tab_info),
+                        getResources().getDrawable(R.drawable.ic_tab_info2),
                         getResources().getColor(R.color.colorWhite)
                 )
                         .title("")
@@ -111,7 +111,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_tab_faq),
+                        getResources().getDrawable(R.drawable.ic_tab_faq2),
                         getResources().getColor(R.color.colorWhite)
                 )
                         .title("")
@@ -120,7 +120,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_tab_order),
+                        getResources().getDrawable(R.drawable.ic_tab_order2),
                         getResources().getColor(R.color.colorWhite)
                 )
                         .title("")

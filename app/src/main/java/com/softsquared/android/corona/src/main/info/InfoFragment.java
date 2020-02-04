@@ -93,42 +93,42 @@ public class InfoFragment extends BaseFragment implements InfoFragmentView {
     public void validateSuccess(Info info) {
         hideProgressDialog();
         mTextViewUpdate.setText(info.getUpdatedTime());
-        mTextViewCured.setText("( "+info.getCured()+" )");
+        mTextViewCured.setText(info.getCured()+"");
         if(info.getCuredDiff()>0){
             mTextViewCuredDiff.setText("( +"+info.getCuredDiff()+" )");
         }
         else{
             mTextViewCuredDiff.setText("( "+info.getCuredDiff()+" )");
         }
-        mTextViewDead.setText("( "+info.getDead()+" )");
+        mTextViewDead.setText(info.getDead()+"");
         if(info.getDeadDiff()>0){
             mTextViewDeadDiff.setText("( +"+info.getDeadDiff()+" )");
         }
         else{
             mTextViewDeadDiff.setText("( "+info.getDeadDiff()+" )");
         }
-        mTextViewInfected.setText("( "+info.getInfected()+" )");
+        mTextViewInfected.setText(info.getInfected()+"");
         if (info.getInfectedDiff()>0){
             mTextViewInfectedDiff.setText("( +"+info.getInfectedDiff()+" )");
         }
         else{
             mTextViewInfectedDiff.setText("( "+info.getInfectedDiff()+" )");
         }
-        mTextViewInspection.setText("( "+info.getInspection()+" )");
+        mTextViewInspection.setText(info.getInspection()+"");
         if(info.getInspectionDiff()>0){
             mTextViewInspectionDiff.setText("( "+info.getInspectionDiff()+" )");
         }
         else{
             mTextViewInspectionDiff.setText("( "+info.getInspectionDiff()+" )");
         }
-        mTextViewIsolation.setText("( "+info.getIsolation()+" )");
+        mTextViewIsolation.setText(info.getIsolation()+"");
         if(info.getIsolationDiff()>0){
-            mTextViewIsolationDiff.setText("( +"+info.getIsolationDiff()+")");
+            mTextViewIsolationDiff.setText("( +"+info.getIsolationDiff()+" )");
         }
         else{
-            mTextViewIsolationDiff.setText("( "+info.getIsolationDiff()+")");
+            mTextViewIsolationDiff.setText("( "+info.getIsolationDiff()+" )");
         }
-        mTextViewSymptom.setText("( "+info.getSymptom()+" )");
+        mTextViewSymptom.setText(info.getSymptom()+"");
         if (info.getSymptomDiff()>0){
             mTextViewSymptomDiff.setText("( +"+info.getSymptomDiff()+" )");
         }

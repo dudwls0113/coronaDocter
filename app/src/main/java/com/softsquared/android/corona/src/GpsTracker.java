@@ -52,9 +52,11 @@ public class GpsTracker extends Service implements LocationListener {
                 if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
                         hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED) {
 
-                    ;
-                } else
-                    return null;
+
+                } else{
+                    latitude = 37.5535582;
+                    longitude = 126.9670034;
+                }
 
 
                 if (isNetworkEnabled) {
