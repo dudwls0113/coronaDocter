@@ -24,5 +24,6 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:src="@drawable/banner_update_1" />
+
     </LinearLayout>
 </ScrollView>

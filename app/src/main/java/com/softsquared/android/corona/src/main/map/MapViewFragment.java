@@ -54,7 +54,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     ZoomControlView zoomControlView;
     private MapView mapView;
     NaverMap naverMap;
-    ImageView mBtn, mBtn2, mBtn3;
+    ImageView mBtn, mBtn2, mBtn3, mBtn4;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationSource locationSource;
     ArrayList<PathOverlay> pathOverlays = new ArrayList<>();
@@ -64,6 +64,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     private boolean route1 = true;
     private boolean route2 = false;
     private boolean route3 = false;
+    private boolean route4 = true;
 
     ArrayList<ClinicInfo> clinicInfos = new ArrayList<>();
     ArrayList<Marker> markerClinic = new ArrayList<>();
@@ -158,6 +159,8 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 //                    pathOverlays.clear();
                     mBtn.setImageResource(R.drawable.ic_route1_off);
                     route1 = false;
+                    mBtn4.setImageResource(R.drawable.ic_route4_off);
+                    route4 = false;
                 }
                 else{
                     for(int i=0; i<markers.size(); i++){
@@ -169,6 +172,8 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                     mBtn.setImageResource(R.drawable.ic_route1);
 //                    getRoute();
                     route1 = true;
+                    mBtn4.setImageResource(R.drawable.ic_route4);
+                    route4 = true;
                 }
             }
         });
@@ -225,6 +230,26 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                 }
             }
         });
+        mBtn4 = v.findViewById(R.id.fragment_map_btn4);
+        mBtn4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(route4){
+                    mBtn4.setImageResource(R.drawable.ic_route4_off);
+                    route4 = false;
+                    for(int i=0; i<pathOverlays.size(); i++){
+                        pathOverlays.get(i).setMap(null);
+                    }
+                }
+                else{
+                    mBtn4.setImageResource(R.drawable.ic_route4);
+                    route4 = true;
+                    for(int i=0; i<pathOverlays.size(); i++){
+                        pathOverlays.get(i).setMap(naverMap);
+                    }
+                }
+            }
+        });
         locationSource =
                 new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
     }
@@ -235,6 +260,10 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         if (locationSource.onRequestPermissionsResult(
                 requestCode, permissions, grantResults)) {
             return;
+        }
+        else{
+            CameraPosition cameraPosition = new CameraPosition(new LatLng(37.5535582,126.9670034), 8);
+            naverMap.setCameraPosition(cameraPosition);
         }
         super.onRequestPermissionsResult(
                 requestCode, permissions, grantResults);
@@ -265,14 +294,15 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
             }
         });
 
+        naverMap.setLocationSource(locationSource);
+
         GpsTracker gpsTracker = new GpsTracker(mContext);
 
-        System.out.println(gpsTracker.getLatitude()+", " +  gpsTracker.getLongitude());
+        System.out.println("gps: " + gpsTracker.getLatitude()+", "+ gpsTracker.getLongitude());
 
-        CameraPosition cameraPosition = new CameraPosition(new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude()), 9);
+        CameraPosition cameraPosition = new CameraPosition(new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude()), 8);
         naverMap.setCameraPosition(cameraPosition);
 
-        naverMap.setLocationSource(locationSource);
 
         zoomControlView.setMap(naverMap);
 
@@ -315,11 +345,24 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         for(int i=0; i<routeResponses.size(); i++){
             ArrayList<LatLng> latLngs = new ArrayList<>();
             for(int j=0; j<routeResponses.get(i).getRouteRes().size(); j++){
-                System.out.println(routeResponses.get(i).getRouteRes().get(j).getLatitude()+", "+routeResponses.get(i).getRouteRes().get(j).getLongtitude());
                 latLngs.add(new LatLng(routeResponses.get(i).getRouteRes().get(j).getLatitude(), routeResponses.get(i).getRouteRes().get(j).getLongtitude()));
                 Marker marker = new Marker();
                 marker.setPosition(new LatLng(routeResponses.get(i).getRouteRes().get(j).getLatitude(), routeResponses.get(i).getRouteRes().get(j).getLongtitude()));
-                marker.setIcon(OverlayImage.fromResource(R.drawable.corona_marker));
+                if(i%5==0){
+                    marker.setIcon(OverlayImage.fromResource(R.drawable.corona_marker));
+                }
+                else if(i%5==1){
+                    marker.setIcon(OverlayImage.fromResource(R.drawable.corona_marker2));
+                }
+                else if(i%5==2){
+                    marker.setIcon(OverlayImage.fromResource(R.drawable.corona_marker3));
+                }
+                else if(i%5==3){
+                    marker.setIcon(OverlayImage.fromResource(R.drawable.corona_marker4));
+                }
+                else if(i%5==4){
+                    marker.setIcon(OverlayImage.fromResource(R.drawable.corona_marker5));
+                }
                 marker.setAnchor(new PointF((float)0.5,(float)0.5));
                 marker.setWidth(90);
                 marker.setHeight(90);
@@ -338,11 +381,36 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
             if (latLngs.size()>=2){
                 PathOverlay path = new PathOverlay();
                 path.setCoords(latLngs);
-                path.setWidth(10);
-//            path.setColor(Color.TRANSPARENT);
-                path.setColor(Color.parseColor("#30ff8353"));
-                path.setOutlineWidth(1);
-                path.setOutlineColor(Color.parseColor("#30ff8353"));
+                if(i%5==0){
+                    path.setWidth(10);
+                    path.setColor(Color.parseColor("#ff8353"));
+                    path.setOutlineWidth(1);
+                    path.setOutlineColor(Color.parseColor("#ff8353"));
+                }
+                else if(i%5==1){
+                    path.setWidth(10);
+                    path.setColor(Color.parseColor("#b31b3c"));
+                    path.setOutlineWidth(1);
+                    path.setOutlineColor(Color.parseColor("#b31b3c"));
+                }
+                else if(i%5==2){
+                    path.setWidth(10);
+                    path.setColor(Color.parseColor("#091ab3"));
+                    path.setOutlineWidth(1);
+                    path.setOutlineColor(Color.parseColor("#091ab3"));
+                }
+                else if(i%5==3){
+                    path.setWidth(10);
+                    path.setColor(Color.parseColor("#801ab3"));
+                    path.setOutlineWidth(1);
+                    path.setOutlineColor(Color.parseColor("#801ab3"));
+                }
+                else if(i%5==4){
+                    path.setWidth(10);
+                    path.setColor(Color.parseColor("#b0e400"));
+                    path.setOutlineWidth(1);
+                    path.setOutlineColor(Color.parseColor("#b0e400"));
+                }
                 path.setMap(naverMap);
                 pathOverlays.add(path);
             }
