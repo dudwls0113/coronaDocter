@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "839807434055",
+    "firebase_url": "https://coronadoctor-1268e.firebaseio.com",
+    "project_id": "coronadoctor-1268e",
+    "storage_bucket": "coronadoctor-1268e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:839807434055:android:9cd3e9a627503bc151e062",
+        "android_client_info": {
+          "package_name": "com.softsquared.android.corona"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "839807434055-554alngt6160qs573mdbjv3gvjju0v7o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.softsquared.android.corona",
+            "certificate_hash": "0539a298123ec30132071df52db6b33f1525184e"
+          }
+        },
+        {
+          "client_id": "839807434055-oshvsrhqrbddpbhu3mftbn6e4si00blb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCK1_aC5NuDvbMZFqnD4Y0dXtlOxojc_L8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "839807434055-oshvsrhqrbddpbhu3mftbn6e4si00blb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
