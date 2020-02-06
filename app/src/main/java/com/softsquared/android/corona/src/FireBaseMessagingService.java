@@ -48,11 +48,11 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
 //        String type = remoteMessage.getData().get("type");
 
 
+
         Intent intent = new Intent(this, SplashActivity.class);
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, channel_id,intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         final String CHANNEL_ID = "coronaDoctor";
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -71,7 +71,6 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
         builder.setAutoCancel(true);
-//        builder.setDefaults(Notification.DEFAULT_ALL);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         builder.setWhen(System.currentTimeMillis());
 
@@ -86,7 +85,9 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
         builder.setContentTitle(title);
         builder.setContentText(message);
         builder.setSound(defaultSoundUri);
-        builder.setFullScreenIntent(pendingIntent, true);
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(message));   // 3
+        builder.setContentIntent(pendingIntent);
+//        builder.setFullScreenIntent(pendingIntent, true);
 
         notificationManager.notify(channel_id, builder.build());
         channel_id++;

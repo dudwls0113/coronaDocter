@@ -65,7 +65,7 @@ public class FaqFragment extends BaseFragment {
         });
 
         mWebView.loadUrl(URL2);
-//        mWebView.scrollTo(0,2300);
+        mWebView.scrollTo(0,500);
 
 
     }
