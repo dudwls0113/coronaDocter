@@ -18,6 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApplicationClass extends Application {
     public static MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=uft-8");
     public static MediaType MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg");
+    public static int channel_id = 0;
 
     // 테스트 서버 주소
     public static String BASE_URL = "http://52.79.232.21/";
@@ -27,7 +28,12 @@ public class ApplicationClass extends Application {
     public static SharedPreferences sSharedPreferences = null;
 
     // SharedPreferences 키 값
-    public static String TAG = "TEMPLATE_APP";
+    public static String TAG = "CORONA_DOCTOR_APP";
+    public static String CAN_UPDATE_ROUTE = "CAN_UPDATE_ROUTE";
+    public static String CAN_UPDATE_CLINIC= "CAN_UPDATE_CLINIC";
+    public static String CAN_UPDATE_HOSPITAL = "CAN_UPDATE_HOSPITAL";
+    public static String PUSH_ON_OFF = "PUSH_ON_OFF";
+
 
     // JWT Token 값
     public static String X_ACCESS_TOKEN = "X-ACCESS-TOKEN";

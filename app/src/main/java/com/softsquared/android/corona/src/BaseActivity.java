@@ -2,11 +2,16 @@ package com.softsquared.android.corona.src;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.softsquared.android.corona.R;
+
+import static com.softsquared.android.corona.src.ApplicationClass.sSharedPreferences;
 
 
 @SuppressLint("Registered")
@@ -30,6 +35,16 @@ public class BaseActivity extends AppCompatActivity {
     public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (sSharedPreferences == null) {
+            sSharedPreferences = getApplicationContext().getSharedPreferences(ApplicationClass.TAG
+                    , Context.MODE_PRIVATE);
+
         }
     }
 

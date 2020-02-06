@@ -9,8 +9,8 @@ public class DefaultResponse {
     @SerializedName("message")
     private String message;
 
-    @SerializedName("isSuccess")
-    private boolean isSuccess;
+    @SerializedName("fcmToken")
+    private String fcmToken;
 
     public int getCode() {
         return code;
@@ -20,7 +20,11 @@ public class DefaultResponse {
         return message;
     }
 
-    public boolean getIsSuccess() {
-        return isSuccess;
+    public String getFcmToken() {
+        return fcmToken;
     }
+
+    //    public boolean getIsSuccess() {
+//        return isSuccess;
+//    }
 }

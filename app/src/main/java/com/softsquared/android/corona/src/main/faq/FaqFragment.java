@@ -24,7 +24,7 @@ public class FaqFragment extends BaseFragment {
 
     Context mContext;
     WebView mWebView;
-    private static String URL2 = "http://www.cdc.go.kr/linkCheck.es?mid=a21111050400";
+    private static String URL2 = "http://ncov.mohw.go.kr/faqBoardList.do";
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -65,7 +65,7 @@ public class FaqFragment extends BaseFragment {
         });
 
         mWebView.loadUrl(URL2);
-        mWebView.scrollTo(0,2300);
+//        mWebView.scrollTo(0,2300);
 
 
     }

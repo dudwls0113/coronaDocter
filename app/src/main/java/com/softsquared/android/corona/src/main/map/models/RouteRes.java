@@ -37,6 +37,13 @@ public class RouteRes {
     @SerializedName("routeName")
     String routeName;
 
+    public int getNewRoute() {
+        return isNewRoute;
+    }
+
+    @SerializedName("isNewRoute")
+    int isNewRoute;
+
     public String getRouteName() {
         return routeName;
     }

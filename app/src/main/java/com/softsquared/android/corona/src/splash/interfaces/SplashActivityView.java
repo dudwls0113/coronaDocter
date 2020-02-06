@@ -6,5 +6,8 @@ public interface SplashActivityView {
 
     void validateFailure(String message);
 
+    void updateFcmFail();
+
+    void updateFcmSuccess(String fcm);
 
 }

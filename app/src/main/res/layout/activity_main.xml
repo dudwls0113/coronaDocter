@@ -12,8 +12,8 @@
         android:id="@+id/activity_main_relative_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -27,14 +27,31 @@
                 android:id="@+id/activity_main_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorWhite"
-                android:visibility="gone"
                 android:text="지도"
+                android:textColor="@color/colorWhite"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="visible" />
+
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/activity_main_linear_noti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/activity_main_iv_noti"
+                android:layout_width="24dp"
+                android:layout_height="30dp"
+                android:padding="2dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/img_noti_off"/>
+        </LinearLayout>
 
     </RelativeLayout>
 
@@ -46,15 +63,14 @@
         android:background="@color/colorWhite" />
 
 
-
     <devlight.io.library.ntb.NavigationTabBar
-        android:elevation="20dp"
         android:id="@+id/ntb"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:background="@color/colorWhite"
+        android:elevation="20dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:background="@color/colorWhite"
         app:ntb_active_color="@color/colorDeepBlue"
         app:ntb_animation_duration="0"
         app:ntb_badge_use_typeface="false"
@@ -68,7 +84,6 @@
         app:ntb_title_mode="all"
         app:ntb_title_size="0sp"
         app:ntb_titled="false" />
-
 
 
 </LinearLayout>

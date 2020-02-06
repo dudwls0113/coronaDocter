@@ -1,9 +1,14 @@
 package com.softsquared.android.corona.src.main;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -23,6 +28,11 @@ import com.softsquared.android.corona.src.main.order.OrderFragment;
 import java.util.ArrayList;
 
 import devlight.io.library.ntb.NavigationTabBar;
+
+import static com.softsquared.android.corona.src.ApplicationClass.CAN_UPDATE_CLINIC;
+import static com.softsquared.android.corona.src.ApplicationClass.CAN_UPDATE_ROUTE;
+import static com.softsquared.android.corona.src.ApplicationClass.PUSH_ON_OFF;
+import static com.softsquared.android.corona.src.ApplicationClass.sSharedPreferences;
 
 public class MainActivity extends BaseActivity implements MainActivityView {
     private TextView mTextViewTitle;
@@ -45,6 +55,9 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     MainFragmentPagerAdapter mMainFragmentPagerAdapter;
 
     private RelativeLayout mRelativeTopBar;
+    private LinearLayout mLinearNoti;
+    private ImageView mImageViewNoti;
+
 
     public static NavigationTabBar mNavigationTabBar;
     private ArrayList<NavigationTabBar.Model> mNavigationTabBarModels;
@@ -65,6 +78,8 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         mTextViewTitle = findViewById(R.id.activity_main_tv);
         mRelativeTopBar = findViewById(R.id.activity_main_relative_top);
+        mLinearNoti = findViewById(R.id.activity_main_linear_noti);
+        mImageViewNoti = findViewById(R.id.activity_main_iv_noti);
 //        mTextViewTitle = findViewById(R.id.activity_main_tv);
 //        mImageViewTitle = findViewById(R.id.activity_main_iv_title);
 
@@ -143,6 +158,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                     case MAP_FRAGMENT:
                         mRelativeTopBar.setVisibility(View.GONE);
                         mTextViewTitle.setVisibility(View.VISIBLE);
+                        mLinearNoti.setVisibility(View.GONE);
                         mTextViewTitle.setText("지도");
                         IS_WEBVIEW_MODE = 0;
                         break;
@@ -150,6 +166,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                     case NEWS_FRAGMENT:
                         mRelativeTopBar.setVisibility(View.VISIBLE);
                         mTextViewTitle.setVisibility(View.VISIBLE);
+                        mLinearNoti.setVisibility(View.GONE);
                         mTextViewTitle.setText("뉴스");
                         IS_WEBVIEW_MODE = 1;
                         break;
@@ -157,6 +174,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                     case ORDER_FRAGMENT:
                         mRelativeTopBar.setVisibility(View.VISIBLE);
                         mTextViewTitle.setVisibility(View.VISIBLE);
+                        mLinearNoti.setVisibility(View.GONE);
                         mTextViewTitle.setText("구매");
                         IS_WEBVIEW_MODE = 0;
 
@@ -164,12 +182,16 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                     case INFO_FRAGMENT:
                         mRelativeTopBar.setVisibility(View.VISIBLE);
                         mTextViewTitle.setVisibility(View.VISIBLE);
+                        mLinearNoti.setVisibility(View.VISIBLE);
+
                         mTextViewTitle.setText("감염 정보");
                         IS_WEBVIEW_MODE = 0;
                         break;
                     case FAQ_FRAGMENT:
                         mRelativeTopBar.setVisibility(View.VISIBLE);
                         mTextViewTitle.setVisibility(View.VISIBLE);
+                        mLinearNoti.setVisibility(View.GONE);
+
                         mTextViewTitle.setText("질문 답변");
                         IS_WEBVIEW_MODE = 0;
                         break;
@@ -183,6 +205,23 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         });
         mNavigationTabBar.setBadgeTitleColor(Color.WHITE);
         mNavigationTabBar.setIsSwiped(true);
+
+        setNotiIcon();
+        mImageViewNoti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences spf = sSharedPreferences;
+                boolean isPushOn = spf.getBoolean(PUSH_ON_OFF, true);
+                final SharedPreferences.Editor editor = sSharedPreferences.edit();
+                if (isPushOn) {
+                    editor.putBoolean(PUSH_ON_OFF, false);
+                } else {
+                    editor.putBoolean(PUSH_ON_OFF, true);
+                }
+                editor.apply();
+                setNotiIcon();
+            }
+        });
     }
 
 
@@ -239,7 +278,18 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                     " 뒤로가기를 한번 더 누르면 앱을 종료합니다", Snackbar.LENGTH_LONG).show();
         }
     }
-
+    public void setNotiIcon(){
+        SharedPreferences spf = sSharedPreferences;
+        boolean isPushOn = spf.getBoolean(PUSH_ON_OFF, true);
+        final SharedPreferences.Editor editor = sSharedPreferences.edit();
+        if (isPushOn) {
+            mImageViewNoti.setImageResource(R.drawable.img_noti_on);
+            editor.putBoolean(PUSH_ON_OFF, false);
+        } else {
+            mImageViewNoti.setImageResource(R.drawable.img_noti_off);
+            editor.putBoolean(PUSH_ON_OFF, true);
+        }
+    }
 
     public void customOnClick(View view) {
         switch (view.getId()) {
