@@ -42,6 +42,7 @@ import com.softsquared.android.corona.src.GpsTracker;
 import com.softsquared.android.corona.src.main.map.interfaces.MapViewView;
 import com.softsquared.android.corona.src.main.map.models.ClinicInfo;
 import com.softsquared.android.corona.src.main.map.models.HospitalInfo;
+import com.softsquared.android.corona.src.main.map.models.Infected;
 import com.softsquared.android.corona.src.main.map.models.RouteRes;
 import com.softsquared.android.corona.src.main.map.models.RouteResponse;
 
@@ -60,17 +61,20 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     ZoomControlView zoomControlView;
     private MapView mapView;
     NaverMap naverMap;
-    ImageView mBtn, mBtn2, mBtn3, mBtn4;
+    ImageView mBtn, mBtn2, mBtn3, mBtn4, mBtnInfectedSelect;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationSource locationSource;
     ArrayList<PathOverlay> pathOverlays = new ArrayList<>();
     ArrayList<RouteResponse> routeResponses = new ArrayList<>();
     ArrayList<Marker> markers = new ArrayList<>();
+    ArrayList<Infected> mInfectedList = new ArrayList<>();
+    ArrayList<Integer> selectedInfectedArr = new ArrayList<>();
 
     private boolean route1 = true;
     private boolean route2 = false;
     private boolean route3 = false;
     private boolean route4 = true;
+    private boolean mIsSel = true;
 
     ArrayList<ClinicInfo> clinicInfos = new ArrayList<>();
     ArrayList<Marker> markerClinic = new ArrayList<>();
@@ -99,7 +103,6 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         routeResponses.clear();
         clinicInfos.clear();
         mapView.getMapAsync(this);
-
 //        SharedPreferences spf = sSharedPreferences;
 //        canUpdateRoute = spf.getBoolean(CAN_UPDATE_ROUTE, true);
 //        canUpdateClinic = spf.getBoolean(CAN_UPDATE_CLINIC, true);
@@ -162,7 +165,6 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
             public void onClick(View view) {
                 if (route1) {
                     for (int i = 0; i < markers.size(); i++) {
-                        Log.d("map", "??개");
                         markers.get(i).setMap(null);
                     }
                     for (int i = 0; i < pathOverlays.size(); i++) {
@@ -176,12 +178,14 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                     mBtn4.setImageResource(R.drawable.ic_route4_off);
                     route4 = false;
                 } else {
-                    for (int i = 0; i < markers.size(); i++) {
-                        markers.get(i).setMap(naverMap);
-                    }
-                    for (int i = 0; i < pathOverlays.size(); i++) {
-                        pathOverlays.get(i).setMap(naverMap);
-                    }
+//                    for (int i = 0; i < markers.size(); i++) {
+//                        markers.get(i).setMap(naverMap);
+//                    }
+//                    for (int i = 0; i < pathOverlays.size(); i++) {
+//                        pathOverlays.get(i).setMap(naverMap);
+//                    }
+                    updateMarkerAndLine();
+
                     mBtn.setImageResource(R.drawable.ic_route1);
 //                    getRoute();
                     route1 = true;
@@ -255,11 +259,66 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                     for (int i = 0; i < pathOverlays.size(); i++) {
                         pathOverlays.get(i).setMap(naverMap);
                     }
+                    updateLine();
                 }
             }
         });
+
+        mBtnInfectedSelect = v.findViewById(R.id.fragment_map_btn_infected_select);
+        mBtnInfectedSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InfectedSelectCustomDialog infectedSelectCustomDialog = new InfectedSelectCustomDialog(getContext(), mInfectedList, new InfectedSelectCustomDialog.CustomDialogDoneEventListener() {
+                    @Override
+                    public void doneClicked(ArrayList<Infected> infectedArrayList) {
+                        updateSelectedInfectedArr();
+                        updateMarkerAndLine();
+                    }
+                });
+                infectedSelectCustomDialog.show();
+            }
+        });
+
         locationSource =
                 new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+    }
+
+    void updateMarkerAndLine() {
+        for (int i = 0; i < markers.size(); i++) {
+            if (!selectedInfectedArr.contains((Integer) markers.get(i).getTag())) {
+//                                Log.d("로그___지워라이거를", markers.get(i).getTag()+"");
+                markers.get(i).setMap(null);
+            } else {
+                markers.get(i).setMap(naverMap);
+            }
+        }
+        for (int i = 0; i < pathOverlays.size(); i++) {
+            if (!selectedInfectedArr.contains((Integer) pathOverlays.get(i).getTag())) {
+                pathOverlays.get(i).setMap(null);
+            } else {
+                pathOverlays.get(i).setMap(naverMap);
+            }
+        }
+    }
+
+    void updateLine() {
+        for (int i = 0; i < pathOverlays.size(); i++) {
+            if (!selectedInfectedArr.contains((Integer) pathOverlays.get(i).getTag())) {
+                pathOverlays.get(i).setMap(null);
+            } else {
+                pathOverlays.get(i).setMap(naverMap);
+            }
+        }
+    }
+
+    void updateSelectedInfectedArr(){
+        selectedInfectedArr.clear();
+        for (int i = 0; i < mInfectedList.size(); i++) {
+            if (mInfectedList.get(i).isSelected()) {
+                selectedInfectedArr.add(mInfectedList.get(i).getInfectedNo());
+//                Log.d("로그, 추가", mInfectedList.get(i).getInfectedNo()+"");
+            }
+        }
     }
 
     @Override
@@ -297,7 +356,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         naverMap.setOnMapLongClickListener(new NaverMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
-                showCustomToast(pointF + "");
+//                showCustomToast(pointF + "");
             }
         });
 
@@ -326,6 +385,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 
 
         getRoute();
+        getInfected();
     }
 
     void getRoute() {
@@ -348,10 +408,16 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         mapViewService.getHospital();
     }
 
+    void getInfected() {
+        showProgressDialog(getActivity());
+        final MapViewService mapViewService = new MapViewService(this);
+        mapViewService.getInfected();
+    }
+
     @Override
     public void validateGetRouteSuccess(ArrayList<RouteResponse> arrayList) {
         routeResponses.addAll(arrayList);
-        for(int i=0; i<markers.size(); i++){
+        for (int i = 0; i < markers.size(); i++) {
             markers.get(i).setMap(null);
             Log.d("map", "널");
         }
@@ -385,7 +451,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                     marker.setIcon(marker5);
                 }
                 marker.setHeight(90);
-                if(routeResponses.get(i).getRouteRes().get(j).getNewRoute() == 1){
+                if (routeResponses.get(i).getRouteRes().get(j).getNewRoute() == 1) {
                     if (i % 5 == 0) {
                         marker.setIcon(newMarker1);
                     } else if (i % 5 == 1) {
@@ -401,6 +467,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                 }
                 marker.setAnchor(new PointF((float) 0.5, (float) 0.5));
                 marker.setWidth(90);
+                marker.setTag(routeResponses.get(i).getRouteRes().get(j).getInfectedNo());
                 marker.setMap(naverMap);
                 final RouteRes routeRes = routeResponses.get(i).getRouteRes().get(j);
                 marker.setOnClickListener(new Overlay.OnClickListener() {
@@ -442,6 +509,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                     path.setOutlineWidth(1);
                     path.setOutlineColor(Color.parseColor("#b0e400"));
                 }
+                path.setTag(routeResponses.get(i).getRouteRes().get(0).getInfectedNo());
                 path.setMap(naverMap);
                 pathOverlays.add(path);
             }
@@ -518,5 +586,13 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         final SharedPreferences.Editor editor = sSharedPreferences.edit();
         editor.putBoolean(CAN_UPDATE_HOSPITAL, false);
         editor.apply();
+    }
+
+    @Override
+    public void validateGetInfectedSuccess(ArrayList<Infected> arrayList) {
+        hideProgressDialog();
+        mInfectedList = arrayList;
+//        showCustomToast(arrayList.size() + "");
+        updateSelectedInfectedArr();
     }
 }

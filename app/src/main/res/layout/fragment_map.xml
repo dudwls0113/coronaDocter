@@ -111,6 +111,26 @@
             android:gravity="center"
             android:textColor="#000000"
             android:lineSpacingExtra="4sp"/>
+
+        <ImageView
+            android:id="@+id/fragment_map_btn_infected_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_infected_select" />
+        <TextView
+            android:layout_marginTop="-1dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:text="감염자 선택"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:lineSpacingExtra="4sp"/>
+
     </LinearLayout>
 
 
