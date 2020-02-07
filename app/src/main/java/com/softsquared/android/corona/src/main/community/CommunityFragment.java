@@ -86,10 +86,8 @@ public class CommunityFragment extends BaseFragment {
         mLinearHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showWrite();
-                if (mIsExpanded) {
-                    mIsExpanded = false;
-                } else {
+                if(!mIsExpanded){
+                    showWrite();
                     mIsExpanded = true;
                 }
             }
@@ -98,6 +96,7 @@ public class CommunityFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 hideWrite();
+                mIsExpanded = false;
             }
         });
     }
@@ -116,7 +115,7 @@ public class CommunityFragment extends BaseFragment {
             }
         });
         anim2.start();
-//        mLinearHeader.setVisibility(View.GONE);
+        mIsExpanded = true;
     }
 
 
