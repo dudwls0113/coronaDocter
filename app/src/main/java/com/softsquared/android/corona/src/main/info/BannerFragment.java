@@ -1,6 +1,7 @@
 package com.softsquared.android.corona.src.main.info;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,11 +11,10 @@ import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import com.google.android.material.snackbar.Snackbar;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseFragment;
 import com.softsquared.android.corona.src.main.news.KakaoShareCustomDialog;
+import com.softsquared.android.corona.src.main.community.OrderWebViewActivity;
 
 
 public class BannerFragment extends BaseFragment {
@@ -23,12 +23,15 @@ public class BannerFragment extends BaseFragment {
     Context mContext;
     int imageId;
     int type;
+    String title;
 
-    public static Fragment newInstance(CaringInfo caringInfo){
+
+    public static Fragment newInstance(CaringInfo caringInfo) {
         BannerFragment bannerFragment = new BannerFragment();
         Bundle args = new Bundle();
         args.putInt("imageId", caringInfo.getCaringId());
-        args.putInt("type",caringInfo.getType());
+        args.putInt("type", caringInfo.getType());
+        args.putString("title", caringInfo.getTitle());
         bannerFragment.setArguments(args);
         return bannerFragment;
     }
@@ -36,9 +39,10 @@ public class BannerFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments()!=null){
+        if (getArguments() != null) {
             imageId = getArguments().getInt("imageId");
             type = getArguments().getInt("type");
+            title = getArguments().getString("title");
         }
     }
 
@@ -47,7 +51,7 @@ public class BannerFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_banner, container, false);
-        mContext=getContext();
+        mContext = getContext();
         setComponentView(view);
         return view;
     }
@@ -58,15 +62,18 @@ public class BannerFragment extends BaseFragment {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(type == 1){//카톡 공유
+                if (type == 1) {//카톡 공유
                     KakaoShareCustomDialog kakaoShareCustomDialog = new KakaoShareCustomDialog(getContext(), "https://play.google.com/store/apps/details?id=com.softsquared.android.corona");
                     kakaoShareCustomDialog.show();
 //                    Snackbar.make(view, mWebView.getUrl(), Snackbar.LENGTH_LONG)
 //                            .setAction("Action", null).show();
-                }
-                else{
+                } else if (type == 2) {//다이얼로그
                     BannerLongDialog bannerLongDialog = new BannerLongDialog(getContext());
                     bannerLongDialog.show();
+                } else {//구매
+                    Intent intent3 = new Intent(getContext(), OrderWebViewActivity.class);
+                    intent3.putExtra("keyword", title);
+                    startActivity(intent3);
                 }
             }
         });

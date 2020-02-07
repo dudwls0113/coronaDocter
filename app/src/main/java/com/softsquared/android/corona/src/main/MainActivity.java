@@ -4,11 +4,9 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -23,14 +21,12 @@ import com.softsquared.android.corona.src.main.info.InfoFragment;
 import com.softsquared.android.corona.src.main.interfaces.MainActivityView;
 import com.softsquared.android.corona.src.main.map.MapViewFragment;
 import com.softsquared.android.corona.src.main.news.NewsFragment;
-import com.softsquared.android.corona.src.main.order.OrderFragment;
+import com.softsquared.android.corona.src.main.community.CommunityFragment;
 
 import java.util.ArrayList;
 
 import devlight.io.library.ntb.NavigationTabBar;
 
-import static com.softsquared.android.corona.src.ApplicationClass.CAN_UPDATE_CLINIC;
-import static com.softsquared.android.corona.src.ApplicationClass.CAN_UPDATE_ROUTE;
 import static com.softsquared.android.corona.src.ApplicationClass.PUSH_ON_OFF;
 import static com.softsquared.android.corona.src.ApplicationClass.sSharedPreferences;
 
@@ -72,7 +68,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     private void initView() {
         mDealingFragments = new MapViewFragment();
         mNewsFragments = new NewsFragment();
-        mOrderFragment = new OrderFragment();
+        mOrderFragment = new CommunityFragment();
         mInfoFragment = new InfoFragment();
         mFaqFragment = new FaqFragment();
 

@@ -54,6 +54,8 @@ public class InfoFragment extends BaseFragment implements InfoFragmentView {
         mArrayListCaringInfos.clear();
         mArrayListCaringInfos.add(new CaringInfo(R.drawable.banner_invite, "", 1));
         mArrayListCaringInfos.add(new CaringInfo(R.drawable.banner_tip, "", 2));
+        mArrayListCaringInfos.add(new CaringInfo(R.drawable.img_mask, "KF94마스크", 3));
+        mArrayListCaringInfos.add(new CaringInfo(R.drawable.img_hand, "손세정제", 3));
 
         newsAdapter = new NewsAdapter(getChildFragmentManager(), mArrayListCaringInfos);
 

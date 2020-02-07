@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
+        tools:replace="android:icon"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".src.splash.SplashActivity">
             <intent-filter>
@@ -23,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".src.main.order.OrderWebViewActivity"></activity>
+        <activity android:name=".src.main.community.OrderWebViewActivity"></activity>
         <activity android:name=".src.main.MainActivity"></activity>
 
         <meta-data

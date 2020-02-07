@@ -1,4 +1,4 @@
-package com.softsquared.android.corona.src.main.order;
+package com.softsquared.android.corona.src.main.community;
 
 import androidx.appcompat.app.AppCompatActivity;
 

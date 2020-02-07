@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_history_Linear_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="17dp"
+    android:layout_marginEnd="17dp"
+    android:background="@drawable/bg_rec_trans_deep_blue"
+    android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:lineSpacingExtra="3.7sp"
+            android:padding="14dp"
+            android:text="새 글을 작성해주세요!"
+            android:textColor="#0802c1"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/img_post" />
+</LinearLayout>
