@@ -9,5 +9,7 @@ public interface PostDetailView {
 
     void getPostDetail(Post post, ArrayList<Comment> arrayList);
 
+    void postCommentWrite();
+
     void validateFailure(String message);
 }

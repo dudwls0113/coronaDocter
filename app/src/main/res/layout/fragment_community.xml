@@ -76,6 +76,7 @@
                 android:orientation="vertical">
 
                 <EditText
+                    android:id="@+id/post_write_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -97,6 +98,7 @@
                     android:background="#707070" />
 
                 <EditText
+                    android:id="@+id/post_write_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"

@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,10 +37,12 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     ViewPager mViewPager;
     NewsAdapter newsAdapter;
     TabLayout mTabLayout;
-    Button mBtnCancel;
+    Button mBtnCancel, mBtnWrite;
     ImageView mImageViewMask, mImageViewHand;
     LinearLayout mLinearHeader, mLinearContent;
     LikeCheckDialog likeCheckDialog;
+    EditText mTextViewPostWriteTitle, mTextViewPostWriteContent;
+
 
     ArrayList<CaringInfo> mArrayListCaringInfos = new ArrayList<>();
     boolean mIsExpanded = false;
@@ -79,7 +83,6 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     public void setComponentView(View v) {
         SharedPreferences spf = sSharedPreferences;
         mFcmToken = spf.getString("fcm", null);
-
         mTabLayout = v.findViewById(R.id.home_tab_indicator);
         mLinearHeader = v.findViewById(R.id.fragment_community_linear_header);
         mLinearContent = v.findViewById(R.id.fragment_community_linear_content);
@@ -132,6 +135,23 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
             public void onClick(View view) {
                 hideWrite();
                 mIsExpanded = false;
+            }
+        });
+
+        mTextViewPostWriteTitle = v.findViewById(R.id.post_write_title);
+        mTextViewPostWriteContent = v.findViewById(R.id.post_write_content);
+
+        mBtnWrite = v.findViewById(R.id.dialog_infect_select_btn_post);
+        mBtnWrite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mTextViewPostWriteTitle.getText().toString().length() < 2) {
+                    showCustomToast("제목을 2글자 이상 입력해주세요.");
+                } else if (mTextViewPostWriteContent.getText().toString().length() < 5) {
+                    showCustomToast("내용은 5글자 이상 입력해주세요.");
+                } else {
+                    postWritePost(mFcmToken, mTextViewPostWriteTitle.getText().toString(), mTextViewPostWriteContent.getText().toString());
+                }
             }
         });
 
@@ -282,6 +302,12 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         communityService.getNewPost(mPage);
     }
 
+    void postWritePost(String fcmToken, String title, String content) {
+        showProgressDialog(getActivity());
+        final CommunityService communityService = new CommunityService(this);
+        communityService.postWritePost(fcmToken, title, content);
+    }
+
     @Override
     public void getHotPostSuccess(ArrayList<Post> arrayList) {
         hideProgressDialog();
@@ -307,6 +333,21 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     @Override
     public void postLikeSuccess(int position) {
         mHotPosts.get(position).setLikeCountPlus();
+    }
+
+    public void postWritePostSuccess() {
+        hideProgressDialog();
+        hideWrite();
+        mIsExpanded = false;
+        mPage = 0;
+        mLoadLock = false;
+        mNoMoreItem = false;
+        mHotPosts.clear();
+        mNewPosts.clear();
+        mHotPostAdapter.notifyDataSetChanged();
+        mNewPostAdapter.notifyDataSetChanged();
+        getHotPost();
+        getNewPost(mPage);
     }
 
     @Override

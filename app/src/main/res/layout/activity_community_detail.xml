@@ -161,6 +161,7 @@
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="10.3dp">
                     <EditText
+                        android:id="@+id/comment_edt_write"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -176,6 +177,7 @@
                         android:paddingBottom="10dp"
                         android:layout_marginEnd="10dp"/>
                     <ImageView
+                        android:id="@+id/comment_write"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_comment_write"

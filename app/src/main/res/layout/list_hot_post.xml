@@ -56,6 +56,8 @@
                 android:textColor="#434343"
                 android:textSize="12sp"
                 tools:text="4분전" />
+
+
         </LinearLayout>
 
         <TextView
@@ -65,11 +67,14 @@
             android:layout_marginStart="13.7dp"
             android:layout_marginEnd="13.7dp"
             android:layout_marginBottom="10.9dp"
+            android:ellipsize="end"
             android:lineSpacingExtra="3.7sp"
+            android:maxLines="6"
             android:textColor="#010101"
             android:textSize="12sp"
             tools:text="우리 지역에 감염자수 개많아..." />
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="wrap_content"

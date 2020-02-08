@@ -3,11 +3,17 @@ package com.softsquared.android.corona.src.main.community;
 import com.softsquared.android.corona.src.main.community.interfaces.CommunityRetrofitInterface;
 import com.softsquared.android.corona.src.main.community.interfaces.PostDetailView;
 import com.softsquared.android.corona.src.main.community.model.PostDetailResponse;
+import com.softsquared.android.corona.src.main.community.model.PostWriteResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.softsquared.android.corona.src.ApplicationClass.MEDIA_TYPE_JSON;
 import static com.softsquared.android.corona.src.ApplicationClass.getRetrofit;
 
 public class PostDetailService {
@@ -37,6 +43,39 @@ public class PostDetailService {
 
             @Override
             public void onFailure(Call<PostDetailResponse> call, Throwable t) {
+                mPostDetailView.validateFailure(null);
+            }
+        });
+    }
+
+    void postCommentWrite(String fcmToken, int postNo, String content){
+        JSONObject params = new JSONObject();
+        try {
+            params.put("fcmToken", fcmToken);
+            params.put("postNo", postNo);
+            params.put("content", content);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final CommunityRetrofitInterface communityRetrofitInterface = getRetrofit().create(CommunityRetrofitInterface.class);
+        communityRetrofitInterface.postWriteComment(RequestBody.create(params.toString(),MEDIA_TYPE_JSON)).enqueue(new Callback<PostWriteResponse>() {
+            @Override
+            public void onResponse(Call<PostWriteResponse> call, Response<PostWriteResponse> response) {
+                final PostWriteResponse postWriteResponse = response.body();
+                if(postWriteResponse==null){
+                    mPostDetailView.validateFailure(null);
+                }
+                else if(postWriteResponse.getCode()==100){
+                    mPostDetailView.postCommentWrite();
+                }
+                else{
+                    mPostDetailView.validateFailure(postWriteResponse.getMessage());
+                    System.out.println(postWriteResponse.getCode()+"코드");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostWriteResponse> call, Throwable t) {
                 mPostDetailView.validateFailure(null);
             }
         });

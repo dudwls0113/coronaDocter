@@ -12,5 +12,7 @@ public interface CommunityView {
 
     void postLikeSuccess(int position);
 
+    void postWritePostSuccess();
+
     void validateFailure(String message);
 }

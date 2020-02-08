@@ -3,6 +3,7 @@ package com.softsquared.android.corona.src.main.community.interfaces;
 import com.softsquared.android.corona.src.main.community.model.PostDetailResponse;
 import com.softsquared.android.corona.src.main.community.model.PostResponse;
 import com.softsquared.android.corona.src.main.models.DefaultResponse;
+import com.softsquared.android.corona.src.main.community.model.PostWriteResponse;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -23,4 +24,9 @@ public interface CommunityRetrofitInterface {
 
     @POST("/corona/like")
     Call<DefaultResponse> postLike(@Body RequestBody params);
+    @POST("/corona/post")
+    Call<PostWriteResponse> postWrite(@Body RequestBody params);
+
+    @POST("/corona/comment")
+    Call<PostWriteResponse> postWriteComment(@Body RequestBody params);
 }
