@@ -23,4 +23,7 @@ public interface CommunityRetrofitInterface {
 
     @POST("/corona/post")
     Call<PostWriteResponse> postWrite(@Body RequestBody params);
+
+    @POST("/corona/comment")
+    Call<PostWriteResponse> postWriteComment(@Body RequestBody params);
 }

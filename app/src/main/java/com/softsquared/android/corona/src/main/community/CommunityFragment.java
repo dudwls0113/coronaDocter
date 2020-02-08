@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,7 +40,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     Button mBtnCancel, mBtnWrite;
     ImageView mImageViewMask, mImageViewHand;
     LinearLayout mLinearHeader, mLinearContent;
-    TextView mTextViewPostWriteTitle, mTextViewPostWriteContent;
+    EditText mTextViewPostWriteTitle, mTextViewPostWriteContent;
 
 
     ArrayList<CaringInfo> mArrayListCaringInfos = new ArrayList<>();
@@ -144,7 +145,15 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         mBtnWrite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                postWritePost(fcmToken, mTextViewPostWriteTitle.getText().toString(), mTextViewPostWriteContent.getText().toString());
+                if(mTextViewPostWriteTitle.getText().toString().length()<2){
+                    showCustomToast("제목을 2글자 이상 입력해주세요.");
+                }
+                else if(mTextViewPostWriteContent.getText().toString().length()<5){
+                    showCustomToast("내용은 5글자 이상 입력해주세요.");
+                }
+                else{
+                    postWritePost(fcmToken, mTextViewPostWriteTitle.getText().toString(), mTextViewPostWriteContent.getText().toString());
+                }
             }
         });
 
@@ -310,6 +319,15 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         hideProgressDialog();
         hideWrite();
         mIsExpanded = false;
+        mPage = 0;
+        mLoadLock = false;
+        mNoMoreItem = false;
+        mPosts.clear();
+        mNewPosts.clear();
+        mHotPostAdapter.notifyDataSetChanged();
+        mNewPostAdapter.notifyDataSetChanged();
+        getHotPost();
+        getNewPost(mPage);
     }
 
     @Override

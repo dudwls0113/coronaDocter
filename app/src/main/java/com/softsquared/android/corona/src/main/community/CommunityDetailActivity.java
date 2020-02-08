@@ -5,7 +5,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.softsquared.android.corona.R;
@@ -19,17 +23,23 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.softsquared.android.corona.src.ApplicationClass.sSharedPreferences;
+
 public class CommunityDetailActivity extends BaseActivity implements PostDetailView {
 
     Context mContext;
 
     TextView mTextViewTitle, mTextViewTime, mTextViewContent, mTextViewLikeCount, mTextViewCommentCount;
+    ImageView mImageViewCommentWrite;
+    EditText mEdtComment;
+    View mCommentWrite;
 
     RecyclerView mRecyclerView;
     ArrayList<Comment> comments = new ArrayList<>();
     PostDetailAdapter mPostDetailAdapter;
 
     int postNo;
+    String fcmToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +53,29 @@ public class CommunityDetailActivity extends BaseActivity implements PostDetailV
     void init(){
         postNo = getIntent().getIntExtra("postNo",0);
 
+        SharedPreferences spf = sSharedPreferences;
+        fcmToken = spf.getString("fcm", null);
+
         mTextViewTitle = findViewById(R.id.detail_title);
         mTextViewTime = findViewById(R.id.detail_time);
         mTextViewContent = findViewById(R.id.detail_content);
         mTextViewLikeCount = findViewById(R.id.detail_tv_like);
         mTextViewCommentCount = findViewById(R.id.detail_tv_comment);
+
+        mEdtComment = findViewById(R.id.comment_edt_write);
+
+        mImageViewCommentWrite = findViewById(R.id.comment_write);
+        mImageViewCommentWrite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mEdtComment.getText().toString().length()<2){
+                    showCustomToast("댓글은 2글자 이상 입력해주세요.");
+                }
+                else{
+                    postCommentWrite(fcmToken, postNo, mEdtComment.getText().toString());
+                }
+            }
+        });
 
         mRecyclerView = findViewById(R.id.detail_comment_rv);
         mPostDetailAdapter = new PostDetailAdapter(mContext,comments);
@@ -71,6 +99,12 @@ public class CommunityDetailActivity extends BaseActivity implements PostDetailV
         showProgressDialog();
         final PostDetailService postDetailService = new PostDetailService(this);
         postDetailService.getPostDetail(postNo);
+    }
+
+    void postCommentWrite(String fcmToken, int postNo, String content){
+        showProgressDialog();
+        final PostDetailService postDetailService = new PostDetailService(this);
+        postDetailService.postCommentWrite(fcmToken, postNo, content);
     }
 
     @Override
@@ -116,6 +150,15 @@ public class CommunityDetailActivity extends BaseActivity implements PostDetailV
 
         comments.addAll(arrayList);
         mPostDetailAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void postCommentWrite() {
+        hideProgressDialog();
+        mEdtComment.setText("");
+        comments.clear();
+        mPostDetailAdapter.notifyDataSetChanged();
+        getPostDetail(postNo);
     }
 
     @Override
