@@ -5,7 +5,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application
         android:allowBackup="true"
@@ -15,8 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="android:icon"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:icon">
+        <activity android:name=".src.main.community.CommunityDetailActivity"></activity>
         <activity android:name=".src.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,8 +25,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".src.main.community.OrderWebViewActivity"></activity>
-        <activity android:name=".src.main.MainActivity"></activity>
+        <activity android:name=".src.main.community.OrderWebViewActivity" />
+        <activity android:name=".src.main.MainActivity" />
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"

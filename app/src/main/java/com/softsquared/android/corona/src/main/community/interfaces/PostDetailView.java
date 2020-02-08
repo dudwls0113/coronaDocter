@@ -5,10 +5,9 @@ import com.softsquared.android.corona.src.main.community.model.Post;
 
 import java.util.ArrayList;
 
-public interface CommunityView {
-    void getHotPostSuccess(ArrayList<Post> arrayList);
+public interface PostDetailView {
 
-    void getNewPostSuccess(ArrayList<Post> arrayList);
+    void getPostDetail(Post post, ArrayList<Comment> arrayList);
 
     void validateFailure(String message);
 }

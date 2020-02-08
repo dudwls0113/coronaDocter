@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.softsquared.android.corona.R;
+import com.softsquared.android.corona.src.main.community.model.Comment;
 import com.softsquared.android.corona.src.main.community.model.Post;
 
 import java.text.ParseException;
@@ -17,38 +18,36 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import retrofit2.http.POST;
-
-public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomViewHolder> {
+public class PostDetailAdapter extends RecyclerView.Adapter<PostDetailAdapter.CustomViewHolder> {
 
     private Context mContext;
-    private ArrayList<Post> mPosts = new ArrayList<>();
-    private NewPostAdapterListener mNewPostAdapterListener;
+    private ArrayList<Comment> comments = new ArrayList<>();
 
-    public NewPostAdapter(Context context, ArrayList<Post> arrayList, NewPostAdapterListener newPostAdapterListener){
+    public PostDetailAdapter(Context context, ArrayList<Comment> arrayList){
         mContext = context;
-        mPosts = arrayList;
-        mNewPostAdapterListener = newPostAdapterListener;
+        comments = arrayList;
     }
 
-    public interface NewPostAdapterListener{
-        void click(int postNo, int position);
-        void likeClick(int postNo, int position);
-    }
+
     @NonNull
     @Override
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_new_post, parent, false);
-        NewPostAdapter.CustomViewHolder viewHolder = new NewPostAdapter.CustomViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_comment, parent, false);
+        PostDetailAdapter.CustomViewHolder viewHolder = new PostDetailAdapter.CustomViewHolder(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
-        holder.mTextViewTitle.setText(mPosts.get(position).getTitle());
-        holder.mTextViewContent.setText(mPosts.get(position).getContent());
-        holder.mTextViewLikeCount.setText(mPosts.get(position).getLikeCount()+"");
-        holder.mTextViewCommentCount.setText(mPosts.get(position).getCommentCount()+"");
+
+        if(position==comments.size()-1){
+            holder.mEndLine.setVisibility(View.GONE);
+        }
+        else{
+            holder.mEndLine.setVisibility(View.VISIBLE);
+        }
+
+        holder.mTextViewContent.setText(comments.get(position).getComment());
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -56,7 +55,7 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
         String formatDate = sdf.format(date);
         try {
             Date nowDate = sdf.parse(formatDate);
-            Date registerDate = sdf.parse(mPosts.get(position).getCreatedAt());
+            Date registerDate = sdf.parse(comments.get(position).getCreatedAt());
             long diff = nowDate.getTime() - registerDate.getTime();
             if (diff / 60000 < 60) {
                 if (diff / 60000 == 0) {
@@ -85,30 +84,18 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
 
     @Override
     public int getItemCount() {
-        return (null != mPosts ? mPosts.size() : 0);
+        return (comments==null ? 0 : comments.size());
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
-        View mViewItem;
-        TextView mTextViewLikeCount;
-        TextView mTextViewCommentCount;
-        TextView mTextViewTitle;
-        TextView mTextViewContent;
         TextView mTextViewTime;
+        TextView mTextViewContent;
+        View mEndLine;
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
-            mViewItem = itemView.findViewById(R.id.list_new_post_item);
-            mViewItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mNewPostAdapterListener.click(mPosts.get(getAdapterPosition()).getPostNo(), getAdapterPosition());
-                }
-            });
-            mTextViewLikeCount = itemView.findViewById(R.id.list_new_post_tv_like);
-            mTextViewCommentCount = itemView.findViewById(R.id.list_new_post_tv_comment);
-            mTextViewTitle = itemView.findViewById(R.id.list_new_post_title);
-            mTextViewContent = itemView.findViewById(R.id.list_new_post_tv_content);
-            mTextViewTime = itemView.findViewById(R.id.list_new_post_time);
+            mTextViewTime = itemView.findViewById(R.id.list_comment_tv_time);
+            mTextViewContent = itemView.findViewById(R.id.list_comment_tv_content);
+            mEndLine = itemView.findViewById(R.id.endLine);
         }
     }
 }

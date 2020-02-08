@@ -168,12 +168,17 @@
             android:lineSpacingExtra="8.7sp"
             android:layout_marginBottom="16dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/hot_post_rv"
-            android:layout_marginBottom="12dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/hot_post_rv"
+                android:layout_marginBottom="12dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        </RelativeLayout>
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -185,12 +190,18 @@
             android:lineSpacingExtra="8.7sp"
             android:layout_marginStart="17dp"
             android:layout_marginBottom="16dp"/>
-        <androidx.recyclerview.widget.RecyclerView
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/new_post_rv"
-            android:layout_marginBottom="12dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/new_post_rv"
+                android:layout_marginBottom="12dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        </RelativeLayout>
+
 
     </LinearLayout>
 </ScrollView>
