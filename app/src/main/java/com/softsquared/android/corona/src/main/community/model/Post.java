@@ -21,6 +21,9 @@ public class Post {
     @SerializedName("createdAt")
     String createdAt;
 
+    @SerializedName("type")
+    int type;
+
     public int getPostNo() {
         return postNo;
     }
@@ -31,6 +34,10 @@ public class Post {
 
     public String getTitle() {
         return title;
+    }
+
+    public int getType() {
+        return type;
     }
 
     public String getContent() {

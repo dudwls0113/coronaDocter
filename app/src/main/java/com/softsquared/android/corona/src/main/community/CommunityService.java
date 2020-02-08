@@ -2,6 +2,8 @@ package com.softsquared.android.corona.src.main.community;
 
 import com.softsquared.android.corona.src.main.community.interfaces.CommunityRetrofitInterface;
 import com.softsquared.android.corona.src.main.community.interfaces.CommunityView;
+import com.softsquared.android.corona.src.main.community.interfaces.PostDetailView;
+import com.softsquared.android.corona.src.main.community.model.PostDetailResponse;
 import com.softsquared.android.corona.src.main.community.model.PostResponse;
 
 import retrofit2.Call;
@@ -64,4 +66,5 @@ public class CommunityService {
             }
         });
     }
+
 }

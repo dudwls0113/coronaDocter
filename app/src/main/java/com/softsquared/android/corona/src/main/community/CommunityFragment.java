@@ -141,13 +141,14 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         });
         mHotPostAdapter = new HotPostAdapter(getContext(), mPosts, new HotPostAdapter.HotPostAdapterListener() {
             @Override
-            public void Click() {
-                showCustomToast(mHotPostAdapter.getItemCount() + "");
+            public void Click(int postNo, int position) {
+                Intent intent = new Intent(getContext(), CommunityDetailActivity.class);
+                intent.putExtra("postNo", postNo);
+                startActivity(intent);
             }
 
             @Override
-            public void likeClick() {
-                showCustomToast(mHotPostAdapter.getItemCount() + "");
+            public void likeClick(int postNo, int position) {
 
             }
         });
@@ -168,12 +169,14 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
 
         mNewPostAdapter = new NewPostAdapter(getContext(), mNewPosts, new NewPostAdapter.NewPostAdapterListener() {
             @Override
-            public void click() {
-
+            public void click(int postNo, int position) {
+                Intent intent = new Intent(getContext(), CommunityDetailActivity.class);
+                intent.putExtra("postNo", postNo);
+                startActivity(intent);
             }
 
             @Override
-            public void likeClick() {
+            public void likeClick(int postNo, int position) {
 
             }
         });
