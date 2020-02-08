@@ -113,7 +113,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         mLinearHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!mIsExpanded){
+                if (!mIsExpanded) {
                     showWrite();
                     mIsExpanded = true;
                 }
@@ -128,7 +128,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         });
 
         mRecyclerView = v.findViewById(R.id.hot_post_rv);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
             @Override
             public boolean canScrollVertically() {
                 return false;
@@ -142,18 +142,19 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         mHotPostAdapter = new HotPostAdapter(getContext(), mPosts, new HotPostAdapter.HotPostAdapterListener() {
             @Override
             public void Click() {
-
+                showCustomToast(mHotPostAdapter.getItemCount() + "");
             }
 
             @Override
             public void likeClick() {
+                showCustomToast(mHotPostAdapter.getItemCount() + "");
 
             }
         });
         mRecyclerView.setAdapter(mHotPostAdapter);
 
         mNewRv = v.findViewById(R.id.new_post_rv);
-        mNewRv.setLayoutManager(new LinearLayoutManager(getContext()){
+        mNewRv.setLayoutManager(new LinearLayoutManager(getContext()) {
             @Override
             public boolean canScrollVertically() {
                 return false;
@@ -205,7 +206,8 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     }
 
     private void showWrite() {
-        ValueAnimator anim2 = ValueAnimator.ofInt(0,700);
+        float dp = getContext().getResources().getDisplayMetrics().density;
+        ValueAnimator anim2 = ValueAnimator.ofInt(0, (int) (300f * dp));
         anim2.setDuration(500); // duration 5 seconds
 //        anim2.setRepeatCount(ValueAnimator.INFINITE);
         anim2.setRepeatMode(ValueAnimator.REVERSE);
@@ -223,7 +225,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
 
 
     private void hideWrite() {
-        ValueAnimator anim2 = ValueAnimator.ofInt(800,0);
+        ValueAnimator anim2 = ValueAnimator.ofInt(800, 0);
         anim2.setDuration(500); // duration 5 seconds
 //        anim2.setRepeatCount(ValueAnimator.INFINITE);
         anim2.setRepeatMode(ValueAnimator.REVERSE);
@@ -239,13 +241,13 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
 //        mLinearHeader.setVisibility(View.VISIBLE);
     }
 
-    void getHotPost(){
+    void getHotPost() {
         showProgressDialog(getActivity());
         final CommunityService communityService = new CommunityService(this);
         communityService.getHotPost();
     }
 
-    void getNewPost(int mPage){
+    void getNewPost(int mPage) {
         showProgressDialog(getActivity());
         final CommunityService communityService = new CommunityService(this);
         communityService.getNewPost(mPage);
@@ -261,11 +263,11 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     @Override
     public void getNewPostSuccess(ArrayList<Post> arrayList) {
         hideProgressDialog();
-        if(arrayList.size()%mSize!=0||arrayList.size()==0){
+        if (arrayList.size() % mSize != 0 || arrayList.size() == 0) {
             mNoMoreItem = true;
         }
 
-        if(arrayList!=null){
+        if (arrayList != null) {
             mNewPosts.addAll(arrayList);
             mNewPostAdapter.notifyDataSetChanged();
             mPage += arrayList.size();
@@ -276,6 +278,6 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     @Override
     public void validateFailure(String message) {
         hideProgressDialog();
-        showCustomToast( message == null || message.isEmpty() ? getString(R.string.network_error) : message);
+        showCustomToast(message == null || message.isEmpty() ? getString(R.string.network_error) : message);
     }
 }
