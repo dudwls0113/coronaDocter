@@ -24,6 +24,7 @@ public interface CommunityRetrofitInterface {
 
     @POST("/corona/like")
     Call<DefaultResponse> postLike(@Body RequestBody params);
+
     @POST("/corona/post")
     Call<PostWriteResponse> postWrite(@Body RequestBody params);
 

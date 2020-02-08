@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,19 +24,21 @@ import retrofit2.http.POST;
 public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomViewHolder> {
 
     private Context mContext;
-    private ArrayList<Post> mPosts = new ArrayList<>();
+    private ArrayList<Post> mPosts;
     private NewPostAdapterListener mNewPostAdapterListener;
 
-    public NewPostAdapter(Context context, ArrayList<Post> arrayList, NewPostAdapterListener newPostAdapterListener){
+    public NewPostAdapter(Context context, ArrayList<Post> arrayList, NewPostAdapterListener newPostAdapterListener) {
         mContext = context;
         mPosts = arrayList;
         mNewPostAdapterListener = newPostAdapterListener;
     }
 
-    public interface NewPostAdapterListener{
+    public interface NewPostAdapterListener {
         void click(int postNo, int position);
+
         void likeClick(int postNo, int position);
     }
+
     @NonNull
     @Override
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -47,8 +51,8 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         holder.mTextViewTitle.setText(mPosts.get(position).getTitle());
         holder.mTextViewContent.setText(mPosts.get(position).getContent());
-        holder.mTextViewLikeCount.setText(mPosts.get(position).getLikeCount()+"");
-        holder.mTextViewCommentCount.setText(mPosts.get(position).getCommentCount()+"");
+        holder.mTextViewLikeCount.setText(mPosts.get(position).getLikeCount() + "");
+        holder.mTextViewCommentCount.setText(mPosts.get(position).getCommentCount() + "");
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -66,8 +70,7 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
                 }
             } else if (diff / 108000000 <= 1) {
                 holder.mTextViewTime.setText(diff / 3600000 + "시간전");
-            }
-            else{
+            } else {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
                 String registerTime = simpleDateFormat.format(registerDate);
                 holder.mTextViewTime.setText(registerTime);
@@ -95,6 +98,9 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
         TextView mTextViewTitle;
         TextView mTextViewContent;
         TextView mTextViewTime;
+        ImageButton mImageBtnLike;
+        ImageView mImageViewComment;
+
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
             mViewItem = itemView.findViewById(R.id.list_new_post_item);
@@ -109,6 +115,22 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
             mTextViewTitle = itemView.findViewById(R.id.list_new_post_title);
             mTextViewContent = itemView.findViewById(R.id.list_new_post_tv_content);
             mTextViewTime = itemView.findViewById(R.id.list_new_post_time);
+            mImageBtnLike = itemView.findViewById(R.id.list_new_post_btn_like);
+            mImageViewComment = itemView.findViewById(R.id.list_new_post_iv_comment);
+
+            mImageBtnLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mNewPostAdapterListener.likeClick(mPosts.get(getAdapterPosition()).getPostNo(), getAdapterPosition());
+                }
+            });
+            mImageViewComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mNewPostAdapterListener.click(mPosts.get(getAdapterPosition()).getPostNo(), getAdapterPosition());
+                }
+            });
+
         }
     }
 }

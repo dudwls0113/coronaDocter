@@ -17,7 +17,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:gravity="center"
-        android:text="이 글에 좋아요를 누르시겠습니까?"
+        android:text="글을 작성하시겠습니까?"
         android:textColor="#000000"
         android:textSize="13.3sp" />
 

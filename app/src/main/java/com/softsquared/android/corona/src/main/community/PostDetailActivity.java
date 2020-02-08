@@ -1,17 +1,20 @@
 package com.softsquared.android.corona.src.main.community;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseActivity;
 import com.softsquared.android.corona.src.main.community.interfaces.PostDetailView;
@@ -25,20 +28,21 @@ import java.util.Date;
 
 import static com.softsquared.android.corona.src.ApplicationClass.sSharedPreferences;
 
-public class CommunityDetailActivity extends BaseActivity implements PostDetailView {
+public class PostDetailActivity extends BaseActivity implements PostDetailView {
 
     Context mContext;
 
     TextView mTextViewTitle, mTextViewTime, mTextViewContent, mTextViewLikeCount, mTextViewCommentCount;
-    ImageView mImageViewCommentWrite;
-    EditText mEdtComment;
+    ImageView mImageViewCommentWrite, mImageViewLike, mImageViewBack;
+    EditText mEditTextComment;
     View mCommentWrite;
+    LikeCheckDialog likeCheckDialog;
 
     RecyclerView mRecyclerView;
     ArrayList<Comment> comments = new ArrayList<>();
     PostDetailAdapter mPostDetailAdapter;
 
-    int postNo;
+    int postNo, mLikeCount, mCommentCount;
     String fcmToken;
 
     @Override
@@ -50,8 +54,8 @@ public class CommunityDetailActivity extends BaseActivity implements PostDetailV
         getPostDetail(postNo);
     }
 
-    void init(){
-        postNo = getIntent().getIntExtra("postNo",0);
+    void init() {
+        postNo = getIntent().getIntExtra("postNo", 0);
 
         SharedPreferences spf = sSharedPreferences;
         fcmToken = spf.getString("fcm", null);
@@ -61,26 +65,27 @@ public class CommunityDetailActivity extends BaseActivity implements PostDetailV
         mTextViewContent = findViewById(R.id.detail_content);
         mTextViewLikeCount = findViewById(R.id.detail_tv_like);
         mTextViewCommentCount = findViewById(R.id.detail_tv_comment);
+        mImageViewLike = findViewById(R.id.activity_post_detail_iv_like);
+        mImageViewBack = findViewById(R.id.community_detail_back);
 
-        mEdtComment = findViewById(R.id.comment_edt_write);
+        mEditTextComment = findViewById(R.id.comment_edt_write);
 
         mImageViewCommentWrite = findViewById(R.id.comment_write);
         mImageViewCommentWrite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mEdtComment.getText().toString().length()<2){
+                if (mEditTextComment.getText().toString().length() < 2) {
                     showCustomToast("댓글은 2글자 이상 입력해주세요.");
-                }
-                else{
-                    postCommentWrite(fcmToken, postNo, mEdtComment.getText().toString());
+                } else {
+                    postCommentWrite(fcmToken, postNo, mEditTextComment.getText().toString());
                 }
             }
         });
 
         mRecyclerView = findViewById(R.id.detail_comment_rv);
-        mPostDetailAdapter = new PostDetailAdapter(mContext,comments);
+        mPostDetailAdapter = new PostDetailAdapter(mContext, comments);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this){
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this) {
             @Override
             public boolean canScrollHorizontally() {
                 return false;
@@ -93,29 +98,71 @@ public class CommunityDetailActivity extends BaseActivity implements PostDetailV
         });
 
         mRecyclerView.setAdapter(mPostDetailAdapter);
+
+        mImageViewLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                likeCheckDialog = new LikeCheckDialog(mContext, new LikeCheckDialog.CustomLIstener() {
+                    @Override
+                    public void okClick() {
+                        postLike(postNo);
+                    }
+
+                    @Override
+                    public void cancelClick() {
+
+                    }
+                });
+                likeCheckDialog.show();
+            }
+        });
+        mImageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        mEditTextComment.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    if (mEditTextComment.getText().toString().length() != 0) {
+                        postCommentWrite(fcmToken, postNo, mEditTextComment.getText().toString());
+                    }
+                }
+                return false;
+            }
+        });
     }
 
-    void getPostDetail(int postNo){
+    void getPostDetail(int postNo) {
         showProgressDialog();
         final PostDetailService postDetailService = new PostDetailService(this);
         postDetailService.getPostDetail(postNo);
     }
 
-    void postCommentWrite(String fcmToken, int postNo, String content){
+    void postCommentWrite(String fcmToken, int postNo, String content) {
         showProgressDialog();
         final PostDetailService postDetailService = new PostDetailService(this);
         postDetailService.postCommentWrite(fcmToken, postNo, content);
     }
 
+    void postLike(int postNo) {
+        showProgressDialog();
+        final PostDetailService postDetailService = new PostDetailService(this);
+        postDetailService.postLike(postNo, fcmToken);
+    }
+
     @Override
     public void getPostDetail(Post post, ArrayList<Comment> arrayList) {
-        System.out.println("댓글 사이즈: " + arrayList.size());
+//        System.out.println("댓글 사이즈: " + arrayList.size());
         hideProgressDialog();
         mTextViewTitle.setText(post.getTitle());
         mTextViewContent.setText(post.getContent());
-        mTextViewLikeCount.setText(post.getLikeCount()+"");
-        mTextViewCommentCount.setText(post.getCommentCount()+"");
-
+        mTextViewLikeCount.setText(post.getLikeCount() + "");
+        mTextViewCommentCount.setText(post.getCommentCount() + "");
+        mLikeCount = post.getLikeCount();
+        mCommentCount = post.getCommentCount();
         long now = System.currentTimeMillis();
         Date date = new Date(now);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -128,12 +175,11 @@ public class CommunityDetailActivity extends BaseActivity implements PostDetailV
                 if (diff / 60000 == 0) {
                     mTextViewTime.setText("방금 전");
                 } else {
-                   mTextViewTime.setText(diff / 60000 + "분전");
+                    mTextViewTime.setText(diff / 60000 + "분전");
                 }
             } else if (diff / 108000000 <= 1) {
                 mTextViewTime.setText(diff / 3600000 + "시간전");
-            }
-            else{
+            } else {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
                 String registerTime = simpleDateFormat.format(registerDate);
                 mTextViewTime.setText(registerTime);
@@ -149,21 +195,37 @@ public class CommunityDetailActivity extends BaseActivity implements PostDetailV
         }
 
         comments.addAll(arrayList);
-        mPostDetailAdapter.notifyDataSetChanged();
+        mPostDetailAdapter.notifyItemRangeInserted(0, arrayList.size());
     }
 
     @Override
     public void postCommentWrite() {
         hideProgressDialog();
-        mEdtComment.setText("");
+        hideKeyBoard();
+        mEditTextComment.setText("");
+        mPostDetailAdapter.notifyItemRangeRemoved(0, comments.size());
         comments.clear();
-        mPostDetailAdapter.notifyDataSetChanged();
         getPostDetail(postNo);
+        mCommentCount++;
+        mTextViewCommentCount.setText(String.valueOf(mCommentCount));
     }
 
     @Override
     public void validateFailure(String message) {
         hideProgressDialog();
-        showCustomToast( message == null || message.isEmpty() ? getString(R.string.network_error) : message);
+        Snackbar.make(findViewById(R.id.activity_post_detail_iv_like),
+                message == null || message.isEmpty() ? getString(R.string.network_error) : message, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void postLikeSuccess() {
+        hideProgressDialog();
+        mLikeCount++;
+        mTextViewLikeCount.setText(String.valueOf(mLikeCount));
+    }
+
+    public void hideKeyBoard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); // 키보드 객체 받아오기
+        imm.hideSoftInputFromWindow(mEditTextComment.getWindowToken(), 0); // 키보드 숨기기
     }
 }

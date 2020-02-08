@@ -12,4 +12,7 @@ public interface PostDetailView {
     void postCommentWrite();
 
     void validateFailure(String message);
+
+    void postLikeSuccess();
+
 }

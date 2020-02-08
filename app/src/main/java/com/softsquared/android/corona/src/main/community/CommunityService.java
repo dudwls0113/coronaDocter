@@ -2,8 +2,6 @@ package com.softsquared.android.corona.src.main.community;
 
 import com.softsquared.android.corona.src.main.community.interfaces.CommunityRetrofitInterface;
 import com.softsquared.android.corona.src.main.community.interfaces.CommunityView;
-import com.softsquared.android.corona.src.main.community.interfaces.PostDetailView;
-import com.softsquared.android.corona.src.main.community.model.PostDetailResponse;
 import com.softsquared.android.corona.src.main.community.model.PostResponse;
 import com.softsquared.android.corona.src.main.models.DefaultResponse;
 import com.softsquared.android.corona.src.main.community.model.PostWriteResponse;
@@ -70,7 +68,7 @@ public class CommunityService {
         });
     }
 
-    void postLike(int postNo, String fcmToken, final int position) {
+    void postLike(int postNo, final String fcmToken, final int mode, final int position) {
         JSONObject params = new JSONObject();
         try {
             params.put("postNo", postNo);
@@ -86,7 +84,7 @@ public class CommunityService {
                 if (defaultResponse == null) {
                     mCommunityView.validateFailure(null);
                 } else if (defaultResponse.getCode() == 100) {
-                    mCommunityView.postLikeSuccess(position);
+                    mCommunityView.postLikeSuccess(mode, position);
                 } else {
                     mCommunityView.validateFailure(defaultResponse.getMessage());
                 }

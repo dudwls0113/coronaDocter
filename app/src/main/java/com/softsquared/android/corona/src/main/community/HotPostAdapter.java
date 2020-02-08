@@ -1,14 +1,13 @@
 package com.softsquared.android.corona.src.main.community;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,9 +23,16 @@ import java.util.Date;
 
 public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomViewHolder> {
 
+    public interface HotPostAdapterListener {
+        void Click(int postNo, int position);
+
+        void likeClick(int postNo, int position);
+    }
+
     private Context mContext;
     private ArrayList<Post> mPosts = new ArrayList<>();
     private HotPostAdapterListener mHotPostAdapterListener;
+
 
     public HotPostAdapter(Context context, ArrayList<Post> arrayList, HotPostAdapterListener hotPostAdapterListener) {
         mContext = context;
@@ -34,11 +40,6 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
         mHotPostAdapterListener = hotPostAdapterListener;
     }
 
-    public interface HotPostAdapterListener {
-        void Click(int postNo, int position);
-
-        void likeClick(int postNo, int position);
-    }
 
     @NonNull
     @Override
@@ -81,12 +82,6 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
                 String registerTime = simpleDateFormat.format(registerDate);
                 holder.mTextViewTime.setText(registerTime);
             }
-//            } else if (diff / 108000000 < 30) {
-//                holder.mTextViewTime.setText(diff / 108000000 + "일전");
-//            } else {
-//                long month = diff / 108000000;
-//                holder.mTextViewTime.setText(month / 30 + "달전");
-//            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -94,13 +89,12 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
 
     @Override
     public int getItemCount() {
-        Log.d("해결", (null != mPosts ? mPosts.size() : 0) + "");
         return (null != mPosts ? mPosts.size() : 0);
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
 
-        View mViewItem;
+        LinearLayout linearLayout;
         TextView mTextViewLikeCount;
         TextView mTextViewCommentCount;
         TextView mTextViewTitle;
@@ -108,14 +102,14 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
 
         TextView mTextViewTime;
 
-        ImageView mImageViewLike, mImageViewNotice;
+        ImageView mImageViewNotice, mImageViewComment;
 
+        ImageButton mImageBtnLike;
 
-        @SuppressLint("ClickableViewAccessibility")
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
-            mViewItem = itemView.findViewById(R.id.list_hot_post_item);
-            mViewItem.setOnClickListener(new View.OnClickListener() {
+            linearLayout = itemView.findViewById(R.id.list_hot_post_item);
+            linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mHotPostAdapterListener.Click(mPosts.get(getAdapterPosition()).getPostNo(), getAdapterPosition());
@@ -126,14 +120,20 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
             mTextViewTitle = itemView.findViewById(R.id.list_hot_post_title);
             mTextViewContent = itemView.findViewById(R.id.list_hot_post_tv_content);
             mTextViewTime = itemView.findViewById(R.id.list_hot_post_time);
-            mImageViewLike = itemView.findViewById(R.id.list_hot_post_iv_like);
+            mImageBtnLike = itemView.findViewById(R.id.list_hot_post_iv_like);
             mImageViewNotice = itemView.findViewById(R.id.list_hot_post_tv_notice);
+            mImageViewComment = itemView.findViewById(R.id.list_hot_post_iv_comment);
 
-            mImageViewLike.setOnClickListener(new View.OnClickListener() {
+            mImageBtnLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("클릭", "");
                     mHotPostAdapterListener.likeClick(mPosts.get(getAdapterPosition()).getPostNo(), getAdapterPosition());
+                }
+            });
+            mImageViewComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mHotPostAdapterListener.Click(mPosts.get(getAdapterPosition()).getPostNo(), getAdapterPosition());
                 }
             });
         }

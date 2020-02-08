@@ -1,24 +1,30 @@
 package com.softsquared.android.corona.src.main.community;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseFragment;
@@ -32,7 +38,7 @@ import java.util.ArrayList;
 import static com.softsquared.android.corona.src.ApplicationClass.sSharedPreferences;
 
 
-public class CommunityFragment extends BaseFragment implements CommunityView {
+public class CommunityFragment extends BaseFragment implements CommunityView, SwipeRefreshLayout.OnRefreshListener {
 
     ViewPager mViewPager;
     NewsAdapter newsAdapter;
@@ -41,7 +47,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     ImageView mImageViewMask, mImageViewHand;
     LinearLayout mLinearHeader, mLinearContent;
     LikeCheckDialog likeCheckDialog;
-    EditText mTextViewPostWriteTitle, mTextViewPostWriteContent;
+    EditText mEditTextPostWriteTitle, mEditTextPostWriteContent;
 
 
     ArrayList<CaringInfo> mArrayListCaringInfos = new ArrayList<>();
@@ -62,6 +68,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     RecyclerView mNewRv;
 
     String mFcmToken;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +86,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         return view;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void setComponentView(View v) {
         SharedPreferences spf = sSharedPreferences;
@@ -97,11 +105,11 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         mViewPager = v.findViewById(R.id.fragment_info_vp);
 //       뷰페이저 미리보기 설정//
         mViewPager.setClipToPadding(false);
-//        int dpValue = 25;
-//        float d = getResources().getDisplayMetrics().density;
-//        int margin = (int) (dpValue * d);
-//        mViewPager.setPadding(margin/2, 0, margin, 0);
-//        mViewPager.setPageMargin(margin/3);
+
+        swipeRefreshLayout = v.findViewById(R.id.refresh);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+
         mViewPager.setAdapter(newsAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
@@ -138,19 +146,30 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
             }
         });
 
-        mTextViewPostWriteTitle = v.findViewById(R.id.post_write_title);
-        mTextViewPostWriteContent = v.findViewById(R.id.post_write_content);
+        mEditTextPostWriteTitle = v.findViewById(R.id.post_write_title);
+        mEditTextPostWriteContent = v.findViewById(R.id.post_write_content);
 
         mBtnWrite = v.findViewById(R.id.dialog_infect_select_btn_post);
         mBtnWrite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mTextViewPostWriteTitle.getText().toString().length() < 2) {
+                if (mEditTextPostWriteTitle.getText().toString().length() < 2) {
                     showCustomToast("제목을 2글자 이상 입력해주세요.");
-                } else if (mTextViewPostWriteContent.getText().toString().length() < 5) {
+                } else if (mEditTextPostWriteContent.getText().toString().length() < 5) {
                     showCustomToast("내용은 5글자 이상 입력해주세요.");
                 } else {
-                    postWritePost(mFcmToken, mTextViewPostWriteTitle.getText().toString(), mTextViewPostWriteContent.getText().toString());
+                    WriteCheckDialog writeCheckDialog = new WriteCheckDialog(getContext(), new WriteCheckDialog.CustomLIstener() {
+                        @Override
+                        public void okClick() {
+                            postWritePost(mFcmToken, mEditTextPostWriteTitle.getText().toString(), mEditTextPostWriteContent.getText().toString());
+                        }
+
+                        @Override
+                        public void cancelClick() {
+
+                        }
+                    });
+                    writeCheckDialog.show();
                 }
             }
         });
@@ -170,14 +189,25 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         mHotPostAdapter = new HotPostAdapter(getContext(), mHotPosts, new HotPostAdapter.HotPostAdapterListener() {
             @Override
             public void Click(int postNo, int position) {
-                Intent intent = new Intent(getContext(), CommunityDetailActivity.class);
+                Intent intent = new Intent(getContext(), PostDetailActivity.class);
                 intent.putExtra("postNo", postNo);
                 startActivity(intent);
             }
 
             @Override
-            public void likeClick(int postNo, int position) {
+            public void likeClick(final int postNo, final int position) {
+                likeCheckDialog = new LikeCheckDialog(getContext(), new LikeCheckDialog.CustomLIstener() {
+                    @Override
+                    public void okClick() {
+                        postLike(postNo, 1, position);
+                    }
 
+                    @Override
+                    public void cancelClick() {
+
+                    }
+                });
+                likeCheckDialog.show();
             }
         });
         mRecyclerView.setAdapter(mHotPostAdapter);
@@ -198,18 +228,17 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         mNewPostAdapter = new NewPostAdapter(getContext(), mNewPosts, new NewPostAdapter.NewPostAdapterListener() {
             @Override
             public void click(int postNo, int position) {
-                Intent intent = new Intent(getContext(), CommunityDetailActivity.class);
+                Intent intent = new Intent(getContext(), PostDetailActivity.class);
                 intent.putExtra("postNo", postNo);
                 startActivity(intent);
             }
 
             @Override
             public void likeClick(final int postNo, final int position) {
-                showCustomToast("ddd");
                 likeCheckDialog = new LikeCheckDialog(getContext(), new LikeCheckDialog.CustomLIstener() {
                     @Override
                     public void okClick() {
-                        postLike(postNo, position);
+                        postLike(postNo, 2, position);
                     }
 
                     @Override
@@ -231,9 +260,9 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                int lastVisiblePosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-                int itemTotalCount = mRecyclerView.getAdapter().getItemCount();
-
+                int lastVisiblePosition = ((LinearLayoutManager) mNewRv.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                int itemTotalCount = mNewRv.getAdapter().getItemCount();
+                Log.d("스크롤", lastVisiblePosition + "//" + itemTotalCount * 0.7);
                 if (lastVisiblePosition > itemTotalCount * 0.7) {
                     if (!mLoadLock) {
                         mLoadLock = true;
@@ -246,13 +275,30 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         });
 
         mNewRv.setAdapter(mNewPostAdapter);
+
+        mEditTextPostWriteContent.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    // 터치가 눌렸을때 터치 이벤트를 활성화한다.
+                    case MotionEvent.ACTION_DOWN:
+                        v.getParent().requestDisallowInterceptTouchEvent(true);
+                        break;
+                    // 터치가 끝났을때 터치 이벤트를 비활성화한다 [원상복구]
+                    case MotionEvent.ACTION_UP:
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                        break;
+                }
+                return false;
+            }
+        });
+
     }
 
     private void showWrite() {
         float dp = getContext().getResources().getDisplayMetrics().density;
         ValueAnimator anim2 = ValueAnimator.ofInt(0, (int) (300f * dp));
         anim2.setDuration(500); // duration 5 seconds
-//        anim2.setRepeatCount(ValueAnimator.INFINITE);
         anim2.setRepeatMode(ValueAnimator.REVERSE);
         anim2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -270,7 +316,6 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     private void hideWrite() {
         ValueAnimator anim2 = ValueAnimator.ofInt(800, 0);
         anim2.setDuration(500); // duration 5 seconds
-//        anim2.setRepeatCount(ValueAnimator.INFINITE);
         anim2.setRepeatMode(ValueAnimator.REVERSE);
         anim2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -281,7 +326,6 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
             }
         });
         anim2.start();
-//        mLinearHeader.setVisibility(View.VISIBLE);
     }
 
     void getHotPost() {
@@ -290,10 +334,10 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         communityService.getHotPost();
     }
 
-    void postLike(int postNo, int position) {
+    void postLike(int postNo, int mode, int position) {
         showProgressDialog(getActivity());
         final CommunityService communityService = new CommunityService(this);
-        communityService.postLike(postNo, mFcmToken, position);
+        communityService.postLike(postNo, mFcmToken, mode, position);
     }
 
     void getNewPost(int mPage) {
@@ -312,7 +356,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     public void getHotPostSuccess(ArrayList<Post> arrayList) {
         hideProgressDialog();
         mHotPosts.addAll(arrayList);
-        mHotPostAdapter.notifyDataSetChanged();
+        mHotPostAdapter.notifyItemRangeInserted(0, arrayList.size());
     }
 
     @Override
@@ -323,29 +367,46 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         }
 
         if (arrayList != null) {
+            mNewPostAdapter.notifyItemRangeInserted(mNewPosts.size(), arrayList.size());
             mNewPosts.addAll(arrayList);
-            mNewPostAdapter.notifyDataSetChanged();
+//            mNewPostAdapter.notifyDataSetChanged();
             mPage += arrayList.size();
             mLoadLock = false;
         }
     }
 
     @Override
-    public void postLikeSuccess(int position) {
-        mHotPosts.get(position).setLikeCountPlus();
+    public void postLikeSuccess(int mode, int position) {
+        hideProgressDialog();
+        if (mode == 1) {//인기게시글
+            mHotPosts.get(position).setLikeCountPlus();
+            mHotPostAdapter.notifyItemChanged(position);
+        } else {//일반게시글
+            mNewPosts.get(position).setLikeCountPlus();
+            mNewPostAdapter.notifyItemChanged(position);
+        }
+
     }
 
+    @Override
     public void postWritePostSuccess() {
-        hideProgressDialog();
+        hideKeyBoard();
+        mEditTextPostWriteContent.setText("");
+        mEditTextPostWriteTitle.setText("");
         hideWrite();
         mIsExpanded = false;
+        clearAndReLoad();
+        hideProgressDialog();
+    }
+
+    private void clearAndReLoad() {
         mPage = 0;
         mLoadLock = false;
         mNoMoreItem = false;
+        mHotPostAdapter.notifyItemRangeRemoved(0, mHotPosts.size());
+        mNewPostAdapter.notifyItemRangeRemoved(0, mNewPosts.size());
         mHotPosts.clear();
         mNewPosts.clear();
-        mHotPostAdapter.notifyDataSetChanged();
-        mNewPostAdapter.notifyDataSetChanged();
         getHotPost();
         getNewPost(mPage);
     }
@@ -353,6 +414,18 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     @Override
     public void validateFailure(String message) {
         hideProgressDialog();
-        showCustomToast(message == null || message.isEmpty() ? getString(R.string.network_error) : message);
+        Snackbar.make(getActivity().findViewById(R.id.fragment_community_linear_header),
+                message == null || message.isEmpty() ? getString(R.string.network_error) : message, Snackbar.LENGTH_LONG).show();
+    }
+
+    public void hideKeyBoard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE); // 키보드 객체 받아오기
+        imm.hideSoftInputFromWindow(mEditTextPostWriteContent.getWindowToken(), 0); // 키보드 숨기기
+    }
+
+    @Override
+    public void onRefresh() {
+        clearAndReLoad();
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

@@ -4,6 +4,7 @@ import com.softsquared.android.corona.src.main.community.interfaces.CommunityRet
 import com.softsquared.android.corona.src.main.community.interfaces.PostDetailView;
 import com.softsquared.android.corona.src.main.community.model.PostDetailResponse;
 import com.softsquared.android.corona.src.main.community.model.PostWriteResponse;
+import com.softsquared.android.corona.src.main.models.DefaultResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,6 +77,35 @@ public class PostDetailService {
 
             @Override
             public void onFailure(Call<PostWriteResponse> call, Throwable t) {
+                mPostDetailView.validateFailure(null);
+            }
+        });
+    }
+
+    void postLike(int postNo, final String fcmToken) {
+        JSONObject params = new JSONObject();
+        try {
+            params.put("postNo", postNo);
+            params.put("fcmToken", fcmToken);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final CommunityRetrofitInterface communityRetrofitInterface = getRetrofit().create(CommunityRetrofitInterface.class);
+        communityRetrofitInterface.postLike(RequestBody.create(params.toString(), MEDIA_TYPE_JSON)).enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                final DefaultResponse defaultResponse = response.body();
+                if (defaultResponse == null) {
+                    mPostDetailView.validateFailure(null);
+                } else if (defaultResponse.getCode() == 100) {
+                    mPostDetailView.postLikeSuccess();
+                } else {
+                    mPostDetailView.validateFailure(defaultResponse.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
                 mPostDetailView.validateFailure(null);
             }
         });

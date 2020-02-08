@@ -10,7 +10,7 @@ public interface CommunityView {
 
     void getNewPostSuccess(ArrayList<Post> arrayList);
 
-    void postLikeSuccess(int position);
+    void postLikeSuccess(int mode, int position);
 
     void postWritePostSuccess();
 
