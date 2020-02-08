@@ -1,6 +1,7 @@
 package com.softsquared.android.corona.src.main.community;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,10 +51,13 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
         holder.mTextViewLikeCount.setText(mPosts.get(position).getLikeCount()+"");
         holder.mTextViewCommentCount.setText(mPosts.get(position).getCommentCount()+"");
 
+//        Log.d("해결", position+"");
+
     }
 
     @Override
     public int getItemCount() {
+        Log.d("해결", (null != mPosts ? mPosts.size() : 0)+"");
         return (null != mPosts ? mPosts.size() : 0);
     }
 
