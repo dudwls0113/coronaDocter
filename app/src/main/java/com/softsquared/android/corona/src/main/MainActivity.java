@@ -171,7 +171,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         mRelativeTopBar.setVisibility(View.VISIBLE);
                         mTextViewTitle.setVisibility(View.VISIBLE);
                         mLinearNoti.setVisibility(View.GONE);
-                        mTextViewTitle.setText("구매");
+                        mTextViewTitle.setText("커뮤니티");
                         IS_WEBVIEW_MODE = 0;
 
                         break;

@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/bg_round_trans_trans"
-                    android:hint="제목"
+                    android:hint="제목은 2글자 이상 입력해주세요."
                     android:lineSpacingExtra="3.7sp"
                     android:padding="13dp"
                     android:paddingStart="17dp"
@@ -103,7 +103,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bg_round_trans_trans"
                     android:gravity="top"
-                    android:hint="내용"
+                    android:hint="내용은 5글자 이상 입력해주세요."
                     android:lineSpacingExtra="3.7sp"
                     android:padding="13dp"
                     android:paddingStart="17dp"
@@ -156,7 +156,41 @@
         <!--            android:layout_height="match_parent"-->
         <!--            expandable:contentLayout="@layout/view_community_post_content"-->
         <!--            expandable:headerLayout="@layout/view_community_post_header" />-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="17dp"
+            android:textStyle="bold"
+            android:text="인기 게시물"
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:lineSpacingExtra="8.7sp"
+            android:layout_marginBottom="16dp"/>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/hot_post_rv"
+            android:layout_marginBottom="12dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="실시간 게시물"
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:lineSpacingExtra="8.7sp"
+            android:layout_marginStart="17dp"
+            android:layout_marginBottom="16dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/new_post_rv"
+            android:layout_marginBottom="12dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
     </LinearLayout>
 </ScrollView>

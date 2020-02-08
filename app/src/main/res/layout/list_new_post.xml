@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_new_post_item"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_round_new"
+    android:layout_marginStart="17dp"
+    android:layout_marginEnd="17dp"
+    android:layout_marginBottom="8dp">
+    <TextView
+        android:layout_marginTop="11.7dp"
+        android:layout_marginStart="13.7dp"
+        android:layout_marginEnd="13.7dp"
+        android:layout_marginBottom="12.3dp"
+        android:id="@+id/list_new_post_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textColor="#000000"
+        android:lineSpacingExtra="6.3sp"
+        tools:text="우리 어떻게 하냐...."/>
+
+    <TextView
+        android:id="@+id/list_new_post_tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#010101"
+        android:lineSpacingExtra="3.7sp"
+        android:layout_marginStart="13.7dp"
+        android:layout_marginEnd="13.7dp"
+        tools:text="우리 지역에 감염자수 개많아..."
+        android:layout_marginBottom="10.9dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15.8dp"
+        android:layout_marginBottom="15.4dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_like"
+            android:layout_marginEnd="13.3dp"
+            android:id="@+id/list_new_post_iv_like"/>
+        <TextView
+            android:id="@+id/list_new_post_tv_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="#000000"
+            android:lineSpacingExtra="3.7sp"
+            tools:text="6"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10.8dp"
+            android:gravity="center_vertical"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_coment"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="13.3dp"
+            android:id="@+id/list_new_post_iv_comment"/>
+
+        <TextView
+            android:id="@+id/list_new_post_tv_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="#000000"
+            android:lineSpacingExtra="3.7sp"
+            tools:text="6"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10.8dp"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+
+</LinearLayout>
