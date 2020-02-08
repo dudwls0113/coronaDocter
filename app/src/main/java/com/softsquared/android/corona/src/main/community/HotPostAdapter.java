@@ -1,8 +1,10 @@
 package com.softsquared.android.corona.src.main.community;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
@@ -53,7 +55,7 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
         holder.mTextViewContent.setText(mPosts.get(position).getContent());
         holder.mTextViewLikeCount.setText(mPosts.get(position).getLikeCount() + "");
         holder.mTextViewCommentCount.setText(mPosts.get(position).getCommentCount() + "");
-        if (mPosts.get(position).getType()>1) {
+        if (mPosts.get(position).getType() > 1) {
             holder.mImageViewNotice.setVisibility(View.VISIBLE);
         } else {
             holder.mImageViewNotice.setVisibility(View.GONE);
@@ -109,6 +111,7 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
         ImageView mImageViewLike, mImageViewNotice;
 
 
+        @SuppressLint("ClickableViewAccessibility")
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
             mViewItem = itemView.findViewById(R.id.list_hot_post_item);
@@ -125,9 +128,11 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
             mTextViewTime = itemView.findViewById(R.id.list_hot_post_time);
             mImageViewLike = itemView.findViewById(R.id.list_hot_post_iv_like);
             mImageViewNotice = itemView.findViewById(R.id.list_hot_post_tv_notice);
+
             mImageViewLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.d("클릭", "");
                     mHotPostAdapterListener.likeClick(mPosts.get(getAdapterPosition()).getPostNo(), getAdapterPosition());
                 }
             });

@@ -2,6 +2,7 @@ package com.softsquared.android.corona.src.main.community;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,8 @@ import com.softsquared.android.corona.src.main.info.NewsAdapter;
 
 import java.util.ArrayList;
 
+import static com.softsquared.android.corona.src.ApplicationClass.sSharedPreferences;
+
 
 public class CommunityFragment extends BaseFragment implements CommunityView {
 
@@ -35,12 +38,12 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     Button mBtnCancel;
     ImageView mImageViewMask, mImageViewHand;
     LinearLayout mLinearHeader, mLinearContent;
-
+    LikeCheckDialog likeCheckDialog;
 
     ArrayList<CaringInfo> mArrayListCaringInfos = new ArrayList<>();
     boolean mIsExpanded = false;
 
-    ArrayList<Post> mPosts = new ArrayList<>();
+    ArrayList<Post> mHotPosts = new ArrayList<>();
     HotPostAdapter mHotPostAdapter;
     RecyclerView mRecyclerView;
 
@@ -53,6 +56,8 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     ArrayList<Post> mNewPosts = new ArrayList<>();
     NewPostAdapter mNewPostAdapter;
     RecyclerView mNewRv;
+
+    String mFcmToken;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +77,9 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
 
     @Override
     public void setComponentView(View v) {
+        SharedPreferences spf = sSharedPreferences;
+        mFcmToken = spf.getString("fcm", null);
+
         mTabLayout = v.findViewById(R.id.home_tab_indicator);
         mLinearHeader = v.findViewById(R.id.fragment_community_linear_header);
         mLinearContent = v.findViewById(R.id.fragment_community_linear_content);
@@ -139,7 +147,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
                 return false;
             }
         });
-        mHotPostAdapter = new HotPostAdapter(getContext(), mPosts, new HotPostAdapter.HotPostAdapterListener() {
+        mHotPostAdapter = new HotPostAdapter(getContext(), mHotPosts, new HotPostAdapter.HotPostAdapterListener() {
             @Override
             public void Click(int postNo, int position) {
                 Intent intent = new Intent(getContext(), CommunityDetailActivity.class);
@@ -176,8 +184,20 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
             }
 
             @Override
-            public void likeClick(int postNo, int position) {
+            public void likeClick(final int postNo, final int position) {
+                showCustomToast("ddd");
+                likeCheckDialog = new LikeCheckDialog(getContext(), new LikeCheckDialog.CustomLIstener() {
+                    @Override
+                    public void okClick() {
+                        postLike(postNo, position);
+                    }
 
+                    @Override
+                    public void cancelClick() {
+
+                    }
+                });
+                likeCheckDialog.show();
             }
         });
 
@@ -250,6 +270,12 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         communityService.getHotPost();
     }
 
+    void postLike(int postNo, int position) {
+        showProgressDialog(getActivity());
+        final CommunityService communityService = new CommunityService(this);
+        communityService.postLike(postNo, mFcmToken, position);
+    }
+
     void getNewPost(int mPage) {
         showProgressDialog(getActivity());
         final CommunityService communityService = new CommunityService(this);
@@ -259,7 +285,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     @Override
     public void getHotPostSuccess(ArrayList<Post> arrayList) {
         hideProgressDialog();
-        mPosts.addAll(arrayList);
+        mHotPosts.addAll(arrayList);
         mHotPostAdapter.notifyDataSetChanged();
     }
 
@@ -276,6 +302,11 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
             mPage += arrayList.size();
             mLoadLock = false;
         }
+    }
+
+    @Override
+    public void postLikeSuccess(int position) {
+        mHotPosts.get(position).setLikeCountPlus();
     }
 
     @Override

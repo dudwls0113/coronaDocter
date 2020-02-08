@@ -2,9 +2,13 @@ package com.softsquared.android.corona.src.main.community.interfaces;
 
 import com.softsquared.android.corona.src.main.community.model.PostDetailResponse;
 import com.softsquared.android.corona.src.main.community.model.PostResponse;
+import com.softsquared.android.corona.src.main.models.DefaultResponse;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface CommunityRetrofitInterface {
@@ -16,4 +20,7 @@ public interface CommunityRetrofitInterface {
 
     @GET("/corona/postDetail/{postNo}")
     Call<PostDetailResponse> getPostDetail(@Path("postNo") final int postNo);
+
+    @POST("/corona/like")
+    Call<DefaultResponse> postLike(@Body RequestBody params);
 }

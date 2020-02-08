@@ -24,6 +24,10 @@ public class Post {
     @SerializedName("type")
     int type;
 
+    public void setLikeCountPlus() {
+        this.likeCount = likeCount + 1;
+    }
+
     public int getPostNo() {
         return postNo;
     }

@@ -5,11 +5,17 @@ import com.softsquared.android.corona.src.main.community.interfaces.CommunityVie
 import com.softsquared.android.corona.src.main.community.interfaces.PostDetailView;
 import com.softsquared.android.corona.src.main.community.model.PostDetailResponse;
 import com.softsquared.android.corona.src.main.community.model.PostResponse;
+import com.softsquared.android.corona.src.main.models.DefaultResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.softsquared.android.corona.src.ApplicationClass.MEDIA_TYPE_JSON;
 import static com.softsquared.android.corona.src.ApplicationClass.getRetrofit;
 
 public class CommunityService {
@@ -67,4 +73,35 @@ public class CommunityService {
         });
     }
 
+    void postLike(int postNo, String fcmToken, final int position){
+        JSONObject params = new JSONObject();
+        try {
+            params.put("postNo", postNo);
+            params.put("fcmToken", fcmToken);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final CommunityRetrofitInterface communityRetrofitInterface = getRetrofit().create(CommunityRetrofitInterface.class);
+        communityRetrofitInterface.postLike(RequestBody.create(params.toString(), MEDIA_TYPE_JSON)).enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                final DefaultResponse defaultResponse = response.body();
+                if(defaultResponse==null){
+                    mCommunityView.validateFailure(null);
+                }
+                else if(defaultResponse.getCode()==100){
+                    mCommunityView.postLikeSuccess(position);
+                }
+                else{
+                    mCommunityView.validateFailure(defaultResponse.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                mCommunityView.validateFailure(null);
+            }
+        });
+    }
 }
