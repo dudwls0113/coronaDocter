@@ -49,7 +49,7 @@ public class CommunityFragment extends BaseFragment {
         mLinearHeader = v.findViewById(R.id.fragment_community_linear_header);
         mLinearContent = v.findViewById(R.id.fragment_community_linear_content);
         mBtnCancel = v.findViewById(R.id.dialog_infect_select_btn_cancel);
-
+        mIsExpanded = false;
         mArrayListCaringInfos.clear();
         mArrayListCaringInfos.add(new CaringInfo(R.drawable.banner_invite, "", 1));
         mArrayListCaringInfos.add(new CaringInfo(R.drawable.banner_tip, "", 2));
