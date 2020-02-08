@@ -98,7 +98,11 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
         TextView mTextViewCommentCount;
         TextView mTextViewTitle;
         TextView mTextViewContent;
+
         TextView mTextViewTime;
+
+        ImageView mImageViewLike;
+
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -114,6 +118,13 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
             mTextViewTitle = itemView.findViewById(R.id.list_hot_post_title);
             mTextViewContent = itemView.findViewById(R.id.list_hot_post_tv_content);
             mTextViewTime = itemView.findViewById(R.id.list_hot_post_time);
+            mImageViewLike = itemView.findViewById(R.id.list_hot_post_iv_like);
+            mImageViewLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mHotPostAdapterListener.likeClick(mPosts.get(getAdapterPosition()).getPostNo(), getAdapterPosition());
+                }
+            });
         }
     }
 }
