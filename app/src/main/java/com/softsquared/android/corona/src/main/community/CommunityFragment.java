@@ -10,18 +10,24 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseFragment;
+import com.softsquared.android.corona.src.main.community.interfaces.CommunityView;
+import com.softsquared.android.corona.src.main.community.model.Post;
 import com.softsquared.android.corona.src.main.info.CaringInfo;
 import com.softsquared.android.corona.src.main.info.NewsAdapter;
 
 import java.util.ArrayList;
 
 
-public class CommunityFragment extends BaseFragment {
+public class CommunityFragment extends BaseFragment implements CommunityView {
 
     ViewPager mViewPager;
     NewsAdapter newsAdapter;
@@ -33,6 +39,27 @@ public class CommunityFragment extends BaseFragment {
 
     ArrayList<CaringInfo> mArrayListCaringInfos = new ArrayList<>();
     boolean mIsExpanded = false;
+
+    ArrayList<Post> mPosts = new ArrayList<>();
+    HotPostAdapter mHotPostAdapter;
+    RecyclerView mRecyclerView;
+
+    private int mPage = 0;
+    private static int mSize = 20;
+
+    boolean mNoMoreItem = false;
+    boolean mLoadLock = false;
+
+    ArrayList<Post> mNewPosts = new ArrayList<>();
+    NewPostAdapter mNewPostAdapter;
+    RecyclerView mNewRv;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getHotPost();
+        getNewPost(mPage);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,6 +126,82 @@ public class CommunityFragment extends BaseFragment {
                 mIsExpanded = false;
             }
         });
+
+        mRecyclerView = v.findViewById(R.id.hot_post_rv);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+
+            @Override
+            public boolean canScrollHorizontally() {
+                return false;
+            }
+        });
+        mHotPostAdapter = new HotPostAdapter(getContext(), mPosts, new HotPostAdapter.HotPostAdapterListener() {
+            @Override
+            public void Click() {
+
+            }
+
+            @Override
+            public void likeClick() {
+
+            }
+        });
+        mRecyclerView.setAdapter(mHotPostAdapter);
+
+        mNewRv = v.findViewById(R.id.new_post_rv);
+        mNewRv.setLayoutManager(new LinearLayoutManager(getContext()){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+
+            @Override
+            public boolean canScrollHorizontally() {
+                return false;
+            }
+        });
+
+        mNewPostAdapter = new NewPostAdapter(getContext(), mNewPosts, new NewPostAdapter.NewPostAdapterListener() {
+            @Override
+            public void click() {
+
+            }
+
+            @Override
+            public void likeClick() {
+
+            }
+        });
+
+        mNewRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int lastVisiblePosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                int itemTotalCount = mRecyclerView.getAdapter().getItemCount();
+
+                if (lastVisiblePosition > itemTotalCount * 0.7) {
+                    if (!mLoadLock) {
+                        mLoadLock = true;
+                        if (!mNoMoreItem) {
+                            getNewPost(mPage);
+                        }
+                    }
+                }
+            }
+        });
+
+        mNewRv.setAdapter(mNewPostAdapter);
     }
 
     private void showWrite() {
@@ -134,5 +237,45 @@ public class CommunityFragment extends BaseFragment {
         });
         anim2.start();
 //        mLinearHeader.setVisibility(View.VISIBLE);
+    }
+
+    void getHotPost(){
+        showProgressDialog(getActivity());
+        final CommunityService communityService = new CommunityService(this);
+        communityService.getHotPost();
+    }
+
+    void getNewPost(int mPage){
+        showProgressDialog(getActivity());
+        final CommunityService communityService = new CommunityService(this);
+        communityService.getNewPost(mPage);
+    }
+
+    @Override
+    public void getHotPostSuccess(ArrayList<Post> arrayList) {
+        hideProgressDialog();
+        mPosts.addAll(arrayList);
+        mHotPostAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getNewPostSuccess(ArrayList<Post> arrayList) {
+        hideProgressDialog();
+        if(arrayList.size()%mSize!=0||arrayList.size()==0){
+            mNoMoreItem = true;
+        }
+
+        if(arrayList!=null){
+            mNewPosts.addAll(arrayList);
+            mNewPostAdapter.notifyDataSetChanged();
+            mPage += arrayList.size();
+            mLoadLock = false;
+        }
+    }
+
+    @Override
+    public void validateFailure(String message) {
+        hideProgressDialog();
+        showCustomToast( message == null || message.isEmpty() ? getString(R.string.network_error) : message);
     }
 }

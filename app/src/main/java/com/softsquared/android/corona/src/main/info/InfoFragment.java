@@ -118,7 +118,7 @@ public class InfoFragment extends BaseFragment implements InfoFragmentView {
         }
         mTextViewInspection.setText(info.getInspection()+"");
         if(info.getInspectionDiff()>0){
-            mTextViewInspectionDiff.setText("( "+info.getInspectionDiff()+" )");
+            mTextViewInspectionDiff.setText("( +"+info.getInspectionDiff()+" )");
         }
         else{
             mTextViewInspectionDiff.setText("( "+info.getInspectionDiff()+" )");
