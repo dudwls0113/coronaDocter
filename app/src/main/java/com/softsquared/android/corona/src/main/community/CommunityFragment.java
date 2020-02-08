@@ -2,6 +2,7 @@ package com.softsquared.android.corona.src.main.community;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,15 +28,18 @@ import com.softsquared.android.corona.src.main.info.NewsAdapter;
 
 import java.util.ArrayList;
 
+import static com.softsquared.android.corona.src.ApplicationClass.sSharedPreferences;
+
 
 public class CommunityFragment extends BaseFragment implements CommunityView {
 
     ViewPager mViewPager;
     NewsAdapter newsAdapter;
     TabLayout mTabLayout;
-    Button mBtnCancel;
+    Button mBtnCancel, mBtnWrite;
     ImageView mImageViewMask, mImageViewHand;
     LinearLayout mLinearHeader, mLinearContent;
+    TextView mTextViewPostWriteTitle, mTextViewPostWriteContent;
 
 
     ArrayList<CaringInfo> mArrayListCaringInfos = new ArrayList<>();
@@ -54,6 +59,8 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
     NewPostAdapter mNewPostAdapter;
     RecyclerView mNewRv;
 
+    String fcmToken;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +79,9 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
 
     @Override
     public void setComponentView(View v) {
+        SharedPreferences spf = sSharedPreferences;
+        fcmToken = spf.getString("fcm", null);
+
         mTabLayout = v.findViewById(R.id.home_tab_indicator);
         mLinearHeader = v.findViewById(R.id.fragment_community_linear_header);
         mLinearContent = v.findViewById(R.id.fragment_community_linear_content);
@@ -124,6 +134,17 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
             public void onClick(View view) {
                 hideWrite();
                 mIsExpanded = false;
+            }
+        });
+
+        mTextViewPostWriteTitle = v.findViewById(R.id.post_write_title);
+        mTextViewPostWriteContent = v.findViewById(R.id.post_write_content);
+
+        mBtnWrite = v.findViewById(R.id.dialog_infect_select_btn_post);
+        mBtnWrite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                postWritePost(fcmToken, mTextViewPostWriteTitle.getText().toString(), mTextViewPostWriteContent.getText().toString());
             }
         });
 
@@ -256,6 +277,12 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
         communityService.getNewPost(mPage);
     }
 
+    void postWritePost(String fcmToken, String title, String content){
+        showProgressDialog(getActivity());
+        final CommunityService communityService = new CommunityService(this);
+        communityService.postWritePost(fcmToken, title, content);
+    }
+
     @Override
     public void getHotPostSuccess(ArrayList<Post> arrayList) {
         hideProgressDialog();
@@ -276,6 +303,13 @@ public class CommunityFragment extends BaseFragment implements CommunityView {
             mPage += arrayList.size();
             mLoadLock = false;
         }
+    }
+
+    @Override
+    public void postWritePostSuccess() {
+        hideProgressDialog();
+        hideWrite();
+        mIsExpanded = false;
     }
 
     @Override

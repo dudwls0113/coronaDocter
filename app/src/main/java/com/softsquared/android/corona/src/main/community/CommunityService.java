@@ -5,11 +5,17 @@ import com.softsquared.android.corona.src.main.community.interfaces.CommunityVie
 import com.softsquared.android.corona.src.main.community.interfaces.PostDetailView;
 import com.softsquared.android.corona.src.main.community.model.PostDetailResponse;
 import com.softsquared.android.corona.src.main.community.model.PostResponse;
+import com.softsquared.android.corona.src.main.community.model.PostWriteResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.softsquared.android.corona.src.ApplicationClass.MEDIA_TYPE_JSON;
 import static com.softsquared.android.corona.src.ApplicationClass.getRetrofit;
 
 public class CommunityService {
@@ -67,4 +73,35 @@ public class CommunityService {
         });
     }
 
+    void postWritePost(String fcmToken, String title, String content){
+        JSONObject params = new JSONObject();
+        try {
+            params.put("fcmToken", fcmToken);
+            params.put("title", title);
+            params.put("content", content);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final CommunityRetrofitInterface communityRetrofitInterface = getRetrofit().create(CommunityRetrofitInterface.class);
+        communityRetrofitInterface.postWrite(RequestBody.create(params.toString(), MEDIA_TYPE_JSON)).enqueue(new Callback<PostWriteResponse>() {
+            @Override
+            public void onResponse(Call<PostWriteResponse> call, Response<PostWriteResponse> response) {
+                final PostWriteResponse postWriteResponse = response.body();
+                if(postWriteResponse==null){
+                    mCommunityView.validateFailure(null);
+                }
+                else if(postWriteResponse.getCode()==100){
+                    mCommunityView.postWritePostSuccess();
+                }
+                else{
+                    mCommunityView.validateFailure(postWriteResponse.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostWriteResponse> call, Throwable t) {
+                mCommunityView.validateFailure(null);
+            }
+        });
+    }
 }

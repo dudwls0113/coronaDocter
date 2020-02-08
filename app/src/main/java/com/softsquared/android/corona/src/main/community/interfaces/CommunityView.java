@@ -10,5 +10,7 @@ public interface CommunityView {
 
     void getNewPostSuccess(ArrayList<Post> arrayList);
 
+    void postWritePostSuccess();
+
     void validateFailure(String message);
 }
