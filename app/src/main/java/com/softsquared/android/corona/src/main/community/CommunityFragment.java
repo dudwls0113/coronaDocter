@@ -375,6 +375,10 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
     @Override
     public void getHotPostSuccess(ArrayList<Post> arrayList) {
         hideProgressDialog();
+        if(mHotPosts==null || mHotPostAdapter == null){
+            showCustomToast("알 수 없는 오류가 발생하였습니다. 다시 시도해주세요");
+            return;
+        }
         mHotPosts.addAll(arrayList);
         mHotPostAdapter.notifyItemRangeInserted(0, arrayList.size());
     }
