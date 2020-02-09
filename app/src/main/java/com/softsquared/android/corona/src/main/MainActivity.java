@@ -3,6 +3,7 @@ package com.softsquared.android.corona.src.main;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,10 +36,11 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     public static int IS_WEBVIEW_MODE = 0;
 
     final int MAP_FRAGMENT = 0;
-    final int NEWS_FRAGMENT = 1;
-    final int INFO_FRAGMENT = 2;
-    final int FAQ_FRAGMENT = 3;
-    final int ORDER_FRAGMENT = 4;
+    final int COMMUNITY_FRAGMENT = 1;
+    final int NEWS_FRAGMENT = 2;
+    final int INFO_FRAGMENT = 3;
+    final int FAQ_FRAGMENT = 4;
+
     private long backPressedTime = 0;
     private final long FINISH_INTERVAL_TIME = 2000;
 
@@ -63,6 +65,15 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        moveToCommunityTab();
+    }
+
+    private void moveToCommunityTab(){
+        if(getIntent().getBooleanExtra("moveCommunityTab", false)){
+            mNavigationTabBar.setViewPager(mViewPagerMain, 1);
+        }
+        else{
+        }
     }
 
     private void initView() {
@@ -81,10 +92,10 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         mMainFragmentPagerAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager());
         mMainFragmentPagerAdapter.addFragment(mDealingFragments, "1");
-        mMainFragmentPagerAdapter.addFragment(mNewsFragments, "2");
-        mMainFragmentPagerAdapter.addFragment(mInfoFragment, "3");
-        mMainFragmentPagerAdapter.addFragment(mFaqFragment, "4");
-        mMainFragmentPagerAdapter.addFragment(mOrderFragment, "5");
+        mMainFragmentPagerAdapter.addFragment(mOrderFragment, "2");
+        mMainFragmentPagerAdapter.addFragment(mNewsFragments, "3");
+        mMainFragmentPagerAdapter.addFragment(mInfoFragment, "4");
+        mMainFragmentPagerAdapter.addFragment(mFaqFragment, "5");
 
         mViewPagerMain = findViewById(R.id.vpMainViewPager);
         mViewPagerMain.setAdapter(mMainFragmentPagerAdapter);
@@ -101,6 +112,14 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         .build()
         );
 
+        mNavigationTabBarModels.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_tab_community),
+                        getResources().getColor(R.color.colorWhite)
+                )
+                        .title("")
+                        .build()
+        );
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
@@ -129,14 +148,6 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         .build()
         );
 
-        mNavigationTabBarModels.add(
-                new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_tab_community),
-                        getResources().getColor(R.color.colorWhite)
-                )
-                        .title("")
-                        .build()
-        );
 
         mNavigationTabBar.setModels(mNavigationTabBarModels);
         mNavigationTabBar.setIsBadged(true);
@@ -167,7 +178,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         IS_WEBVIEW_MODE = 1;
                         break;
 
-                    case ORDER_FRAGMENT:
+                    case COMMUNITY_FRAGMENT:
                         mRelativeTopBar.setVisibility(View.VISIBLE);
                         mTextViewTitle.setVisibility(View.VISIBLE);
                         mLinearNoti.setVisibility(View.GONE);
@@ -274,7 +285,8 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                     " 뒤로가기를 한번 더 누르면 앱을 종료합니다", Snackbar.LENGTH_LONG).show();
         }
     }
-    public void setNotiIcon(){
+
+    public void setNotiIcon() {
         SharedPreferences spf = sSharedPreferences;
         boolean isPushOn = spf.getBoolean(PUSH_ON_OFF, true);
         final SharedPreferences.Editor editor = sSharedPreferences.edit();
