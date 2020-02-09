@@ -87,7 +87,7 @@
                             android:layout_height="wrap_content"
                             android:lineSpacingExtra="8sp"
                             android:textColor="#000000"
-                            android:textSize="18sp"
+                            android:textSize="15sp"
                             tools:text="우리 어떻게 하냐...." />
 
 
