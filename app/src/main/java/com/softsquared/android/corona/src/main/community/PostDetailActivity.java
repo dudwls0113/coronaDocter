@@ -55,9 +55,9 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
     }
 
     void init() {
-        if(getIntent()==null){
+        if (getIntent() == null) {
             finish();
-        }else{
+        } else {
             postNo = getIntent().getIntExtra("postNo", 0);
         }
 
@@ -80,10 +80,9 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
             public void onClick(View view) {
                 if (mEditTextComment.getText().toString().length() < 2) {
                     showCustomToast("댓글은 2글자 이상 입력해주세요.");
-                } else if(fcmToken==null){
+                } else if (fcmToken == null) {
                     showCustomToast("올바르지 않은 접근입니다.");
-                }
-                else {
+                } else {
                     postCommentWrite(fcmToken, postNo, mEditTextComment.getText().toString());
                 }
             }
@@ -134,7 +133,14 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                     if (mEditTextComment.getText().toString().length() != 0) {
-                        postCommentWrite(fcmToken, postNo, mEditTextComment.getText().toString());
+                        if (mEditTextComment.getText().toString().length() < 2) {
+                            showCustomToast("댓글은 2글자 이상 입력해주세요.");
+                        } else if (fcmToken == null) {
+                            showCustomToast("올바르지 않은 접근입니다.");
+                        } else {
+                            postCommentWrite(fcmToken, postNo, mEditTextComment.getText().toString());
+                        }
+//                        postCommentWrite(fcmToken, postNo, mEditTextComment.getText().toString());
                     }
                 }
                 return false;
@@ -164,7 +170,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
     public void getPostDetail(Post post, ArrayList<Comment> arrayList) {
 //        System.out.println("댓글 사이즈: " + arrayList.size());
         hideProgressDialog();
-        if (post!=null){
+        if (post != null) {
             mTextViewTitle.setText(post.getTitle());
             mTextViewContent.setText(post.getContent());
             mTextViewLikeCount.setText(post.getLikeCount() + "");
@@ -179,7 +185,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
                 Date nowDate = sdf.parse(formatDate);
                 Date registerDate = sdf.parse(post.getCreatedAt());
                 long diff = 0;
-                if (nowDate!=null && registerDate!=null){
+                if (nowDate != null && registerDate != null) {
                     diff = nowDate.getTime() - registerDate.getTime();
                 }
                 if (diff / 60000 < 60) {
@@ -206,7 +212,8 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
             }
         }
 
-        if (arrayList!=null){
+        if (arrayList != null) {
+            comments.clear();
             comments.addAll(arrayList);
             mPostDetailAdapter.notifyItemRangeInserted(0, arrayList.size());
         }

@@ -282,7 +282,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
 
                 int lastVisiblePosition = ((LinearLayoutManager) mNewRv.getLayoutManager()).findLastCompletelyVisibleItemPosition();
                 int itemTotalCount = mNewRv.getAdapter().getItemCount();
-                Log.d("스크롤", lastVisiblePosition + "//" + itemTotalCount * 0.7);
+//                Log.d("스크롤", lastVisiblePosition + "//" + itemTotalCount * 0.7);
                 if (lastVisiblePosition > itemTotalCount * 0.7) {
                     if (!mLoadLock) {
                         mLoadLock = true;
