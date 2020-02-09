@@ -33,7 +33,8 @@
 
             <TextView
                 android:id="@+id/list_hot_post_title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="6.3sp"
                 android:textColor="#000000"
@@ -41,10 +42,6 @@
                 android:textStyle="bold"
                 tools:text="우리 어떻게 하냐...." />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/list_hot_post_time"
