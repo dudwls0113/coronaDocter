@@ -55,7 +55,11 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
     }
 
     void init() {
-        postNo = getIntent().getIntExtra("postNo", 0);
+        if(getIntent()==null){
+            finish();
+        }else{
+            postNo = getIntent().getIntExtra("postNo", 0);
+        }
 
         SharedPreferences spf = sSharedPreferences;
         fcmToken = spf.getString("fcm", null);
@@ -76,7 +80,10 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
             public void onClick(View view) {
                 if (mEditTextComment.getText().toString().length() < 2) {
                     showCustomToast("댓글은 2글자 이상 입력해주세요.");
-                } else {
+                } else if(fcmToken==null){
+                    showCustomToast("올바르지 않은 접근입니다.");
+                }
+                else {
                     postCommentWrite(fcmToken, postNo, mEditTextComment.getText().toString());
                 }
             }
@@ -157,48 +164,52 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
     public void getPostDetail(Post post, ArrayList<Comment> arrayList) {
 //        System.out.println("댓글 사이즈: " + arrayList.size());
         hideProgressDialog();
-        mTextViewTitle.setText(post.getTitle());
-        mTextViewContent.setText(post.getContent());
-        mTextViewLikeCount.setText(post.getLikeCount() + "");
-        mTextViewCommentCount.setText(post.getCommentCount() + "");
-        mLikeCount = post.getLikeCount();
-        mCommentCount = post.getCommentCount();
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String formatDate = sdf.format(date);
-        try {
-            Date nowDate = sdf.parse(formatDate);
-            Date registerDate = sdf.parse(post.getCreatedAt());
-            long diff = 0;
-            if (nowDate!=null && registerDate!=null){
-                diff = nowDate.getTime() - registerDate.getTime();
-            }
-            if (diff / 60000 < 60) {
-                if (diff / 60000 == 0) {
-                    mTextViewTime.setText("방금 전");
-                } else {
-                    mTextViewTime.setText(diff / 60000 + "분전");
+        if (post!=null){
+            mTextViewTitle.setText(post.getTitle());
+            mTextViewContent.setText(post.getContent());
+            mTextViewLikeCount.setText(post.getLikeCount() + "");
+            mTextViewCommentCount.setText(post.getCommentCount() + "");
+            mLikeCount = post.getLikeCount();
+            mCommentCount = post.getCommentCount();
+            long now = System.currentTimeMillis();
+            Date date = new Date(now);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formatDate = sdf.format(date);
+            try {
+                Date nowDate = sdf.parse(formatDate);
+                Date registerDate = sdf.parse(post.getCreatedAt());
+                long diff = 0;
+                if (nowDate!=null && registerDate!=null){
+                    diff = nowDate.getTime() - registerDate.getTime();
                 }
-            } else if (diff / 108000000 <= 1) {
-                mTextViewTime.setText(diff / 3600000 + "시간전");
-            } else {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
-                String registerTime = simpleDateFormat.format(registerDate);
-                mTextViewTime.setText(registerTime);
-            }
+                if (diff / 60000 < 60) {
+                    if (diff / 60000 == 0) {
+                        mTextViewTime.setText("방금 전");
+                    } else {
+                        mTextViewTime.setText(diff / 60000 + "분전");
+                    }
+                } else if (diff / 108000000 <= 1) {
+                    mTextViewTime.setText(diff / 3600000 + "시간전");
+                } else {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
+                    String registerTime = simpleDateFormat.format(registerDate);
+                    mTextViewTime.setText(registerTime);
+                }
 //            } else if (diff / 108000000 < 30) {
 //                holder.mTextViewTime.setText(diff / 108000000 + "일전");
 //            } else {
 //                long month = diff / 108000000;
 //                holder.mTextViewTime.setText(month / 30 + "달전");
 //            }
-        } catch (ParseException e) {
-            e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
-        comments.addAll(arrayList);
-        mPostDetailAdapter.notifyItemRangeInserted(0, arrayList.size());
+        if (arrayList!=null){
+            comments.addAll(arrayList);
+            mPostDetailAdapter.notifyItemRangeInserted(0, arrayList.size());
+        }
     }
 
     @Override
