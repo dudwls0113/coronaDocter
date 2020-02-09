@@ -68,20 +68,45 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
         try {
             Date nowDate = sdf.parse(formatDate);
             Date registerDate = sdf.parse(mPosts.get(position).getCreatedAt());
-            long diff = nowDate.getTime() - registerDate.getTime();
-            if (diff / 60000 < 60) {
-                if (diff / 60000 == 0) {
-                    holder.mTextViewTime.setText("방금 전");
-                } else {
-                    holder.mTextViewTime.setText(diff / 60000 + "분전");
-                }
-            } else if (diff / 108000000 <= 1) {
-                holder.mTextViewTime.setText(diff / 3600000 + "시간전");
-            } else {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
-                String registerTime = simpleDateFormat.format(registerDate);
-                holder.mTextViewTime.setText(registerTime);
+            long diff = (nowDate.getTime() - registerDate.getTime())/1000;
+            if(diff<60){
+                holder.mTextViewTime.setText("방금 전");
             }
+            else if((diff/=60)<60){
+                holder.mTextViewTime.setText(diff + "분전");
+            }
+            else if((diff/=60)<24){
+                holder.mTextViewTime.setText(diff + "시간전");
+            }
+            else if((diff/=24)<30){
+                holder.mTextViewTime.setText(diff + "일전");
+            }
+            else if((diff/=30)<12){
+                holder.mTextViewTime.setText(diff + "달전");
+            }
+            else{
+                holder.mTextViewTime.setText(diff + "년전");
+            }
+
+//            if (diff / 60000 < 60) {
+//                if (diff / 60000 == 0) {
+//                    holder.mTextViewTime.setText("방금 전");
+//                } else {
+//                    holder.mTextViewTime.setText(diff / 60000 + "분전");
+//                }
+//            } else if (diff / 108000000 <= 1) {
+//                holder.mTextViewTime.setText(diff / 3600000 + "시간전");
+//            } else if (diff / 108000000 < 30) {
+//                holder.mTextViewTime.setText(diff / 108000000 + "일전");
+//            } else {
+//                long month = diff / 108000000;
+//                holder.mTextViewTime.setText(month / 30 + "달전");
+//            }
+//            else {
+//                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
+//                String registerTime = simpleDateFormat.format(registerDate);
+//                holder.mTextViewTime.setText(registerTime);
+//            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
