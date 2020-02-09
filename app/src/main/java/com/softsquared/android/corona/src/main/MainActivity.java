@@ -131,7 +131,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_tab_order),
+                        getResources().getDrawable(R.drawable.ic_tab_community),
                         getResources().getColor(R.color.colorWhite)
                 )
                         .title("")

@@ -170,7 +170,10 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
         try {
             Date nowDate = sdf.parse(formatDate);
             Date registerDate = sdf.parse(post.getCreatedAt());
-            long diff = nowDate.getTime() - registerDate.getTime();
+            long diff = 0;
+            if (nowDate!=null && registerDate!=null){
+                diff = nowDate.getTime() - registerDate.getTime();
+            }
             if (diff / 60000 < 60) {
                 if (diff / 60000 == 0) {
                     mTextViewTime.setText("방금 전");

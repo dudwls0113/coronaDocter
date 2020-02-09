@@ -70,6 +70,10 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
     String mFcmToken;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private final long FINISH_INTERVAL_TIME = 1000;
+    private long clickPressedTime = 0;
+    private long clickPressedTime2 = 0;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -189,9 +193,16 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
         mHotPostAdapter = new HotPostAdapter(getContext(), mHotPosts, new HotPostAdapter.HotPostAdapterListener() {
             @Override
             public void Click(int postNo, int position) {
-                Intent intent = new Intent(getContext(), PostDetailActivity.class);
-                intent.putExtra("postNo", postNo);
-                startActivity(intent);
+                long tempTime = System.currentTimeMillis();
+                long intervalTime = tempTime - clickPressedTime;
+                if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
+                }
+                else{
+                    clickPressedTime = tempTime;
+                    Intent intent = new Intent(getContext(), PostDetailActivity.class);
+                    intent.putExtra("postNo", postNo);
+                    startActivity(intent);
+                }
             }
 
             @Override
@@ -228,9 +239,16 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
         mNewPostAdapter = new NewPostAdapter(getContext(), mNewPosts, new NewPostAdapter.NewPostAdapterListener() {
             @Override
             public void click(int postNo, int position) {
-                Intent intent = new Intent(getContext(), PostDetailActivity.class);
-                intent.putExtra("postNo", postNo);
-                startActivity(intent);
+                long tempTime = System.currentTimeMillis();
+                long intervalTime = tempTime - clickPressedTime2;
+                if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
+                }
+                else{
+                    clickPressedTime2 = tempTime;
+                    Intent intent = new Intent(getContext(), PostDetailActivity.class);
+                    intent.putExtra("postNo", postNo);
+                    startActivity(intent);
+                }
             }
 
             @Override
@@ -419,8 +437,12 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
     }
 
     public void hideKeyBoard() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE); // 키보드 객체 받아오기
-        imm.hideSoftInputFromWindow(mEditTextPostWriteContent.getWindowToken(), 0); // 키보드 숨기기
+        if (getActivity()!=null){
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE); // 키보드 객체 받아오기
+            if (imm!=null){
+                imm.hideSoftInputFromWindow(mEditTextPostWriteContent.getWindowToken(), 0); // 키보드 숨기기
+            }
+        }
     }
 
     @Override
