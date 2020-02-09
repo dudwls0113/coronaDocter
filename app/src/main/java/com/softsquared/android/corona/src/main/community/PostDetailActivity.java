@@ -265,6 +265,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
         hideProgressDialog();
         Snackbar.make(findViewById(R.id.activity_post_detail_iv_like),
                 message == null || message.isEmpty() ? getString(R.string.network_error) : message, Snackbar.LENGTH_LONG).show();
+        mLoadLock = false;
     }
 
     @Override
