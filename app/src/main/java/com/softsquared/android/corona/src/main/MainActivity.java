@@ -102,8 +102,8 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mMainFragmentPagerAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager());
         mMainFragmentPagerAdapter.addFragment(mDealingFragments, "1");
         mMainFragmentPagerAdapter.addFragment(mOrderFragment, "2");
-        mMainFragmentPagerAdapter.addFragment(mNewsFragments, "3");
-        mMainFragmentPagerAdapter.addFragment(mInfoFragment, "4");
+        mMainFragmentPagerAdapter.addFragment(mInfoFragment, "3");
+        mMainFragmentPagerAdapter.addFragment(mNewsFragments, "4");
         mMainFragmentPagerAdapter.addFragment(mFaqFragment, "5");
 
         mViewPagerMain = findViewById(R.id.vpMainViewPager);
@@ -132,7 +132,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_tab_news),
+                        getResources().getDrawable(R.drawable.ic_tab_info),
                         getResources().getColor(R.color.colorWhite)
                 )
                         .title("")
@@ -141,7 +141,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_tab_info),
+                        getResources().getDrawable(R.drawable.ic_tab_news),
                         getResources().getColor(R.color.colorWhite)
                 )
                         .title("")
