@@ -17,6 +17,7 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.softsquared.android.corona.R;
+import com.softsquared.android.corona.src.main.MainActivity;
 import com.softsquared.android.corona.src.splash.SplashActivity;
 
 import static com.softsquared.android.corona.src.ApplicationClass.PUSH_ON_OFF;
@@ -35,7 +36,7 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
         Log.d("FCM", "aaaaaa");
         SharedPreferences spf = this.getApplicationContext().getSharedPreferences("CORONA_DOCTOR_APP", Context.MODE_PRIVATE);
         boolean isPushOn = spf.getBoolean(PUSH_ON_OFF, true);
-        Log.d("서비스", isPushOn+"");
+        Log.d("서비스", isPushOn + "");
         if (isPushOn && remoteMessage != null && remoteMessage.getData().get("title").length() > 1) {
             Log.d("message", "Message Notification Body: " + remoteMessage.getData().get("message"));
             sendNotification(remoteMessage);
@@ -45,14 +46,16 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
     private void sendNotification(RemoteMessage remoteMessage) {
         String title = remoteMessage.getData().get("title");
         String message = remoteMessage.getData().get("message");
-//        String type = remoteMessage.getData().get("type");
+        String type = remoteMessage.getData().get("type");
 
 
+//        Intent intent = new Intent(this, SplashActivity.class);
+//
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        Intent intent = new Intent(this, SplashActivity.class);
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, channel_id,intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, channel_id,intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        final PendingIntent resultPendingIntent = getPendingIntent(type);
 
         final String CHANNEL_ID = "coronaDoctor";
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -86,7 +89,7 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
         builder.setContentText(message);
         builder.setSound(defaultSoundUri);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(message));   // 3
-        builder.setContentIntent(pendingIntent);
+        builder.setContentIntent(resultPendingIntent);
 //        builder.setFullScreenIntent(pendingIntent, true);
 
         notificationManager.notify(channel_id, builder.build());
@@ -94,5 +97,26 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
         if (channel_id == 100) {
             channel_id = 0;
         }
+    }
+
+    private PendingIntent getPendingIntent(String type) {
+        Intent backIntent = new Intent(this, SplashActivity.class);
+        backIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        Intent resultIntent;
+
+        if (type == null) {
+            Log.d("로그", "null");
+        }
+        //알람을 클릭하면 타입에 따라 해당 화면으로 이동합니다.
+        else if (type.equals("COMMUNITY")) {
+            Log.d("로그", "COMMUNITY");
+            backIntent.putExtra("moveCommunityTab", true);
+
+            return PendingIntent.getActivities(
+                    this, 0,
+                    new Intent[]{backIntent}, PendingIntent.FLAG_ONE_SHOT);
+        }
+        return PendingIntent.getActivities(this, 0, new Intent[]{backIntent}, PendingIntent.FLAG_ONE_SHOT);
     }
 }

@@ -106,6 +106,9 @@ public class SplashActivity extends BaseActivity implements SplashActivityView {
                         Intent intent = new Intent(mContext, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        if (getIntent().getBooleanExtra("moveCommunityTab", false)) {
+                            intent.putExtra("moveCommunityTab", true);
+                        }
                         startActivity(intent);
 
                     }
@@ -128,6 +131,9 @@ public class SplashActivity extends BaseActivity implements SplashActivityView {
                     Intent intent = new Intent(this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    if (getIntent().getBooleanExtra("moveCommunityTab", false)) {
+                        intent.putExtra("moveCommunityTab", true);
+                    }
                     startActivity(intent);
                 }
                 break;
