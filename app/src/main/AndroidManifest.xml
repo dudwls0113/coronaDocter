@@ -26,7 +26,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".src.main.community.OrderWebViewActivity" />
-        <activity android:name=".src.main.MainActivity" />
+        <activity
+            android:name=".src.main.MainActivity"
+            android:parentActivityName=".src.splash.SplashActivity" />
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"

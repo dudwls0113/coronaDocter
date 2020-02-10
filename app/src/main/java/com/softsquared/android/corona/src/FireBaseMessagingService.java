@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.main.MainActivity;
 import com.softsquared.android.corona.src.splash.SplashActivity;
+
+import java.util.Objects;
 
 import static com.softsquared.android.corona.src.ApplicationClass.PUSH_ON_OFF;
 import static com.softsquared.android.corona.src.ApplicationClass.channel_id;
@@ -48,15 +51,15 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
         String message = remoteMessage.getData().get("message");
         String type = remoteMessage.getData().get("type");
 
+        PendingIntent resultPendingIntent;
 
-//        Intent intent = new Intent(this, SplashActivity.class);
-//
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, channel_id,intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        final PendingIntent resultPendingIntent = getPendingIntent(type);
-
+        if (remoteMessage.getData().get("postNo") != null && remoteMessage.getData().get("postNo").length() > 0) {
+            int postNo = Integer.parseInt(remoteMessage.getData().get("postNo"));
+            resultPendingIntent = getPendingIntentToPostNo(postNo);
+        } else {
+            resultPendingIntent = getPendingIntent(type);
+        }
         final String CHANNEL_ID = "coronaDoctor";
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -118,5 +121,25 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
                     new Intent[]{backIntent}, PendingIntent.FLAG_ONE_SHOT);
         }
         return PendingIntent.getActivities(this, 0, new Intent[]{backIntent}, PendingIntent.FLAG_ONE_SHOT);
+    }
+
+    private PendingIntent getPendingIntentToPostNo(int postNo) {
+//        Intent backIntent = new Intent(this, SplashActivity.class);
+//        backIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        Log.d("로그", "" + postNo);
+////        backIntent.putExtra("moveCommunityTab", true);
+//        backIntent.putExtra("postNo", postNo);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(SplashActivity.class);
+        stackBuilder.addNextIntent(intent);
+
+        intent.putExtra("postNo", postNo);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(channel_id, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        return pendingIntent;
     }
 }

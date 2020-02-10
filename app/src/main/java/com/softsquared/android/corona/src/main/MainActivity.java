@@ -1,5 +1,6 @@
 package com.softsquared.android.corona.src.main;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseActivity;
 import com.softsquared.android.corona.src.BaseFragment;
+import com.softsquared.android.corona.src.main.community.PostDetailActivity;
 import com.softsquared.android.corona.src.main.faq.FaqFragment;
 import com.softsquared.android.corona.src.main.info.InfoFragment;
 import com.softsquared.android.corona.src.main.interfaces.MainActivityView;
@@ -68,11 +70,18 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         moveToCommunityTab();
     }
 
-    private void moveToCommunityTab(){
-        if(getIntent().getBooleanExtra("moveCommunityTab", false)){
+    private void moveToCommunityTab() {
+        int postNo = getIntent().getIntExtra("postNo", 0);
+        if (getIntent().getBooleanExtra("moveCommunityTab", false)) {
             mNavigationTabBar.setViewPager(mViewPagerMain, 1);
-        }
-        else{
+            Log.d("로그1111", postNo + "");
+        } else if (postNo > 0) {
+            mNavigationTabBar.setViewPager(mViewPagerMain, 1);
+            Log.d("로그", postNo + "");
+            Intent intent = new Intent(this, PostDetailActivity.class);
+            intent.putExtra("postNo", postNo);
+            startActivity(intent);
+
         }
     }
 
