@@ -183,11 +183,11 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
             mTextViewCommentCount.setText(post.getCommentCount() + "");
             mLikeCount = post.getLikeCount();
             mCommentCount = post.getCommentCount();
-
-            String html = post.getContent();
-            HtmlTagHandler tagHandler = new HtmlTagHandler();
-            Spanned styledText = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY, null, tagHandler);
-            mTextViewContent.setText(styledText);
+//
+//            String html = post.getContent();
+//            HtmlTagHandler tagHandler = new HtmlTagHandler();
+//            Spanned styledText = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY, null, tagHandler);
+//            mTextViewContent.setText(styledText);
 
             long now = System.currentTimeMillis();
             Date date = new Date(now);

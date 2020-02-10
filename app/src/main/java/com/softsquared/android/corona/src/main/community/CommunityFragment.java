@@ -74,11 +74,11 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
     private long clickPressedTime = 0;
     private long clickPressedTime2 = 0;
 
+    boolean isFirst = true;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getHotPost();
-        getNewPost(mPage);
     }
 
     @Override
@@ -87,6 +87,11 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_community, container, false);
         setComponentView(view);
+        if (isFirst){
+            getHotPost();
+            getNewPost(mPage);
+            isFirst = false;
+        }
         return view;
     }
 

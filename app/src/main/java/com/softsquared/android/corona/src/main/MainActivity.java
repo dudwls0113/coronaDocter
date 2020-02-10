@@ -39,17 +39,17 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
     final int MAP_FRAGMENT = 0;
     final int COMMUNITY_FRAGMENT = 1;
-    final int NEWS_FRAGMENT = 2;
-    final int INFO_FRAGMENT = 3;
+    final int NEWS_FRAGMENT = 3;
+    final int INFO_FRAGMENT = 2;
     final int FAQ_FRAGMENT = 4;
 
     private long backPressedTime = 0;
     private final long FINISH_INTERVAL_TIME = 2000;
 
     public static MainViewPager mViewPagerMain;
-    BaseFragment mDealingFragments;
+    BaseFragment mMapFragments;
     NewsFragment mNewsFragments;
-    BaseFragment mOrderFragment;
+    BaseFragment mCommunityFragment;
     BaseFragment mInfoFragment;
     BaseFragment mFaqFragment;
     MainFragmentPagerAdapter mMainFragmentPagerAdapter;
@@ -86,10 +86,10 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     }
 
     private void initView() {
-        mDealingFragments = new MapViewFragment();
-        mNewsFragments = new NewsFragment();
-        mOrderFragment = new CommunityFragment();
+        mMapFragments = new MapViewFragment();
+        mCommunityFragment = new CommunityFragment();
         mInfoFragment = new InfoFragment();
+        mNewsFragments = new NewsFragment();
         mFaqFragment = new FaqFragment();
 
         mTextViewTitle = findViewById(R.id.activity_main_tv);
@@ -100,10 +100,10 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 //        mImageViewTitle = findViewById(R.id.activity_main_iv_title);
 
         mMainFragmentPagerAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager());
-        mMainFragmentPagerAdapter.addFragment(mDealingFragments, "1");
-        mMainFragmentPagerAdapter.addFragment(mOrderFragment, "2");
-        mMainFragmentPagerAdapter.addFragment(mNewsFragments, "3");
-        mMainFragmentPagerAdapter.addFragment(mInfoFragment, "4");
+        mMainFragmentPagerAdapter.addFragment(mMapFragments, "1");
+        mMainFragmentPagerAdapter.addFragment(mCommunityFragment, "2");
+        mMainFragmentPagerAdapter.addFragment(mInfoFragment, "3");
+        mMainFragmentPagerAdapter.addFragment(mNewsFragments, "4");
         mMainFragmentPagerAdapter.addFragment(mFaqFragment, "5");
 
         mViewPagerMain = findViewById(R.id.vpMainViewPager);
@@ -132,7 +132,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_tab_news),
+                        getResources().getDrawable(R.drawable.ic_tab_info),
                         getResources().getColor(R.color.colorWhite)
                 )
                         .title("")
@@ -141,7 +141,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         mNavigationTabBarModels.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_tab_info),
+                        getResources().getDrawable(R.drawable.ic_tab_news),
                         getResources().getColor(R.color.colorWhite)
                 )
                         .title("")
@@ -190,7 +190,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                     case COMMUNITY_FRAGMENT:
                         mRelativeTopBar.setVisibility(View.VISIBLE);
                         mTextViewTitle.setVisibility(View.VISIBLE);
-                        mLinearNoti.setVisibility(View.GONE);
+                        mLinearNoti.setVisibility(View.VISIBLE);
                         mTextViewTitle.setText("커뮤니티");
                         IS_WEBVIEW_MODE = 0;
 
