@@ -1,6 +1,7 @@
 package com.softsquared.android.corona.src.main.community;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final CustomViewHolder holder, int position) {
         holder.mTextViewTitle.setText(mPosts.get(position).getTitle());
         holder.mTextViewContent.setText(mPosts.get(position).getContent());
         holder.mTextViewLikeCount.setText(mPosts.get(position).getLikeCount() + "");

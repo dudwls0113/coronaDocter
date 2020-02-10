@@ -18,5 +18,8 @@
     <color name="colorGray">#b6b6b6</color>
     <color name="colorBlackTextBold">#4a4a4a</color>
 
+    <drawable name="tabNo">#dddddd</drawable>
+    <drawable name="tabYes">#4343EF</drawable>
+
 
 </resources>
