@@ -22,6 +22,7 @@ import com.softsquared.android.corona.src.BaseActivity;
 import com.softsquared.android.corona.src.main.MainActivity;
 import com.softsquared.android.corona.src.splash.interfaces.SplashActivityView;
 import com.facebook.FacebookSdk;
+import com.softsquared.android.corona.src.tutorial.TutorialActivity;
 
 import static com.softsquared.android.corona.src.ApplicationClass.CAN_UPDATE_CLINIC;
 import static com.softsquared.android.corona.src.ApplicationClass.CAN_UPDATE_HOSPITAL;
@@ -116,13 +117,25 @@ public class SplashActivity extends BaseActivity implements SplashActivityView {
 
                 break;
             case 3:
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                if (getIntent().getBooleanExtra("moveCommunityTab", false)) {
-                    intent.putExtra("moveCommunityTab", true);
+                final boolean isFirstRun = sSharedPreferences.getBoolean("isFirst", true);
+                if (isFirstRun){
+                    SharedPreferences.Editor editor = sSharedPreferences.edit();
+                    editor.putBoolean("isFirst", false);
+                    editor.apply();
+                    Intent intent = new Intent(this, TutorialActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                 }
-                startActivity(intent);
+                else{
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    if (getIntent().getBooleanExtra("moveCommunityTab", false)) {
+                        intent.putExtra("moveCommunityTab", true);
+                    }
+                    startActivity(intent);
+                }
                 break;
         }
     }

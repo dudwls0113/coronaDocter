@@ -20,7 +20,7 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/fragment_info_vp"
                 android:layout_width="match_parent"
-                android:layout_height="140dp"
+                android:layout_height="104dp"
                 android:layout_marginHorizontal="17dp"
                 android:layout_marginTop="22dp"
                 android:layout_marginBottom="13dp">
@@ -86,7 +86,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/bg_round_trans_trans"
+                        android:backgroundTint="#00000000"
                         android:hint="제목은 2글자 이상 입력해주세요."
                         android:lineSpacingExtra="3.7sp"
                         android:padding="13dp"
@@ -109,7 +109,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_round_trans_trans"
+                        android:backgroundTint="#00000000"
                         android:gravity="top"
                         android:hint="내용은 5글자 이상 입력해주세요."
                         android:inputType="textMultiLine"

@@ -17,7 +17,8 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon">
-        <activity android:name=".src.main.community.PostDetailActivity"></activity>
+        <activity android:name=".src.tutorial.TutorialActivity"></activity>
+        <activity android:name=".src.main.community.PostDetailActivity" />
         <activity android:name=".src.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
