@@ -1,11 +1,13 @@
 package com.softsquared.android.corona.src.main.community;
 
+import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -181,6 +183,12 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
             mTextViewCommentCount.setText(post.getCommentCount() + "");
             mLikeCount = post.getLikeCount();
             mCommentCount = post.getCommentCount();
+
+            String html = post.getContent();
+            HtmlTagHandler tagHandler = new HtmlTagHandler();
+            Spanned styledText = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY, null, tagHandler);
+            mTextViewContent.setText(styledText);
+
             long now = System.currentTimeMillis();
             Date date = new Date(now);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

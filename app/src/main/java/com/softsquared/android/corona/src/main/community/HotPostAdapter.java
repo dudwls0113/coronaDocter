@@ -1,6 +1,7 @@
 package com.softsquared.android.corona.src.main.community;
 
 import android.content.Context;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.softsquared.android.corona.R;
@@ -53,7 +55,7 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         holder.mTextViewTitle.setText(mPosts.get(position).getTitle());
-        holder.mTextViewContent.setText(mPosts.get(position).getContent());
+//        holder.mTextViewContent.setText(mPosts.get(position).getContent());
         holder.mTextViewLikeCount.setText(mPosts.get(position).getLikeCount() + "");
         holder.mTextViewCommentCount.setText(mPosts.get(position).getCommentCount() + "");
         if (mPosts.get(position).getType() > 1) {
@@ -61,6 +63,12 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
         } else {
             holder.mImageViewNotice.setVisibility(View.GONE);
         }
+
+        String html = mPosts.get(position).getContent();
+        HtmlTagHandler tagHandler = new HtmlTagHandler();
+        Spanned styledText = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY, null, tagHandler);
+        holder.mTextViewContent.setText(styledText);
+
         long now = System.currentTimeMillis();
         Date date = new Date(now);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
