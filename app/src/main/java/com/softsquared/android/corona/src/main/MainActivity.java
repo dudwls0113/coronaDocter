@@ -82,8 +82,10 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     public static final String AD_TEST_KEY_BANNER = "ca-app-pub-3940256099942544/6300978111";
     public static final String AD_TEST_KEY_INTERESTITIAL = "ca-app-pub-3940256099942544/1033173712";
 
-    public static final String AD_REAL_KEY_BANNER = "ca-app-pub-2165488373168832/8270923170";
-    public static final String AD_REAL_KEY_INTERESTITIAL = "ca-app-pub-2165488373168832/3881904411";
+//      [주의] 실제키로 빌드하면안됨
+//    public static final String AD_REAL_KEY_BANNER = "ca-app-pub-2165488373168832/8270923170";
+//    public static final String AD_REAL_KEY_INTERESTITIAL = "ca-app-pub-2165488373168832/3881904411";
+//      [주의] 실제키로 빌드하면안됨
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
