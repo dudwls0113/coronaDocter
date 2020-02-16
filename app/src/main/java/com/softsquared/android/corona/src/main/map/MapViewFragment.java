@@ -5,17 +5,27 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraPosition;
@@ -107,6 +117,9 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 //        canUpdateRoute = spf.getBoolean(CAN_UPDATE_ROUTE, true);
 //        canUpdateClinic = spf.getBoolean(CAN_UPDATE_CLINIC, true);
 //        canUpdateHospital = spf.getBoolean(CAN_UPDATE_HOSPITAL, true);
+
+
+
     }
 
     @Override
@@ -311,7 +324,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         }
     }
 
-    void updateSelectedInfectedArr(){
+    void updateSelectedInfectedArr() {
         selectedInfectedArr.clear();
         for (int i = 0; i < mInfectedList.size(); i++) {
             if (mInfectedList.get(i).isSelected()) {
@@ -595,4 +608,6 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 //        showCustomToast(arrayList.size() + "");
         updateSelectedInfectedArr();
     }
+
+
 }

@@ -40,7 +40,9 @@
         <meta-data
             android:name="com.facebook.sdk.CodelessDebugLogEnabled"
             android:value="true" />
-
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2165488373168832~3857853680"/>
         <service
             android:name=".src.FireBaseMessagingService"
             android:enabled="true"

@@ -4,8 +4,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -14,6 +19,14 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseActivity;
@@ -61,13 +74,51 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
     public static NavigationTabBar mNavigationTabBar;
     private ArrayList<NavigationTabBar.Model> mNavigationTabBarModels;
+    private InterstitialAd mInterstitialAd;
+
+    private AdView mAdView;
+    private LinearLayout mLinear;
+
+    public static final String AD_TEST_KEY_BANNER = "ca-app-pub-3940256099942544/6300978111";
+    public static final String AD_TEST_KEY_INTERESTITIAL = "ca-app-pub-3940256099942544/1033173712";
+
+    public static final String AD_REAL_KEY_BANNER = "ca-app-pub-2165488373168832/8270923170";
+    public static final String AD_REAL_KEY_INTERESTITIAL = "ca-app-pub-2165488373168832/3881904411";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(AD_TEST_KEY_INTERESTITIAL);
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+
+        });
+
         initView();
         moveToCommunityTab();
+
+        mAdView = new AdView(this);
+        mAdView.setAdUnitId(AD_TEST_KEY_BANNER);
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        mLinear = findViewById(R.id.activity_main_linear);
+        // Step 1 - Create AdView and set the ad unit ID on it.
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.TOP;
+        mLinear.addView(mAdView, params);
+        loadBanner();
     }
 
     private void moveToCommunityTab() {
@@ -287,6 +338,11 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         long intervalTime = tempTime - backPressedTime;
 
         if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
+            if (mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+            } else {
+                Log.d("TAG", "The interstitial wasn't loaded yet.");
+            }
             super.onBackPressed();
         } else {
             backPressedTime = tempTime;
@@ -316,5 +372,38 @@ public class MainActivity extends BaseActivity implements MainActivityView {
             default:
                 break;
         }
+    }
+
+    private void loadBanner() {
+        // Create an ad request. Check your logcat output for the hashed device ID
+        // to get test ads on a physical device, e.g.,
+        // "Use AdRequest.Builder.addTestDevice("ABCDE0123") to get test ads on this
+        // device."
+        AdRequest adRequest =
+                new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                        .build();
+
+        AdSize adSize = getAdSize();
+        // Step 4 - Set the adaptive ad size on the ad view.
+        mAdView.setAdSize(adSize);
+
+        // Step 5 - Start loading the ad in the background.
+        mAdView.loadAd(adRequest);
+    }
+
+
+    private AdSize getAdSize() {
+        // Step 2 - Determine the screen width (less decorations) to use for the ad width.
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        int adWidth = (int) (widthPixels / density);
+
+        // Step 3 - Get adaptive ad size and return for setting on the ad view.
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
     }
 }

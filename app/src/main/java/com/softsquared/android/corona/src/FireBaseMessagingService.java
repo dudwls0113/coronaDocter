@@ -36,12 +36,12 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d("FCM", "aaaaaa");
+//        Log.d("FCM", "aaaaaa");
         SharedPreferences spf = this.getApplicationContext().getSharedPreferences("CORONA_DOCTOR_APP", Context.MODE_PRIVATE);
         boolean isPushOn = spf.getBoolean(PUSH_ON_OFF, true);
-        Log.d("서비스", isPushOn + "");
+//        Log.d("서비스", isPushOn + "");
         if (isPushOn && remoteMessage != null && remoteMessage.getData().get("title").length() > 1) {
-            Log.d("message", "Message Notification Body: " + remoteMessage.getData().get("message"));
+//            Log.d("message", "Message Notification Body: " + remoteMessage.getData().get("message"));
             sendNotification(remoteMessage);
         }
     }

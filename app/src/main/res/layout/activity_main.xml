@@ -8,60 +8,67 @@
     tools:context=".src.main.MainActivity">
 
 
-    <RelativeLayout
-        android:id="@+id/activity_main_relative_top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:visibility="gone">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:id="@+id/activity_main_linear"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/activity_main_relative_top"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="14dp"
-            android:layout_marginBottom="14dp">
+            android:background="@color/colorPrimary"
+            android:visibility="gone">
 
-
-            <TextView
-                android:id="@+id/activity_main_tv"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="지도"
-                android:textColor="@color/colorWhite"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:visibility="visible" />
+                android:layout_centerInParent="true"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp">
 
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/activity_main_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="지도"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
 
-        <LinearLayout
-            android:id="@+id/activity_main_linear_noti"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true">
 
-            <ImageView
-                android:id="@+id/activity_main_iv_noti"
-                android:layout_width="24dp"
-                android:layout_height="30dp"
-                android:padding="2dp"
-                android:layout_marginEnd="20dp"
-                android:src="@drawable/img_noti_off"/>
-        </LinearLayout>
+            </LinearLayout>
 
-    </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/activity_main_linear_noti"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:visibility="gone">
 
-    <com.softsquared.android.corona.src.main.MainViewPager
-        android:id="@+id/vpMainViewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@color/colorWhite" />
+                <ImageView
+                    android:id="@+id/activity_main_iv_noti"
+                    android:layout_width="24dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20dp"
+                    android:padding="2dp"
+                    android:src="@drawable/img_noti_off" />
+            </LinearLayout>
 
+        </RelativeLayout>
+
+        <com.softsquared.android.corona.src.main.MainViewPager
+            android:id="@+id/vpMainViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorWhite" />
+    </LinearLayout>
 
     <devlight.io.library.ntb.NavigationTabBar
         android:id="@+id/ntb"
