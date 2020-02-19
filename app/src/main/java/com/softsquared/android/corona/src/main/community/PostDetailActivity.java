@@ -65,6 +65,9 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
 
     public static final String AD_TEST_KEY_BANNER = "ca-app-pub-3940256099942544/6300978111";
 
+    //      [주의] 실제키로 빌드하면안됨
+//    public static final String AD_REAL_KEY_BANNER = "ca-app-pub-2165488373168832/6786768344";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

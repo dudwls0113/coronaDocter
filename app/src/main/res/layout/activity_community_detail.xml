@@ -47,7 +47,7 @@
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/activity_post_detail_frame">
 
         <ScrollView
@@ -223,7 +223,7 @@
                             android:id="@+id/detail_comment_rv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="10dp"
+                            android:layout_marginBottom="70dp"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                     </RelativeLayout>
                 </LinearLayout>
