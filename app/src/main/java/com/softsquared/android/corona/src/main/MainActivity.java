@@ -79,8 +79,8 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     private AdView mAdView;
     private LinearLayout mLinear;
 
-    public static final String AD_TEST_KEY_BANNER = "ca-app-pub-3940256099942544/6300978111";
-    public static final String AD_TEST_KEY_INTERESTITIAL = "ca-app-pub-3940256099942544/1033173712";
+    public static final String AD_TEST_KEY_BANNER = "ca-app-pub-3940256099942544/6300978111_1";
+    public static final String AD_TEST_KEY_INTERESTITIAL = "ca-app-pub-3940256099942544/1033173712_1";
 
 //      [주의] 실제키로 빌드하면안됨
 //    public static final String AD_REAL_KEY_BANNER = "ca-app-pub-2165488373168832/8270923170";
@@ -115,10 +115,46 @@ public class MainActivity extends BaseActivity implements MainActivityView {
             }
         });
 
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        });
+
+
         mLinear = findViewById(R.id.activity_main_linear);
         // Step 1 - Create AdView and set the ad unit ID on it.
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.TOP;
+//        params.gravity = Gravity.TOP;ㅌ
         mLinear.addView(mAdView, params);
         loadBanner();
     }
