@@ -49,7 +49,12 @@ public class InfectedSelectAdapter extends RecyclerView.Adapter<InfectedSelectAd
         if (item.getIsUpdated() == 1) {
             viewHolder.mTextViewNew.setVisibility(View.VISIBLE);
         } else {
-            viewHolder.mTextViewNew.setVisibility(View.INVISIBLE);
+            viewHolder.mTextViewNew.setVisibility(View.GONE);
+        }
+        if (item.getIsCured() == 1){
+            viewHolder.mTextViewCured.setVisibility(View.VISIBLE);
+        } else{
+            viewHolder.mTextViewCured.setVisibility(View.GONE);
         }
         if (item.isSelected()) {
             viewHolder.mImageViewSelect.setImageResource(R.drawable.btn_check_box_on);
@@ -72,13 +77,14 @@ public class InfectedSelectAdapter extends RecyclerView.Adapter<InfectedSelectAd
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView mImageViewSelect;
-        TextView mTextViewName, mTextViewNew;
+        TextView mTextViewName, mTextViewNew, mTextViewCured;
         LinearLayout mLinearItem;
         public ViewHolder(View itemView) {
             super(itemView);
             this.mTextViewNew = itemView.findViewById(R.id.dialog_infect_select_tv_new);
             this.mImageViewSelect = itemView.findViewById(R.id.dialog_infect_select_iv_btn);
             this.mTextViewName = itemView.findViewById(R.id.dialog_infect_select_tv_name);
+            this.mTextViewCured = itemView.findViewById(R.id.dialog_infect_select_tv_cured);
             this.mLinearItem = itemView.findViewById(R.id.list_infected_Linear_item);
             this.mLinearItem.setOnClickListener(new View.OnClickListener() {
                 @Override

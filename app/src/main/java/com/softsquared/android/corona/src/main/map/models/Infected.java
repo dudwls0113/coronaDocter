@@ -12,6 +12,14 @@ public class Infected {
     @SerializedName("infectedNo")
     int infectedNo;
 
+    @SerializedName("isCured")
+    int isCured;
+
+    public int getIsCured() {
+        return isCured;
+    }
+
+
     public int getInfectedNo() {
         return infectedNo;
     }
