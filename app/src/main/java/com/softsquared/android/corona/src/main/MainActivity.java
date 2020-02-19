@@ -79,8 +79,8 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     private AdView mAdView;
     private LinearLayout mLinear;
 
-    public static final String AD_TEST_KEY_BANNER = "ca-app-pub-3940256099942544/6300978111_1";
-    public static final String AD_TEST_KEY_INTERESTITIAL = "ca-app-pub-3940256099942544/1033173712_1";
+    public static final String AD_TEST_KEY_BANNER = "ca-app-pub-3940256099942544/6300978111";
+    public static final String AD_TEST_KEY_INTERESTITIAL = "ca-app-pub-3940256099942544/1033173712";
 
 //      [주의] 실제키로 빌드하면안됨
 //    public static final String AD_REAL_KEY_BANNER = "ca-app-pub-2165488373168832/8270923170";

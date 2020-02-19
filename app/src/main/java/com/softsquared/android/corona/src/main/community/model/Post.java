@@ -24,6 +24,13 @@ public class Post {
     @SerializedName("type")
     int type;
 
+    public String getHtmlContent() {
+        return htmlContent;
+    }
+
+    @SerializedName("htmlContent")
+    String htmlContent;
+
     public void setLikeCountPlus() {
         this.likeCount = likeCount + 1;
     }

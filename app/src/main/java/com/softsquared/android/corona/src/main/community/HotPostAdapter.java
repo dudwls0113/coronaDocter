@@ -55,13 +55,25 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         holder.mTextViewTitle.setText(mPosts.get(position).getTitle());
-        holder.mTextViewContent.setText(mPosts.get(position).getContent());
         holder.mTextViewLikeCount.setText(mPosts.get(position).getLikeCount() + "");
         holder.mTextViewCommentCount.setText(mPosts.get(position).getCommentCount() + "");
         if (mPosts.get(position).getType() > 1) {
             holder.mImageViewNotice.setVisibility(View.VISIBLE);
         } else {
             holder.mImageViewNotice.setVisibility(View.GONE);
+        }
+
+        if(mPosts.get(position).getHtmlContent() == null){
+            holder.mTextViewContent.setText(mPosts.get(position).getContent());
+        }
+        else if(mPosts.get(position).getHtmlContent().length() <2){
+            holder.mTextViewContent.setText(mPosts.get(position).getContent());
+        }
+        else{//html가능
+            String html = mPosts.get(position).getHtmlContent();
+            HtmlTagHandler tagHandler = new HtmlTagHandler();
+            Spanned styledText = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY, null, tagHandler);
+            holder.mTextViewContent.setText(styledText);
         }
 
 //        String html = mPosts.get(position).getContent();

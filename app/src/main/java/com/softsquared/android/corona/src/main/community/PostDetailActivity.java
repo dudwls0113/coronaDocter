@@ -8,14 +8,26 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Spanned;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseActivity;
@@ -48,6 +60,11 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
     String fcmToken;
     boolean mLoadLock = false;
 
+    private AdView mAdView;
+    private FrameLayout mFrame;
+
+    public static final String AD_TEST_KEY_BANNER = "ca-app-pub-3940256099942544/6300978111";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +72,20 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
         mContext = this;
         init();
         getPostDetail(postNo);
+
+        mAdView = new AdView(this);
+        mAdView.setAdUnitId(AD_TEST_KEY_BANNER);
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mFrame = findViewById(R.id.activity_post_detail_frame);
+        // Step 1 - Create AdView and set the ad unit ID on it.
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.BOTTOM;
+        mFrame.addView(mAdView, params);
+        loadBanner();
     }
 
     void init() {
@@ -178,16 +209,24 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
         hideProgressDialog();
         if (post != null) {
             mTextViewTitle.setText(post.getTitle());
-            mTextViewContent.setText(post.getContent());
             mTextViewLikeCount.setText(post.getLikeCount() + "");
             mTextViewCommentCount.setText(post.getCommentCount() + "");
             mLikeCount = post.getLikeCount();
             mCommentCount = post.getCommentCount();
 //
-//            String html = post.getContent();
-//            HtmlTagHandler tagHandler = new HtmlTagHandler();
-//            Spanned styledText = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY, null, tagHandler);
-//            mTextViewContent.setText(styledText);
+            String html;
+            if(post.getHtmlContent() == null){
+                mTextViewContent.setText(post.getContent());
+            }
+            else if(post.getHtmlContent().length() <2){
+                mTextViewContent.setText(post.getContent());
+            }
+            else{//html가능
+                html = post.getHtmlContent();
+                HtmlTagHandler tagHandler = new HtmlTagHandler();
+                Spanned styledText = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY, null, tagHandler);
+                mTextViewContent.setText(styledText);
+            }
 
             long now = System.currentTimeMillis();
             Date date = new Date(now);
@@ -286,5 +325,38 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
     public void hideKeyBoard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); // 키보드 객체 받아오기
         imm.hideSoftInputFromWindow(mEditTextComment.getWindowToken(), 0); // 키보드 숨기기
+    }
+
+    private void loadBanner() {
+        // Create an ad request. Check your logcat output for the hashed device ID
+        // to get test ads on a physical device, e.g.,
+        // "Use AdRequest.Builder.addTestDevice("ABCDE0123") to get test ads on this
+        // device."
+        AdRequest adRequest =
+                new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                        .build();
+
+        AdSize adSize = getAdSize();
+        // Step 4 - Set the adaptive ad size on the ad view.
+        mAdView.setAdSize(adSize);
+
+        // Step 5 - Start loading the ad in the background.
+        mAdView.loadAd(adRequest);
+    }
+
+
+    private AdSize getAdSize() {
+        // Step 2 - Determine the screen width (less decorations) to use for the ad width.
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        int adWidth = (int) (widthPixels / density);
+
+        // Step 3 - Get adaptive ad size and return for setting on the ad view.
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
     }
 }
