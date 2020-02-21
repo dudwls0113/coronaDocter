@@ -22,6 +22,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -47,7 +50,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
     Context mContext;
 
     TextView mTextViewTitle, mTextViewTime, mTextViewContent, mTextViewLikeCount, mTextViewCommentCount;
-    ImageView mImageViewCommentWrite, mImageViewLike, mImageViewBack;
+    ImageView mImageViewCommentWrite, mImageViewLike, mImageViewBack, mImageViewImg;
     EditText mEditTextComment;
     View mCommentWrite;
     LikeCheckDialog likeCheckDialog;
@@ -183,6 +186,8 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
                 return false;
             }
         });
+
+        mImageViewImg = findViewById(R.id.community_detail_iv_img);
     }
 
     void getPostDetail(int postNo) {
@@ -216,6 +221,20 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
             mTextViewCommentCount.setText(post.getCommentCount() + "");
             mLikeCount = post.getLikeCount();
             mCommentCount = post.getCommentCount();
+            RequestOptions sharedOptions =
+                    new RequestOptions()
+                            .override(600, 600)
+                            .placeholder(R.drawable.bg_round)
+                            .error(R.drawable.bg_round)
+                            .diskCacheStrategy(DiskCacheStrategy.DATA)
+                            .centerCrop();
+            if (post.getImageUrl()!=null){
+                mImageViewImg.setVisibility(View.VISIBLE);
+                Glide.with(this).load(post.getImageUrl()).apply(sharedOptions).into(mImageViewImg);
+            }
+            else{
+                mImageViewImg.setVisibility(View.VISIBLE);
+            }
 //
             String html;
             if(post.getHtmlContent() == null){

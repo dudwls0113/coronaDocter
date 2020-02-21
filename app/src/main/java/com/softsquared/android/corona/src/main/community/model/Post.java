@@ -18,6 +18,13 @@ public class Post {
     @SerializedName("postNo")
     int postNo;
 
+    @SerializedName("imageUrl")
+    String imageUrl;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     @SerializedName("createdAt")
     String createdAt;
 
