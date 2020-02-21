@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -52,6 +53,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
     LinearLayout mLinearHeader, mLinearContent;
     LikeCheckDialog likeCheckDialog;
     EditText mEditTextPostWriteTitle, mEditTextPostWriteContent;
+    NestedScrollView mNestedScrollView;
 
 
     ArrayList<CaringInfo> mArrayListCaringInfos = new ArrayList<>();
@@ -130,6 +132,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
 
         mViewPager.setAdapter(newsAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
+
 
 //        mInterstitialAd = new InterstitialAd(getContext());
 //        mInterstitialAd.setAdUnitId(AD_TEST_KEY_INTERESTITIAL);
@@ -253,17 +256,17 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
         mRecyclerView.setAdapter(mHotPostAdapter);
 
         mNewRv = v.findViewById(R.id.new_post_rv);
-        mNewRv.setLayoutManager(new LinearLayoutManager(getContext()) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-
-            @Override
-            public boolean canScrollHorizontally() {
-                return false;
-            }
-        });
+//        mNewRv.setLayoutManager(new LinearLayoutManager(getContext()) {
+//            @Override
+//            public boolean canScrollVertically() {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean canScrollHorizontally() {
+//                return false;
+//            }
+//        });
 
         mNewPostAdapter = new NewPostAdapter(getContext(), mNewPosts, new NewPostAdapter.NewPostAdapterListener() {
             @Override
@@ -296,31 +299,53 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
             }
         });
 
-        mNewRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mNestedScrollView = v.findViewById(R.id.community_scroll_view);
+        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                int lastVisiblePosition = ((LinearLayoutManager) mNewRv.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-                int itemTotalCount = mNewRv.getAdapter().getItemCount();
-//                Log.d("스크롤", lastVisiblePosition + "//" + itemTotalCount * 0.7);
-                if (lastVisiblePosition > itemTotalCount * 0.7) {
-                    if (!mLoadLock) {
-                        mLoadLock = true;
-                        if (!mNoMoreItem) {
-                            getNewPost(mPage);
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY>oldScrollY){
+                    int listen = v.getMeasuredHeight() - v.getChildAt(0).getMeasuredHeight();
+                    listen = listen*-1;
+                    if (scrollY>listen*0.7){
+                        if (!mLoadLock){
+                            mLoadLock = true;
+                            if (!mNoMoreItem){
+                                Log.d("스크롤", "카운트");
+                                getNewPost(mPage);
+                            }
                         }
                     }
                 }
             }
         });
 
+
+//        mNewRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//
+//                int lastVisiblePosition = ((LinearLayoutManager) mNewRv.getLayoutManager()).findLastVisibleItemPosition();
+//                int itemTotalCount = mNewRv.getAdapter().getItemCount();
+//                Log.d("스크롤", lastVisiblePosition + "//" + itemTotalCount + "//" + itemTotalCount*0.7);
+//                if (lastVisiblePosition > itemTotalCount * 0.7) {
+//                    if (!mLoadLock) {
+//                        mLoadLock = true;
+//                        if (!mNoMoreItem) {
+//                            getNewPost(mPage);
+//                        }
+//                    }
+//                }
+//            }
+//        });
+
         mNewRv.setAdapter(mNewPostAdapter);
+
 
         mEditTextPostWriteContent.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -417,8 +442,8 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
         }
 
         if (arrayList != null) {
-            mNewPostAdapter.notifyItemRangeInserted(mNewPosts.size(), arrayList.size());
             mNewPosts.addAll(arrayList);
+            mNewPostAdapter.notifyItemRangeChanged(0, mNewPosts.size());
 //            mNewPostAdapter.notifyDataSetChanged();
             mPage += arrayList.size();
             mLoadLock = false;

@@ -42,12 +42,12 @@ public class FaqFragment extends BaseFragment {
     public void setComponentView(View v) {
         mWebView = v.findViewById(R.id.fragment_faq_web_view);
 
-        mWebView.setOnScrollChangeListener(new View.OnScrollChangeListener(){
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                scroll = scrollY;
-            }
-        });
+//        mWebView.setOnScrollChangeListener(new View.OnScrollChangeListener(){
+//            @Override
+//            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+////                scroll = scrollY;
+//            }
+//        });
 
 
 
