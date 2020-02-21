@@ -61,6 +61,14 @@
 
         </RelativeLayout>
 
+        <LinearLayout
+            android:id="@+id/activity_main_linear"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
+
         <com.softsquared.android.corona.src.main.MainViewPager
             android:id="@+id/vpMainViewPager"
             android:layout_width="match_parent"
@@ -69,13 +77,7 @@
             android:background="@color/colorWhite" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/activity_main_linear"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-    </LinearLayout>
 
     <devlight.io.library.ntb.NavigationTabBar
         android:id="@+id/ntb"

@@ -24,6 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.softsquared.android.corona.R;
@@ -36,6 +39,7 @@ import com.softsquared.android.corona.src.main.info.NewsAdapter;
 import java.util.ArrayList;
 
 import static com.softsquared.android.corona.src.ApplicationClass.sSharedPreferences;
+//import static com.softsquared.android.corona.src.main.MainActivity.AD_TEST_KEY_INTERESTITIAL;
 
 
 public class CommunityFragment extends BaseFragment implements CommunityView, SwipeRefreshLayout.OnRefreshListener {
@@ -76,6 +80,9 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
 
     boolean isFirst = true;
 
+    private InterstitialAd mInterstitialAd;
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +94,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_community, container, false);
         setComponentView(view);
-        if (isFirst){
+        if (isFirst) {
             getHotPost();
             getNewPost(mPage);
             isFirst = false;
@@ -124,6 +131,17 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
         mViewPager.setAdapter(newsAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
+//        mInterstitialAd = new InterstitialAd(getContext());
+//        mInterstitialAd.setAdUnitId(AD_TEST_KEY_INTERESTITIAL);
+//        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//        mInterstitialAd.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdClosed() {
+//                // Load the next interstitial.
+//                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//            }
+//
+//        });
 //        mImageViewMask.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -203,12 +221,16 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
                 long tempTime = System.currentTimeMillis();
                 long intervalTime = tempTime - clickPressedTime;
                 if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
-                }
-                else{
+                } else {
                     clickPressedTime = tempTime;
                     Intent intent = new Intent(getContext(), PostDetailActivity.class);
                     intent.putExtra("postNo", postNo);
                     startActivity(intent);
+//                    if (mInterstitialAd.isLoaded()) {
+//                        mInterstitialAd.show();
+//                    } else {
+//                        Log.d("TAG", "The interstitial wasn't loaded yet.");
+//                    }
                 }
             }
 
@@ -249,8 +271,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
                 long tempTime = System.currentTimeMillis();
                 long intervalTime = tempTime - clickPressedTime2;
                 if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
-                }
-                else{
+                } else {
                     clickPressedTime2 = tempTime;
                     Intent intent = new Intent(getContext(), PostDetailActivity.class);
                     intent.putExtra("postNo", postNo);
@@ -380,7 +401,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
     @Override
     public void getHotPostSuccess(ArrayList<Post> arrayList) {
         hideProgressDialog();
-        if(mHotPosts==null || mHotPostAdapter == null){
+        if (mHotPosts == null || mHotPostAdapter == null) {
             showCustomToast("알 수 없는 오류가 발생하였습니다. 다시 시도해주세요");
             return;
         }
@@ -448,9 +469,9 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
     }
 
     public void hideKeyBoard() {
-        if (getActivity()!=null){
+        if (getActivity() != null) {
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE); // 키보드 객체 받아오기
-            if (imm!=null){
+            if (imm != null) {
                 imm.hideSoftInputFromWindow(mEditTextPostWriteContent.getWindowToken(), 0); // 키보드 숨기기
             }
         }

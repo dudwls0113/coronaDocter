@@ -80,7 +80,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     private LinearLayout mLinear;
 
     public static final String AD_TEST_KEY_BANNER = "ca-app-pub-3940256099942544/6300978111";
-    public static final String AD_TEST_KEY_INTERESTITIAL = "ca-app-pub-3940256099942544/1033173712";
+//    public static final String AD_TEST_KEY_INTERESTITIAL = "ca-app-pub-3940256099942544/1033173712";
 
 //      [주의] 실제키로 빌드하면안됨
 //    public static final String AD_REAL_KEY_BANNER = "ca-app-pub-2165488373168832/8270923170";
@@ -92,17 +92,17 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(AD_TEST_KEY_INTERESTITIAL);
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                // Load the next interstitial.
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            }
-
-        });
+//        mInterstitialAd = new InterstitialAd(this);
+//        mInterstitialAd.setAdUnitId(AD_TEST_KEY_INTERESTITIAL);
+//        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//        mInterstitialAd.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdClosed() {
+//                // Load the next interstitial.
+//                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//            }
+//
+//        });
 
         initView();
         moveToCommunityTab();
@@ -376,11 +376,11 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         long intervalTime = tempTime - backPressedTime;
 
         if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
-            if (mInterstitialAd.isLoaded()) {
-                mInterstitialAd.show();
-            } else {
-                Log.d("TAG", "The interstitial wasn't loaded yet.");
-            }
+//            if (mInterstitialAd.isLoaded()) {
+//                mInterstitialAd.show();
+//            } else {
+//                Log.d("TAG", "The interstitial wasn't loaded yet.");
+//            }
             super.onBackPressed();
         } else {
             backPressedTime = tempTime;
