@@ -3,6 +3,7 @@ package com.softsquared.android.corona.src.main.community;
 import com.softsquared.android.corona.src.main.community.interfaces.CommunityRetrofitInterface;
 import com.softsquared.android.corona.src.main.community.interfaces.CommunityView;
 import com.softsquared.android.corona.src.main.community.model.PostResponse;
+import com.softsquared.android.corona.src.main.community.model.SponsorResponse;
 import com.softsquared.android.corona.src.main.models.DefaultResponse;
 import com.softsquared.android.corona.src.main.community.model.PostWriteResponse;
 
@@ -122,6 +123,28 @@ public class CommunityService {
 
             @Override
             public void onFailure(Call<PostWriteResponse> call, Throwable t) {
+                mCommunityView.validateFailure(null);
+            }
+        });
+    }
+
+    void getSponsor() {
+        final CommunityRetrofitInterface communityRetrofitInterface = getRetrofit().create(CommunityRetrofitInterface.class);
+        communityRetrofitInterface.getSponsor().enqueue(new Callback<SponsorResponse>() {
+            @Override
+            public void onResponse(Call<SponsorResponse> call, Response<SponsorResponse> response) {
+                final SponsorResponse sponsorResponse = response.body();
+                if (sponsorResponse == null) {
+                    mCommunityView.validateFailure(null);
+                } else if (sponsorResponse.getCode() == 100) {
+                    mCommunityView.getSponsorSuccess(sponsorResponse.getmSponsorList());
+                } else {
+                    mCommunityView.validateFailure(sponsorResponse.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SponsorResponse> call, Throwable t) {
                 mCommunityView.validateFailure(null);
             }
         });

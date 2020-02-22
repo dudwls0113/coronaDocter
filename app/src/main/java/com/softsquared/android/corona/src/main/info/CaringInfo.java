@@ -2,6 +2,8 @@ package com.softsquared.android.corona.src.main.info;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class CaringInfo {
 
     private int caringId;
@@ -10,6 +12,11 @@ public class CaringInfo {
 
     private int type;
 
+    private ArrayList<String> arrayListName;
+
+    public ArrayList<String> getArrayListName() {
+        return arrayListName;
+    }
 
     public void setCaringId(int caringId) {
         this.caringId = caringId;
@@ -33,6 +40,13 @@ public class CaringInfo {
 
     public int getType() {
         return type;
+    }
+
+    public CaringInfo(int caringId, String title, int type, ArrayList<String> arrayListName) {
+        this.caringId = caringId;
+        this.title = title;
+        this.type = type;
+        this.arrayListName = arrayListName;
     }
 
     public CaringInfo(int caringId, String title, int type) {

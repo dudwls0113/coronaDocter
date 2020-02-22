@@ -66,10 +66,10 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
     private AdView mAdView;
     private FrameLayout mFrame;
 
-    public static final String AD_TEST_KEY_BANNER = "ca-app-pub-3940256099942544/6300978111";
+//    public static final String AD_TEST_KEY_BANNER = "ca-app-pub-3940256099942544/6300978111";
 
     //      [주의] 실제키로 빌드하면안됨
-//    public static final String AD_REAL_KEY_BANNER = "ca-app-pub-2165488373168832/6786768344";
+    public static final String AD_REAL_KEY_BANNER = "ca-app-pub-2165488373168832/6786768344";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,18 +80,18 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
         getPostDetail(postNo);
 
         mAdView = new AdView(this);
-        mAdView.setAdUnitId(AD_TEST_KEY_BANNER);
+        mAdView.setAdUnitId(AD_REAL_KEY_BANNER);
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
         });
-        mFrame = findViewById(R.id.activity_post_detail_frame);
+//        mFrame = findViewById(R.id.activity_post_detail_frame);
         // Step 1 - Create AdView and set the ad unit ID on it.
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.BOTTOM;
-        mFrame.addView(mAdView, params);
-        loadBanner();
+//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        params.gravity = Gravity.BOTTOM;
+//        mFrame.addView(mAdView, params);
+//        loadBanner();
     }
 
     void init() {
