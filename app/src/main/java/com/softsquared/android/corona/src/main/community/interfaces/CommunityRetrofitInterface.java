@@ -2,6 +2,7 @@ package com.softsquared.android.corona.src.main.community.interfaces;
 
 import com.softsquared.android.corona.src.main.community.model.PostDetailResponse;
 import com.softsquared.android.corona.src.main.community.model.PostResponse;
+import com.softsquared.android.corona.src.main.community.model.SponsorResponse;
 import com.softsquared.android.corona.src.main.models.DefaultResponse;
 import com.softsquared.android.corona.src.main.community.model.PostWriteResponse;
 
@@ -30,4 +31,7 @@ public interface CommunityRetrofitInterface {
 
     @POST("/corona/comment")
     Call<PostWriteResponse> postWriteComment(@Body RequestBody params);
+
+    @GET("/corona/sponsor")
+    Call<SponsorResponse> getSponsor();
 }

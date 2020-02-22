@@ -32,7 +32,12 @@ public class NewsAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int i) {
         if(arrayList !=null && arrayList.size()>0){
             i = i%arrayList.size();
-            return BannerFragment.newInstance(arrayList.get(i));
+            if(arrayList.get(i).getType() == 4){
+                return BannerFragment.newInstance(arrayList.get(i), arrayList.get(i).getArrayListName());
+            }
+            else{
+                return BannerFragment.newInstance(arrayList.get(i));
+            }
         }
         else{
             return BannerFragment.newInstance(null);

@@ -11,10 +11,14 @@ import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseFragment;
+import com.softsquared.android.corona.src.CustomMoneyDialog;
 import com.softsquared.android.corona.src.main.news.KakaoShareCustomDialog;
 import com.softsquared.android.corona.src.main.community.OrderWebViewActivity;
+
+import java.util.ArrayList;
 
 
 public class BannerFragment extends BaseFragment {
@@ -24,7 +28,7 @@ public class BannerFragment extends BaseFragment {
     int imageId;
     int type;
     String title;
-
+    ArrayList<String> stringArrayList;
 
     public static Fragment newInstance(CaringInfo caringInfo) {
         BannerFragment bannerFragment = new BannerFragment();
@@ -36,6 +40,18 @@ public class BannerFragment extends BaseFragment {
         return bannerFragment;
     }
 
+    public static Fragment newInstance(CaringInfo caringInfo, ArrayList<String> peopleList) {
+        BannerFragment bannerFragment = new BannerFragment();
+        Bundle args = new Bundle();
+        args.putInt("imageId", caringInfo.getCaringId());
+        args.putInt("type", caringInfo.getType());
+        args.putString("title", caringInfo.getTitle());
+        args.putStringArrayList("peopleList", peopleList);
+        bannerFragment.setArguments(args);
+        return bannerFragment;
+    }
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +59,9 @@ public class BannerFragment extends BaseFragment {
             imageId = getArguments().getInt("imageId");
             type = getArguments().getInt("type");
             title = getArguments().getString("title");
+            if (getArguments().getStringArrayList("peopleList") != null) {
+                stringArrayList = getArguments().getStringArrayList("peopleList");
+            }
         }
     }
 
@@ -70,7 +89,10 @@ public class BannerFragment extends BaseFragment {
                 } else if (type == 2) {//다이얼로그
                     BannerLongDialog bannerLongDialog = new BannerLongDialog(getContext());
                     bannerLongDialog.show();
-                } else {//구매
+                } else if (type == 4) {//구매
+                    CustomMoneyDialog customMoneyDialog = new CustomMoneyDialog(mContext, stringArrayList);
+                    customMoneyDialog.show();
+                } else {
                     Intent intent3 = new Intent(getContext(), OrderWebViewActivity.class);
                     intent3.putExtra("keyword", title);
                     startActivity(intent3);

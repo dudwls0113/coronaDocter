@@ -34,6 +34,7 @@ import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseFragment;
 import com.softsquared.android.corona.src.main.community.interfaces.CommunityView;
 import com.softsquared.android.corona.src.main.community.model.Post;
+import com.softsquared.android.corona.src.main.community.model.Sponsor;
 import com.softsquared.android.corona.src.main.info.CaringInfo;
 import com.softsquared.android.corona.src.main.info.NewsAdapter;
 
@@ -85,6 +86,8 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
     private InterstitialAd mInterstitialAd;
 
 
+    private ArrayList<String> mArrayListName = new ArrayList<>();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,10 +118,13 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
         mBtnCancel = v.findViewById(R.id.dialog_infect_select_btn_cancel);
         mIsExpanded = false;
         mArrayListCaringInfos.clear();
+        mArrayListCaringInfos.add(new CaringInfo(R.drawable.img_money, "", 4, mArrayListName));
         mArrayListCaringInfos.add(new CaringInfo(R.drawable.banner_invite, "", 1));
         mArrayListCaringInfos.add(new CaringInfo(R.drawable.banner_tip, "", 2));
         mArrayListCaringInfos.add(new CaringInfo(R.drawable.img_mask, "KF94마스크", 3));
         mArrayListCaringInfos.add(new CaringInfo(R.drawable.img_hand, "손세정제", 3));
+
+        getSponsor();
 
         newsAdapter = new NewsAdapter(getChildFragmentManager(), mArrayListCaringInfos);
 
@@ -423,6 +429,11 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
         communityService.postWritePost(fcmToken, title, content);
     }
 
+    void getSponsor() {
+        final CommunityService communityService = new CommunityService(this);
+        communityService.getSponsor();
+    }
+
     @Override
     public void getHotPostSuccess(ArrayList<Post> arrayList) {
         hideProgressDialog();
@@ -447,6 +458,14 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
 //            mNewPostAdapter.notifyDataSetChanged();
             mPage += arrayList.size();
             mLoadLock = false;
+        }
+    }
+
+    @Override
+    public void getSponsorSuccess(ArrayList<Sponsor> arrayList) {
+        mArrayListName.clear();
+        for(int i=0; i<arrayList.size(); i++){
+            mArrayListName.add(arrayList.get(i).getName());
         }
     }
 
