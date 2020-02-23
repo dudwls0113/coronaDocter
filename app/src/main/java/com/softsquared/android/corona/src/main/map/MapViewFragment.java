@@ -95,6 +95,8 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     private boolean isFirstRoute3 = true;
     private boolean canUpdateRoute, canUpdateClinic, canUpdateHospital;
 
+    private boolean newRoute = false;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_map, container, false);
@@ -435,16 +437,18 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
             Log.d("map", "널");
         }
         OverlayImage marker1 = OverlayImage.fromResource(R.drawable.corona_marker);
-        OverlayImage marker2 = OverlayImage.fromResource(R.drawable.corona_marker2);
+//        OverlayImage marker2 = OverlayImage.fromResource(R.drawable.corona_marker2);
         OverlayImage marker3 = OverlayImage.fromResource(R.drawable.corona_marker3);
-        OverlayImage marker4 = OverlayImage.fromResource(R.drawable.corona_marker4);
-        OverlayImage marker5 = OverlayImage.fromResource(R.drawable.corona_marker5);
+//        OverlayImage marker4 = OverlayImage.fromResource(R.drawable.corona_marker4);
+//        OverlayImage marker5 = OverlayImage.fromResource(R.drawable.corona_marker5);
 
-        OverlayImage newMarker1 = OverlayImage.fromResource(R.drawable.new_corona_marker1);
-        OverlayImage newMarker2 = OverlayImage.fromResource(R.drawable.new_corona_marker2);
-        OverlayImage newMarker3 = OverlayImage.fromResource(R.drawable.new_corona_marker3);
-        OverlayImage newMarker4 = OverlayImage.fromResource(R.drawable.new_corona_marker4);
-        OverlayImage newMarker5 = OverlayImage.fromResource(R.drawable.new_corona_marker5);
+        OverlayImage oldMarker = OverlayImage.fromResource(R.drawable.corona_marker_old);
+
+//        OverlayImage newMarker1 = OverlayImage.fromResource(R.drawable.new_corona_marker1);
+//        OverlayImage newMarker2 = OverlayImage.fromResource(R.drawable.new_corona_marker2);
+//        OverlayImage newMarker3 = OverlayImage.fromResource(R.drawable.new_corona_marker3);
+//        OverlayImage newMarker4 = OverlayImage.fromResource(R.drawable.new_corona_marker4);
+//        OverlayImage newMarker5 = OverlayImage.fromResource(R.drawable.new_corona_marker5);
 
         for (int i = 0; i < routeResponses.size(); i++) {
             ArrayList<LatLng> latLngs = new ArrayList<>();
@@ -452,32 +456,18 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                 latLngs.add(new LatLng(routeResponses.get(i).getRouteRes().get(j).getLatitude(), routeResponses.get(i).getRouteRes().get(j).getLongtitude()));
                 Marker marker = new Marker();
                 marker.setPosition(new LatLng(routeResponses.get(i).getRouteRes().get(j).getLatitude(), routeResponses.get(i).getRouteRes().get(j).getLongtitude()));
-                if (i % 5 == 0) {
-                    marker.setIcon(marker1);
-                } else if (i % 5 == 1) {
-                    marker.setIcon(marker2);
-                } else if (i % 5 == 2) {
-                    marker.setIcon(marker3);
-                } else if (i % 5 == 3) {
-                    marker.setIcon(marker4);
-                } else if (i % 5 == 4) {
-                    marker.setIcon(marker5);
+                if(routeResponses.get(i).getRouteRes().get(j).getNewRoute() == 0){
+                    marker.setIcon(oldMarker);
+                }
+                else{
+                    if (i%2==0){
+                        marker.setIcon(marker1);
+                    }
+                    else if(i%2==1){
+                        marker.setIcon(marker3);
+                    }
                 }
                 marker.setHeight(90);
-                if (routeResponses.get(i).getRouteRes().get(j).getNewRoute() == 1) {
-                    if (i % 5 == 0) {
-                        marker.setIcon(newMarker1);
-                    } else if (i % 5 == 1) {
-                        marker.setIcon(newMarker2);
-                    } else if (i % 5 == 2) {
-                        marker.setIcon(newMarker3);
-                    } else if (i % 5 == 3) {
-                        marker.setIcon(newMarker4);
-                    } else if (i % 5 == 4) {
-                        marker.setIcon(newMarker5);
-                    }
-                    marker.setHeight(120);
-                }
                 marker.setAnchor(new PointF((float) 0.5, (float) 0.5));
                 marker.setWidth(90);
                 marker.setTag(routeResponses.get(i).getRouteRes().get(j).getInfectedNo());
@@ -496,31 +486,24 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
             if (latLngs.size() >= 2) {
                 PathOverlay path = new PathOverlay();
                 path.setCoords(latLngs);
-                if (i % 5 == 0) {
+                if (routeResponses.get(i).getRouteRes().get(0).getNewRoute() == 1){
+                    if (i%2==0){
+                        path.setWidth(10);
+                        path.setColor(Color.parseColor("#ff8353"));
+                        path.setOutlineWidth(1);
+                        path.setOutlineColor(Color.parseColor("#ff8353"));
+                    }else if (i%2==1){
+                        path.setWidth(10);
+                        path.setColor(Color.parseColor("#091ab3"));
+                        path.setOutlineWidth(1);
+                        path.setOutlineColor(Color.parseColor("#091ab3"));
+                    }
+                }
+                else{
                     path.setWidth(10);
-                    path.setColor(Color.parseColor("#ff8353"));
+                    path.setColor(Color.parseColor("#948793"));
                     path.setOutlineWidth(1);
-                    path.setOutlineColor(Color.parseColor("#ff8353"));
-                } else if (i % 5 == 1) {
-                    path.setWidth(10);
-                    path.setColor(Color.parseColor("#b31b3c"));
-                    path.setOutlineWidth(1);
-                    path.setOutlineColor(Color.parseColor("#b31b3c"));
-                } else if (i % 5 == 2) {
-                    path.setWidth(10);
-                    path.setColor(Color.parseColor("#091ab3"));
-                    path.setOutlineWidth(1);
-                    path.setOutlineColor(Color.parseColor("#091ab3"));
-                } else if (i % 5 == 3) {
-                    path.setWidth(10);
-                    path.setColor(Color.parseColor("#801ab3"));
-                    path.setOutlineWidth(1);
-                    path.setOutlineColor(Color.parseColor("#801ab3"));
-                } else if (i % 5 == 4) {
-                    path.setWidth(10);
-                    path.setColor(Color.parseColor("#b0e400"));
-                    path.setOutlineWidth(1);
-                    path.setOutlineColor(Color.parseColor("#b0e400"));
+                    path.setOutlineColor(Color.parseColor("#948793"));
                 }
                 path.setTag(routeResponses.get(i).getRouteRes().get(0).getInfectedNo());
                 path.setMap(naverMap);

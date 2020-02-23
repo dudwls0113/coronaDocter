@@ -69,7 +69,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
 //    public static final String AD_TEST_KEY_BANNER = "ca-app-pub-3940256099942544/6300978111";
 
     //      [주의] 실제키로 빌드하면안됨
-    public static final String AD_REAL_KEY_BANNER = "ca-app-pub-2165488373168832/6786768344";
+//    public static final String AD_REAL_KEY_BANNER = "ca-app-pub-2165488373168832/6786768344";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +79,13 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
         init();
         getPostDetail(postNo);
 
-        mAdView = new AdView(this);
-        mAdView.setAdUnitId(AD_REAL_KEY_BANNER);
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
+//        mAdView = new AdView(this);
+//        mAdView.setAdUnitId(AD_REAL_KEY_BANNER);
+//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+//            @Override
+//            public void onInitializationComplete(InitializationStatus initializationStatus) {
+//            }
+//        });
 //        mFrame = findViewById(R.id.activity_post_detail_frame);
         // Step 1 - Create AdView and set the ad unit ID on it.
 //        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -223,7 +223,6 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
             mCommentCount = post.getCommentCount();
             RequestOptions sharedOptions =
                     new RequestOptions()
-                            .override(600, 600)
                             .placeholder(R.drawable.bg_round)
                             .error(R.drawable.bg_round)
                             .diskCacheStrategy(DiskCacheStrategy.DATA)
