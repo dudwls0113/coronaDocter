@@ -17,9 +17,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -28,6 +30,8 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.kakao.adfit.ads.AdListener;
+import com.kakao.adfit.ads.ba.BannerAdView;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseActivity;
 import com.softsquared.android.corona.src.BaseFragment;
@@ -79,6 +83,9 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     private AdView mAdView;
     private LinearLayout mLinear;
 
+    private BannerAdView adView;
+
+
     public static final String AD_TEST_KEY_BANNER = "ca-app-pub-3940256099942544/6300978111";
 //    public static final String AD_TEST_KEY_INTERESTITIAL = "ca-app-pub-3940256099942544/1033173712";
 
@@ -107,7 +114,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         initView();
         moveToCommunityTab();
 
-        mAdView = new AdView(this);
+/*        mAdView = new AdView(this);
         mAdView.setAdUnitId(AD_TEST_KEY_BANNER);
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -156,7 +163,54 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 //        params.gravity = Gravity.TOP;ㅌ
         mLinear.addView(mAdView, params);
-        loadBanner();
+        loadBanner();*/
+
+        adView = findViewById(R.id.adView);  // 배너 광고 뷰
+        adView.setClientId("DAN-us3hebllllk2");  // 할당 받은 광고 단위(clientId) 설정
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+//                showCustomToast("Banner is loaded");
+
+            }
+
+            @Override
+            public void onAdFailed(int i) {
+//                showCustomToast("Failed to load banner :: errorCode = " + i);
+
+            }
+
+            @Override
+            public void onAdClicked() {
+//                showCustomToast("Banner is clicked");
+
+            }
+        });
+        adView.loadAd();  // 광고 요청
+
+
+        getLifecycle().addObserver(new LifecycleObserver() {
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+            public void onResume() {
+                if (adView == null) return;
+                adView.resume();
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+            public void onPause() {
+                if (adView == null) return;
+                adView.pause();
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+            public void onDestroy() {
+                if (adView == null) return;
+                adView.destroy();
+                adView = null;
+            }
+
+        });
     }
 
     private void moveToCommunityTab() {

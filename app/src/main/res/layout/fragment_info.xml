@@ -1,374 +1,432 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".src.main.info.InfoFragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/fragment_info_vp"
-                android:layout_width="match_parent"
-                android:layout_height="104dp"
-                android:layout_marginHorizontal="17dp"
-                android:layout_marginTop="22dp"
-                android:layout_marginBottom="13dp"></androidx.viewpager.widget.ViewPager>
+            <!--            <androidx.viewpager.widget.ViewPager-->
+            <!--                android:id="@+id/fragment_info_vp"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="104dp"-->
+            <!--                android:layout_marginHorizontal="17dp"-->
+            <!--                android:layout_marginTop="22dp"-->
+            <!--                android:layout_marginBottom="13dp"></androidx.viewpager.widget.ViewPager>-->
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/home_tab_indicator"
-                app:tabBackground="@drawable/tab_selector"
-                app:tabGravity="center"
-                app:tabIndicatorHeight="0dp"
-                app:tabPaddingEnd="7dp"
-                app:tabPaddingStart="7dp"
-                android:layout_width="wrap_content"
-                android:layout_height="8dp"
-                android:layout_marginTop="12dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="22dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="20dp">
-                <TextView
-                    android:layout_marginStart="17dp"
-                    android:textStyle="bold"
-                    android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="#f0f2fe"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:textColor="#000000"
-                    android:lineSpacingExtra="8.7sp"
-                    android:text="대한민국 감염자 실황"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:id="@+id/info_update"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="#757575"
-                    android:lineSpacingExtra="5.3sp"
-                    android:layout_marginEnd="17dp"
-                    android:text="2020.01.23"/>
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="17dp"
+                        android:lineSpacingExtra="8.7sp"
+                        android:text="대한민국 코로나19 현황"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/info_update"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="17dp"
+                        android:lineSpacingExtra="5.3sp"
+                        android:text="2020.01.23"
+                        android:textColor="#757575"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+
+                <com.github.mikephil.charting.charts.CombinedChart
+                    android:id="@+id/fragment_info_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp" />
+
             </LinearLayout>
+
+            <!--            <com.google.android.material.tabs.TabLayout-->
+            <!--                android:id="@+id/home_tab_indicator"-->
+            <!--                app:tabBackground="@drawable/tab_selector"-->
+            <!--                app:tabGravity="center"-->
+            <!--                app:tabIndicatorHeight="0dp"-->
+            <!--                app:tabPaddingEnd="7dp"-->
+            <!--                app:tabPaddingStart="7dp"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="8dp"-->
+            <!--                android:layout_marginTop="12dp"-->
+            <!--                android:layout_gravity="center_horizontal"-->
+            <!--                android:layout_marginBottom="22dp" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
                 android:layout_marginEnd="17dp"
-                android:orientation="vertical"
+                android:layout_marginBottom="15.3dp"
                 android:background="@drawable/bg_round_scroll"
-                android:layout_marginBottom="15.3dp">
+                android:orientation="vertical">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6.5dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="14.3dp"
                         android:layout_marginStart="17.3dp"
-                        android:textColor="#070707"
+                        android:layout_marginTop="14.3dp"
                         android:lineSpacingExtra="8sp"
-                        android:text="감염자"/>
+                        android:text="감염자"
+                        android:textColor="#070707"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
                     <TextView
+                        android:id="@+id/info_infected_plus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/info_infected_plus"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="14.3dp"
                         android:layout_marginEnd="64.7dp"
-                        android:textSize="18sp"
-                        android:textColor="#727272"
                         android:lineSpacingExtra="8sp"
-                        tools:text="(+4)"/>
+                        android:textColor="#727272"
+                        android:textSize="18sp"
+                        tools:text="(+4)" />
+
                     <TextView
                         android:id="@+id/info_infected"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginTop="14.3dp"
                         android:layout_marginEnd="17.3dp"
-                        android:layout_alignParentEnd="true"
-                        android:textSize="18sp"
-                        android:textColor="#ff4040"
                         android:lineSpacingExtra="8sp"
-                        tools:text="15"/>
+                        android:textColor="#ff4040"
+                        android:textSize="18sp"
+                        tools:text="15" />
                 </RelativeLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#727272"
                     android:layout_marginStart="15.8dp"
                     android:layout_marginEnd="15.5dp"
-                    android:layout_marginBottom="8.8dp"/>
+                    android:layout_marginBottom="8.8dp"
+                    android:background="#727272" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
                         android:layout_marginStart="17.3dp"
-                        android:textColor="#3d3d3d"
                         android:lineSpacingExtra="6.7sp"
-                        android:text="사망자"/>
+                        android:text="사망자"
+                        android:textColor="#3d3d3d"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
+                        android:id="@+id/info_death_plus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/info_death_plus"
-                        android:layout_marginEnd="64.7dp"
                         android:layout_alignParentEnd="true"
-                        android:textSize="16sp"
-                        android:textColor="#727272"
+                        android:layout_marginEnd="64.7dp"
                         android:lineSpacingExtra="8sp"
-                        tools:text="(+4)"/>
+                        android:textColor="#727272"
+                        android:textSize="16sp"
+                        tools:text="(+4)" />
+
                     <TextView
                         android:id="@+id/info_death"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="17.3dp"
-                        android:textSize="16sp"
-                        android:textColor="#ff7430"
                         android:lineSpacingExtra="6.7sp"
-                        tools:text="0"/>
+                        android:textColor="#ff7430"
+                        android:textSize="16sp"
+                        tools:text="0" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="13.7dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
                         android:layout_marginStart="17.3dp"
-                        android:textColor="#3d3d3d"
                         android:lineSpacingExtra="6.7sp"
-                        android:text="완치자"/>
+                        android:text="완치자"
+                        android:textColor="#3d3d3d"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
+                        android:id="@+id/info_cure_plus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/info_cure_plus"
-                        android:layout_marginEnd="64.7dp"
                         android:layout_alignParentEnd="true"
-                        android:textSize="16sp"
-                        android:textColor="#727272"
+                        android:layout_marginEnd="64.7dp"
                         android:lineSpacingExtra="8sp"
-                        tools:text="(+4)"/>
+                        android:textColor="#727272"
+                        android:textSize="16sp"
+                        tools:text="(+4)" />
+
                     <TextView
                         android:id="@+id/info_cure"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="17.3dp"
-                        android:textSize="16sp"
-                        android:textColor="#ff7430"
                         android:lineSpacingExtra="6.7sp"
-                        tools:text="0"/>
+                        android:textColor="#ff7430"
+                        android:textSize="16sp"
+                        tools:text="0" />
 
                 </RelativeLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
                 android:layout_marginEnd="17dp"
-                android:orientation="vertical"
+                android:layout_marginBottom="17.7dp"
                 android:background="@drawable/bg_round_scroll"
-                android:layout_marginBottom="17.7dp">
+                android:orientation="vertical">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15.3dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="14.3dp"
                         android:layout_marginStart="17.3dp"
-                        android:textColor="#5d5d5d"
+                        android:layout_marginTop="14.3dp"
                         android:lineSpacingExtra="8sp"
-                        android:text="유증상자"/>
+                        android:text="유증상자"
+                        android:textColor="#5d5d5d"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
+                        android:id="@+id/info_symptom_plus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/info_symptom_plus"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginTop="14.3dp"
                         android:layout_marginEnd="64.7dp"
-                        android:layout_alignParentEnd="true"
-                        android:textSize="16sp"
-                        android:textColor="#727272"
                         android:lineSpacingExtra="8sp"
-                        tools:text="(+4)"/>
+                        android:textColor="#727272"
+                        android:textSize="16sp"
+                        tools:text="(+4)" />
+
                     <TextView
                         android:id="@+id/info_symptom"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginTop="14.3dp"
                         android:layout_marginEnd="17.3dp"
-                        android:layout_alignParentEnd="true"
-                        android:textSize="16sp"
-                        android:textColor="#0701c0"
                         android:lineSpacingExtra="6.7sp"
+                        android:textColor="#0701c0"
+                        android:textSize="16sp"
                         tools:text="424" />
 
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
                         android:layout_marginStart="17.3dp"
-                        android:textColor="#5d5d5d"
                         android:lineSpacingExtra="6.7sp"
-                        android:text="검사중"/>
+                        android:text="검사중"
+                        android:textColor="#5d5d5d"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/info_inspection"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="17.3dp"
                         android:layout_alignParentEnd="true"
-                        android:textSize="16sp"
-                        android:textColor="#0701c0"
+                        android:layout_marginEnd="17.3dp"
                         android:lineSpacingExtra="6.7sp"
-                        tools:text="0"/>
+                        android:textColor="#0701c0"
+                        android:textSize="16sp"
+                        tools:text="0" />
+
                     <TextView
+                        android:id="@+id/info_inspection_plus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/info_inspection_plus"
-                        android:layout_marginEnd="64.7dp"
                         android:layout_alignParentEnd="true"
-                        android:textSize="16sp"
-                        android:textColor="#727272"
+                        android:layout_marginEnd="64.7dp"
                         android:lineSpacingExtra="8sp"
-                        tools:text="(+4)"/>
+                        android:textColor="#727272"
+                        android:textSize="16sp"
+                        tools:text="(+4)" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="13.7dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
                         android:layout_marginStart="17.3dp"
-                        android:textColor="#5d5d5d"
                         android:lineSpacingExtra="6.7sp"
-                        android:text="격리해제"/>
+                        android:text="격리해제"
+                        android:textColor="#5d5d5d"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/info_isolation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="17.3dp"
                         android:layout_alignParentEnd="true"
-                        android:textSize="16sp"
-                        android:textColor="#0701c0"
+                        android:layout_marginEnd="17.3dp"
                         android:lineSpacingExtra="6.7sp"
-                        tools:text="0"/>
+                        android:textColor="#0701c0"
+                        android:textSize="16sp"
+                        tools:text="0" />
+
                     <TextView
+                        android:id="@+id/info_isolation_plus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/info_isolation_plus"
-                        android:layout_marginEnd="64.7dp"
                         android:layout_alignParentEnd="true"
-                        android:textSize="16sp"
-                        android:textColor="#727272"
+                        android:layout_marginEnd="64.7dp"
                         android:lineSpacingExtra="8sp"
-                        tools:text="(+4)"/>
+                        android:textColor="#727272"
+                        android:textSize="16sp"
+                        tools:text="(+4)" />
                 </RelativeLayout>
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#f3f3f3"
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="16.7dp"
-                    android:layout_marginBottom="3.7dp">
+                    android:layout_marginBottom="3.7dp"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="17.3dp"
-                        android:textSize="12sp"
-                        android:textColor="#828282"
                         android:lineSpacingExtra="3.3sp"
-                        android:text="출처 질병관리본부 "/>
+                        android:text="출처 질병관리본부 "
+                        android:textColor="#828282"
+                        android:textSize="12sp" />
+
                     <View
                         android:layout_width="0dp"
                         android:layout_height="1dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="17.3dp"
-                        android:textSize="12sp"
-                        android:textColor="#828282"
                         android:lineSpacingExtra="3.3sp"
-                        android:text="질병관리본부 콜센터"/>
+                        android:text="질병관리본부 콜센터"
+                        android:textColor="#828282"
+                        android:textSize="12sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="16.7dp">
+                    android:layout_marginBottom="16.7dp"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="17.3dp"
-                        android:textSize="12sp"
-                        android:textColor="#828282"
                         android:lineSpacingExtra="3.3sp"
-                        android:text="www.cdc.go.kr" />
+                        android:text="www.cdc.go.kr"
+                        android:textColor="#828282"
+                        android:textSize="12sp" />
+
                     <View
                         android:layout_width="0dp"
                         android:layout_height="1dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="17.3dp"
-                        android:textSize="12sp"
-                        android:textColor="#7171e9"
                         android:lineSpacingExtra="3.3sp"
-                        android:text="국번 없이 1339"/>
+                        android:text="국번 없이 1339"
+                        android:textColor="#7171e9"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
 
 
 </LinearLayout>

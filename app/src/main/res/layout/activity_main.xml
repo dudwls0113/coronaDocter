@@ -63,10 +63,14 @@
 
         <LinearLayout
             android:id="@+id/activity_main_linear"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <com.kakao.adfit.ads.ba.BannerAdView
+                android:id="@+id/adView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <com.softsquared.android.corona.src.main.MainViewPager
@@ -76,7 +80,6 @@
             android:layout_weight="1"
             android:background="@color/colorWhite" />
     </LinearLayout>
-
 
 
     <devlight.io.library.ntb.NavigationTabBar

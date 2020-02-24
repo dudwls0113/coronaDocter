@@ -2,6 +2,7 @@ package com.softsquared.android.corona.src.main.community;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.main.community.model.Post;
 
@@ -50,10 +55,11 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
 
     @Override
     public void onBindViewHolder(@NonNull final CustomViewHolder holder, int position) {
-        holder.mTextViewTitle.setText(mPosts.get(position).getTitle());
-        holder.mTextViewContent.setText(mPosts.get(position).getContent());
-        holder.mTextViewLikeCount.setText(mPosts.get(position).getLikeCount() + "");
-        holder.mTextViewCommentCount.setText(mPosts.get(position).getCommentCount() + "");
+        Post post = mPosts.get(position);
+        holder.mTextViewTitle.setText(post.getTitle());
+        holder.mTextViewContent.setText(post.getContent());
+        holder.mTextViewLikeCount.setText(post.getLikeCount() + "");
+        holder.mTextViewCommentCount.setText(post.getCommentCount() + "");
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -81,27 +87,35 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
             else{
                 holder.mTextViewTime.setText(diff + "년전");
             }
-//            long diff = nowDate.getTime() - registerDate.getTime();
-//            if (diff / 60000 < 60) {
-//                if (diff / 60000 == 0) {
-//                    holder.mTextViewTime.setText("방금 전");
-//                } else {
-//                    holder.mTextViewTime.setText(diff / 60000 + "분전");
-//                }
-//            } else if (diff / 108000000 <= 1) {
-//                holder.mTextViewTime.setText(diff / 3600000 + "시간전");
-//            }
-//            else if (diff / 108000000 < 30) {
-//                holder.mTextViewTime.setText(diff / 108000000 + "일전");
-//            } else {
-//                long month = diff / 108000000;
-//                holder.mTextViewTime.setText(month / 30 + "달전");
-//            }
-//            else {
-//                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
-//                String registerTime = simpleDateFormat.format(registerDate);
-//                holder.mTextViewTime.setText(registerTime);
-//            }
+
+            if(post.getHtmlContent() == null){
+                holder.mTextViewContent.setText(mPosts.get(position).getContent());
+            }
+            else if(post.getHtmlContent().length() <2){
+                holder.mTextViewContent.setText(mPosts.get(position).getContent());
+            }
+            else{//html가능
+                String html = mPosts.get(position).getHtmlContent();
+                HtmlTagHandler tagHandler = new HtmlTagHandler();
+                Spanned styledText = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY, null, tagHandler);
+                holder.mTextViewContent.setText(styledText);
+            }
+
+            if(post.getImageUrl()!=null){
+                RequestOptions sharedOptions =
+                        new RequestOptions()
+                                .placeholder(R.drawable.bg_round)
+                                .error(R.drawable.bg_round)
+                                .diskCacheStrategy(DiskCacheStrategy.DATA)
+//                            .centerCrop()
+                        ;
+                Glide.with(mContext).load(post.getImageUrl()).apply(sharedOptions).thumbnail(0.1f).into(holder.mImageViewThumbnail);
+            }
+            else{
+                holder.mImageViewThumbnail.setVisibility(View.GONE);
+            }
+
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -121,6 +135,7 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
         TextView mTextViewTime;
         ImageButton mImageBtnLike;
         ImageView mImageViewComment;
+        ImageView mImageViewThumbnail;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -138,6 +153,7 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
             mTextViewTime = itemView.findViewById(R.id.list_new_post_time);
             mImageBtnLike = itemView.findViewById(R.id.list_new_post_btn_like);
             mImageViewComment = itemView.findViewById(R.id.list_new_post_iv_comment);
+            mImageViewThumbnail = itemView.findViewById(R.id.list_post_iv);
 
             mImageBtnLike.setOnClickListener(new View.OnClickListener() {
                 @Override

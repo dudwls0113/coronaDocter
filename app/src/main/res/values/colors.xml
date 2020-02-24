@@ -15,6 +15,9 @@
     <color name="colorErrorRed">#fc6d70</color>
     <color name="colorFemaleRed">#fe6c6d</color>
 
+    <color name="colorOrange">#ff6214</color>
+    <color name="colorEmerald">#00bbb5</color>
+
     <color name="colorGray">#b6b6b6</color>
     <color name="colorBlackTextBold">#4a4a4a</color>
 

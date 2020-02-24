@@ -15,6 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.main.community.model.Post;
 
@@ -54,19 +59,20 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
 
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
-        holder.mTextViewTitle.setText(mPosts.get(position).getTitle());
-        holder.mTextViewLikeCount.setText(mPosts.get(position).getLikeCount() + "");
-        holder.mTextViewCommentCount.setText(mPosts.get(position).getCommentCount() + "");
-        if (mPosts.get(position).getType() > 1) {
+        Post post = mPosts.get(position);
+        holder.mTextViewTitle.setText(post.getTitle());
+        holder.mTextViewLikeCount.setText(post.getLikeCount() + "");
+        holder.mTextViewCommentCount.setText(post.getCommentCount() + "");
+        if (post.getType() > 1) {
             holder.mImageViewNotice.setVisibility(View.VISIBLE);
         } else {
             holder.mImageViewNotice.setVisibility(View.GONE);
         }
 
-        if(mPosts.get(position).getHtmlContent() == null){
+        if(post.getHtmlContent() == null){
             holder.mTextViewContent.setText(mPosts.get(position).getContent());
         }
-        else if(mPosts.get(position).getHtmlContent().length() <2){
+        else if(post.getHtmlContent().length() <2){
             holder.mTextViewContent.setText(mPosts.get(position).getContent());
         }
         else{//html가능
@@ -74,6 +80,20 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
             HtmlTagHandler tagHandler = new HtmlTagHandler();
             Spanned styledText = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY, null, tagHandler);
             holder.mTextViewContent.setText(styledText);
+        }
+
+        if(post.getImageUrl()!=null){
+            RequestOptions sharedOptions =
+                    new RequestOptions()
+                            .placeholder(R.drawable.bg_round)
+                            .error(R.drawable.bg_round)
+                            .diskCacheStrategy(DiskCacheStrategy.DATA)
+//                            .centerCrop()
+                    ;
+            Glide.with(mContext).load(post.getImageUrl()).apply(sharedOptions).thumbnail(0.1f).into(holder.mImageViewThumbnail);
+        }
+        else{
+            holder.mImageViewThumbnail.setVisibility(View.GONE);
         }
 
 //        String html = mPosts.get(position).getContent();
@@ -150,6 +170,8 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
         ImageView mImageViewNotice, mImageViewComment;
 
         ImageButton mImageBtnLike;
+        ImageView mImageViewThumbnail;
+
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -168,6 +190,7 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
             mImageBtnLike = itemView.findViewById(R.id.list_hot_post_iv_like);
             mImageViewNotice = itemView.findViewById(R.id.list_hot_post_tv_notice);
             mImageViewComment = itemView.findViewById(R.id.list_hot_post_iv_comment);
+            mImageViewThumbnail = itemView.findViewById(R.id.list_hot_post_iv);
 
             mImageBtnLike.setOnClickListener(new View.OnClickListener() {
                 @Override

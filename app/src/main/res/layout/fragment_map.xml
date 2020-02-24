@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_map_frame"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_map_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -143,13 +143,22 @@
 
     </LinearLayout>
 
-<!--    <com.google.android.gms.ads.AdView-->
-<!--        xmlns:ads="http://schemas.android.com/apk/res-auto"-->
-<!--        android:id="@+id/fragment_map_banner_ad"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        ads:adSize="SMART_BANNER"-->
-<!--        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>-->
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="100dp"
+        android:src="@drawable/img_help" />
+
+    <!--    <com.google.android.gms.ads.AdView-->
+    <!--        xmlns:ads="http://schemas.android.com/apk/res-auto"-->
+    <!--        android:id="@+id/fragment_map_banner_ad"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        ads:adSize="SMART_BANNER"-->
+    <!--        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>-->
 
 
 </FrameLayout>
