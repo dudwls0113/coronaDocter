@@ -3,6 +3,7 @@ package com.softsquared.android.corona.src.main.info;
 
 import com.softsquared.android.corona.src.main.info.interfaces.InfoFragmentView;
 import com.softsquared.android.corona.src.main.info.interfaces.InfoRetrofitInterface;
+import com.softsquared.android.corona.src.main.info.models.InfectedDataResponse;
 import com.softsquared.android.corona.src.main.info.models.Info;
 import com.softsquared.android.corona.src.main.info.models.InfoResponse;
 
@@ -43,4 +44,30 @@ public class InfoFragmentService {
             }
         });
     }
+
+
+    void getGraph(){
+        final InfoRetrofitInterface infoRetrofitInterface = getRetrofit().create(InfoRetrofitInterface.class);
+        infoRetrofitInterface.getGraph().enqueue(new Callback<InfectedDataResponse>() {
+            @Override
+            public void onResponse(Call<InfectedDataResponse> call, Response<InfectedDataResponse> response) {
+                final InfectedDataResponse infoResponse = response.body();
+                if(infoResponse==null){
+                    mInfoFragmentView.validateFailure(null);
+                }
+                else if(infoResponse.getCode()==100){
+                    mInfoFragmentView.getGraphSuccess(infoResponse.getData());
+                }
+                else{
+                    mInfoFragmentView.validateFailure(infoResponse.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InfectedDataResponse> call, Throwable t) {
+                mInfoFragmentView.validateFailure(null);
+            }
+        });
+    }
+
 }

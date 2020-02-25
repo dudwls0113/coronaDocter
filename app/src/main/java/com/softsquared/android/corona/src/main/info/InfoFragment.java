@@ -54,6 +54,7 @@ public class InfoFragment extends BaseFragment implements InfoFragmentView {
         final View view = inflater.inflate(R.layout.fragment_info, container, false);
         setComponentView(view);
         getInfo();
+        getGraph();
         return view;
     }
 
@@ -94,8 +95,7 @@ public class InfoFragment extends BaseFragment implements InfoFragmentView {
         mTextViewUpdate = v.findViewById(R.id.info_update);
         mChart = v.findViewById(R.id.fragment_info_chart);
 
-        addDummyData();
-        setChart();
+//        addDummyData();
     }
 
     void addDummyData(){
@@ -191,7 +191,7 @@ public class InfoFragment extends BaseFragment implements InfoFragmentView {
 
 
         mChart.setExtraOffsets(10f, 10f, 10f, 10f);
-        mChart.setVisibleXRangeMaximum(20f);
+//        mChart.setVisibleXRangeMaximum(20f);
         mChart.setDoubleTapToZoomEnabled(true);
         mChart.setDrawGridBackground(false);
         mChart.setDescription(null);
@@ -242,9 +242,9 @@ public class InfoFragment extends BaseFragment implements InfoFragmentView {
         lineDataSet.setLineWidth(2);
         lineDataSet.setColor(getResources().getColor(R.color.colorOrange));
         lineDataSet.setCircleColor(getResources().getColor(R.color.colorOrange));
-        lineDataSet.setCircleRadius(5);
+        lineDataSet.setCircleRadius(3);
         lineDataSet.setCircleHoleColor(getResources().getColor(R.color.colorOrange));
-        lineDataSet.setCircleHoleRadius(3);
+        lineDataSet.setCircleHoleRadius(1);
 //        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         lineDataSet.setCubicIntensity(0.2f);
 
@@ -258,6 +258,12 @@ public class InfoFragment extends BaseFragment implements InfoFragmentView {
         showProgressDialog(getActivity());
         final InfoFragmentService infoFragmentService = new InfoFragmentService(this);
         infoFragmentService.getStatistics();
+    }
+
+    void getGraph() {
+        showProgressDialog(getActivity());
+        final InfoFragmentService infoFragmentService = new InfoFragmentService(this);
+        infoFragmentService.getGraph();
     }
 
     @Override
@@ -300,6 +306,16 @@ public class InfoFragment extends BaseFragment implements InfoFragmentView {
         } else {
             mTextViewSymptomDiff.setText("( " + info.getSymptomDiff() + " )");
         }
+    }
+
+    @Override
+    public void getGraphSuccess(ArrayList<InfectedData> info) {
+        hideProgressDialog();
+        mInfectedDataList = new ArrayList<>();
+        mInfectedDataList.clear();
+        mInfectedDataList.addAll(info);
+        setChart();
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.softsquared.android.corona.src.main.info.interfaces;
 
+import com.softsquared.android.corona.src.main.info.models.InfectedDataResponse;
 import com.softsquared.android.corona.src.main.info.models.InfoResponse;
 
 import retrofit2.Call;
@@ -9,4 +10,7 @@ public interface InfoRetrofitInterface {
 
     @GET("/corona/statistic")
     Call<InfoResponse> getStatistics();
+
+    @GET("/corona/graph")
+    Call<InfectedDataResponse> getGraph();
 }
