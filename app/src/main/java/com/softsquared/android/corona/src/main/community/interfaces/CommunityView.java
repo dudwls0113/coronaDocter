@@ -18,4 +18,6 @@ public interface CommunityView {
     void postWritePostSuccess();
 
     void validateFailure(String message);
+
+    void postReportSuccess();
 }

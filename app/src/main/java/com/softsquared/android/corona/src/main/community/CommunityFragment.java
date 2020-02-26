@@ -120,6 +120,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
         mIsExpanded = false;
         mArrayListCaringInfos.clear();
         mArrayListCaringInfos.add(new CaringInfo(R.drawable.img_money, "", 4, mArrayListName));
+        mArrayListCaringInfos.add(new CaringInfo(R.drawable.img_report_banner, "", 5));
         mArrayListCaringInfos.add(new CaringInfo(R.drawable.banner_invite, "", 1));
         mArrayListCaringInfos.add(new CaringInfo(R.drawable.banner_tip, "", 2));
         mArrayListCaringInfos.add(new CaringInfo(R.drawable.img_mask, "KF94마스크", 3));
@@ -261,11 +262,11 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
             }
 
             @Override
-            public void reportClick(int postNo, int position) {
+            public void reportClick(final int postNo, int position) {
                 reportCheckDialog = new ReportCheckDialog(getContext(), new ReportCheckDialog.CustomLIstener() {
                     @Override
                     public void okClick() {
-
+                        postReport(postNo);
                     }
 
                     @Override
@@ -322,11 +323,11 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
             }
 
             @Override
-            public void reportClick(int postNo, int position) {
+            public void reportClick(final int postNo, int position) {
                 reportCheckDialog = new ReportCheckDialog(getContext(), new ReportCheckDialog.CustomLIstener() {
                     @Override
                     public void okClick() {
-
+                        postReport(postNo);
                     }
 
                     @Override
@@ -450,6 +451,12 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
         communityService.postLike(postNo, mFcmToken, mode, position);
     }
 
+    void postReport(int postNo){
+        showProgressDialog(getActivity());
+        final CommunityService communityService = new CommunityService(this);
+        communityService.postReport(postNo, mFcmToken);
+    }
+
     void getNewPost(int mPage) {
         showProgressDialog(getActivity());
         final CommunityService communityService = new CommunityService(this);
@@ -545,6 +552,11 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
                 message == null || message.isEmpty() ? getString(R.string.network_error) : message, Snackbar.LENGTH_LONG).show();
     }
 
+    @Override
+    public void postReportSuccess() {
+        hideProgressDialog();
+    }
+
     public void hideKeyBoard() {
         if (getActivity() != null) {
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE); // 키보드 객체 받아오기
@@ -558,5 +570,11 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
     public void onRefresh() {
         clearAndReLoad();
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onDestroy() {
+        hideProgressDialog();
+        super.onDestroy();
     }
 }

@@ -92,6 +92,26 @@ public class BannerFragment extends BaseFragment {
                 } else if (type == 4) {//구매
                     CustomMoneyDialog customMoneyDialog = new CustomMoneyDialog(mContext, stringArrayList);
                     customMoneyDialog.show();
+                } else if(type == 5) {
+                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+                    try {
+                        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"coronadoctora@gmail.com"});
+
+                        emailIntent.setType("text/html");
+                        emailIntent.setPackage("com.google.android.gm");
+                        if (emailIntent.resolveActivity(mContext.getPackageManager()) != null)
+                            startActivity(emailIntent);
+
+                        startActivity(emailIntent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+
+                        emailIntent.setType("text/html");
+                        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"coronadoctora@gmail.com"});
+
+                        startActivity(Intent.createChooser(emailIntent, "Send Email"));
+                    }
                 } else {
                     Intent intent3 = new Intent(getContext(), OrderWebViewActivity.class);
                     intent3.putExtra("keyword", title);

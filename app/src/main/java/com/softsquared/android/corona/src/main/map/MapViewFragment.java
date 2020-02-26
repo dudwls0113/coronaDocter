@@ -601,5 +601,9 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 //        }
     }
 
-
+    @Override
+    public void onDestroy() {
+        hideProgressDialog();
+        super.onDestroy();
+    }
 }

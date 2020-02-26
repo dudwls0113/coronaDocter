@@ -323,4 +323,10 @@ public class InfoFragment extends BaseFragment implements InfoFragmentView {
         hideProgressDialog();
         showCustomToast(message == null || message.isEmpty() ? getString(R.string.network_error) : message);
     }
+
+    @Override
+    public void onDestroy() {
+        hideProgressDialog();
+        super.onDestroy();
+    }
 }

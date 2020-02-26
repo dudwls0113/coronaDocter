@@ -110,4 +110,33 @@ public class PostDetailService {
             }
         });
     }
+
+    void postReport(int postNo, final String fcmToken){
+        JSONObject params = new JSONObject();
+        try {
+            params.put("postNo", postNo);
+            params.put("fcmToken", fcmToken);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final CommunityRetrofitInterface communityRetrofitInterface = getRetrofit().create(CommunityRetrofitInterface.class);
+        communityRetrofitInterface.postReport(RequestBody.create(params.toString(),MEDIA_TYPE_JSON)).enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                final DefaultResponse defaultResponse = response.body();
+                if (defaultResponse == null) {
+                    mPostDetailView.validateFailure(null);
+                } else if (defaultResponse.getCode() == 100) {
+                    mPostDetailView.postReportSuccess();
+                } else {
+                    mPostDetailView.validateFailure(defaultResponse.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                mPostDetailView.validateFailure(null);
+            }
+        });
+    }
 }

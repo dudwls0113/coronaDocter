@@ -121,7 +121,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
                 reportCheckDialog = new ReportCheckDialog(mContext, new ReportCheckDialog.CustomLIstener() {
                     @Override
                     public void okClick() {
-
+                        postReport(postNo);
                     }
 
                     @Override
@@ -230,6 +230,12 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
         showProgressDialog();
         final PostDetailService postDetailService = new PostDetailService(this);
         postDetailService.postLike(postNo, fcmToken);
+    }
+
+    void postReport(int postNo){
+        showProgressDialog();
+        final PostDetailService postDetailService = new PostDetailService(this);
+        postDetailService.postReport(postNo, fcmToken);
     }
 
     @Override
@@ -379,6 +385,11 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
         mTextViewLikeCount.setText(String.valueOf(mLikeCount));
     }
 
+    @Override
+    public void postReportSuccess() {
+        hideProgressDialog();
+    }
+
     public void hideKeyBoard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); // 키보드 객체 받아오기
         imm.hideSoftInputFromWindow(mEditTextComment.getWindowToken(), 0); // 키보드 숨기기
@@ -415,5 +426,11 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
 
         // Step 3 - Get adaptive ad size and return for setting on the ad view.
         return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+    }
+
+    @Override
+    protected void onDestroy() {
+        hideProgressDialog();
+        super.onDestroy();
     }
 }

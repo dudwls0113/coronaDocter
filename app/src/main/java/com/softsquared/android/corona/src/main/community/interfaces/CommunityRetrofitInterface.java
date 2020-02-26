@@ -34,4 +34,7 @@ public interface CommunityRetrofitInterface {
 
     @GET("/corona/sponsor")
     Call<SponsorResponse> getSponsor();
+
+    @POST("/corona/declaration")
+    Call<DefaultResponse> postReport(@Body RequestBody params);
 }

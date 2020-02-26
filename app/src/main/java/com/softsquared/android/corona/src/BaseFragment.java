@@ -16,6 +16,7 @@ public abstract class BaseFragment extends Fragment {
 
     public ProgressDialog mProgressDialog;
     public AppCompatDialog progressDialog;
+    public Activity activity;
 
     public void showCustomToast(final String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
@@ -23,6 +24,7 @@ public abstract class BaseFragment extends Fragment {
 
     public void showProgressDialog(Activity activity) {
         if (mProgressDialog == null) {
+            this.activity = activity;
             mProgressDialog = new ProgressDialog(activity);
             mProgressDialog.setCancelable(false);
             mProgressDialog.setMessage(getString(R.string.loading));
@@ -34,8 +36,10 @@ public abstract class BaseFragment extends Fragment {
 
 
     public void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
+        if (!activity.isDestroyed() && activity!=null){
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                mProgressDialog.dismiss();
+            }
         }
     }
 
