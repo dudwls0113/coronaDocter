@@ -52,10 +52,11 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
     Context mContext;
 
     TextView mTextViewTitle, mTextViewTime, mTextViewContent, mTextViewLikeCount, mTextViewCommentCount;
-    ImageView mImageViewCommentWrite, mImageViewLike, mImageViewBack, mImageViewImg;
+    ImageView mImageViewCommentWrite, mImageViewLike, mImageViewBack, mImageViewImg, mImageViewReport;
     EditText mEditTextComment;
     View mCommentWrite;
     LikeCheckDialog likeCheckDialog;
+    ReportCheckDialog reportCheckDialog;
 
     RecyclerView mRecyclerView;
     ArrayList<Comment> comments = new ArrayList<>();
@@ -113,6 +114,24 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
         mTextViewCommentCount = findViewById(R.id.detail_tv_comment);
         mImageViewLike = findViewById(R.id.activity_post_detail_iv_like);
         mImageViewBack = findViewById(R.id.community_detail_back);
+        mImageViewReport = findViewById(R.id.activity_post_detail_iv_report);
+        mImageViewReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reportCheckDialog = new ReportCheckDialog(mContext, new ReportCheckDialog.CustomLIstener() {
+                    @Override
+                    public void okClick() {
+
+                    }
+
+                    @Override
+                    public void cancelClick() {
+
+                    }
+                });
+                reportCheckDialog.show();
+            }
+        });
 
         mEditTextComment = findViewById(R.id.comment_edt_write);
 
@@ -230,12 +249,16 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
                             .diskCacheStrategy(DiskCacheStrategy.DATA)
 //                    .bitmapTransform(new MyTransformation())
                             .override(Target.SIZE_ORIGINAL)
-                            .format(DecodeFormat.PREFER_ARGB_8888).dontTransform()
+                            .format(DecodeFormat.PREFER_ARGB_8888).dontTransform();
 
 
 //                            .centerCrop()
-                    ;
 
+            if (post.getType()>1){
+                mImageViewReport.setVisibility(View.GONE);
+            } else {
+                mImageViewReport.setVisibility(View.VISIBLE);
+            }
 
             if (post.getImageUrl()!=null){
                 mImageViewImg.setVisibility(View.VISIBLE);
@@ -248,15 +271,18 @@ public class PostDetailActivity extends BaseActivity implements PostDetailView {
             String html;
             if(post.getHtmlContent() == null){
                 mTextViewContent.setText(post.getContent());
+                mImageViewReport.setVisibility(View.VISIBLE);
             }
             else if(post.getHtmlContent().length() <2){
                 mTextViewContent.setText(post.getContent());
+                mImageViewReport.setVisibility(View.VISIBLE);
             }
             else{//html가능
                 html = post.getHtmlContent();
                 HtmlTagHandler tagHandler = new HtmlTagHandler();
                 Spanned styledText = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY, null, tagHandler);
                 mTextViewContent.setText(styledText);
+                mImageViewReport.setVisibility(View.GONE);
             }
 
             long now = System.currentTimeMillis();

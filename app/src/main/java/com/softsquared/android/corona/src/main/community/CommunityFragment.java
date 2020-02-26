@@ -53,6 +53,7 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
     ImageView mImageViewMask, mImageViewHand;
     LinearLayout mLinearHeader, mLinearContent;
     LikeCheckDialog likeCheckDialog;
+    ReportCheckDialog reportCheckDialog;
     EditText mEditTextPostWriteTitle, mEditTextPostWriteContent;
     NestedScrollView mNestedScrollView;
 
@@ -258,6 +259,22 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
                 });
                 likeCheckDialog.show();
             }
+
+            @Override
+            public void reportClick(int postNo, int position) {
+                reportCheckDialog = new ReportCheckDialog(getContext(), new ReportCheckDialog.CustomLIstener() {
+                    @Override
+                    public void okClick() {
+
+                    }
+
+                    @Override
+                    public void cancelClick() {
+
+                    }
+                });
+                reportCheckDialog.show();
+            }
         });
         mRecyclerView.setAdapter(mHotPostAdapter);
 
@@ -302,6 +319,22 @@ public class CommunityFragment extends BaseFragment implements CommunityView, Sw
                     }
                 });
                 likeCheckDialog.show();
+            }
+
+            @Override
+            public void reportClick(int postNo, int position) {
+                reportCheckDialog = new ReportCheckDialog(getContext(), new ReportCheckDialog.CustomLIstener() {
+                    @Override
+                    public void okClick() {
+
+                    }
+
+                    @Override
+                    public void cancelClick() {
+
+                    }
+                });
+                reportCheckDialog.show();
             }
         });
 

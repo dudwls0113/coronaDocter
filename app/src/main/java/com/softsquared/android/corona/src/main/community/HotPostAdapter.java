@@ -34,6 +34,8 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
         void Click(int postNo, int position);
 
         void likeClick(int postNo, int position);
+
+        void reportClick(int postNo, int position);
     }
 
     private Context mContext;
@@ -65,21 +67,26 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
         holder.mTextViewCommentCount.setText(post.getCommentCount() + "");
         if (post.getType() > 1) {
             holder.mImageViewNotice.setVisibility(View.VISIBLE);
+            holder.mImageViewReport.setVisibility(View.GONE);
         } else {
             holder.mImageViewNotice.setVisibility(View.GONE);
+            holder.mImageViewReport.setVisibility(View.VISIBLE);
         }
 
         if(post.getHtmlContent() == null){
             holder.mTextViewContent.setText(mPosts.get(position).getContent());
+            holder.mImageViewReport.setVisibility(View.VISIBLE);
         }
         else if(post.getHtmlContent().length() <2){
             holder.mTextViewContent.setText(mPosts.get(position).getContent());
+            holder.mImageViewReport.setVisibility(View.VISIBLE);
         }
         else{//html가능
             String html = mPosts.get(position).getHtmlContent();
             HtmlTagHandler tagHandler = new HtmlTagHandler();
             Spanned styledText = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY, null, tagHandler);
             holder.mTextViewContent.setText(styledText);
+            holder.mImageViewReport.setVisibility(View.GONE);
         }
 
         if(post.getImageUrl()!=null){
@@ -171,6 +178,7 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
 
         ImageButton mImageBtnLike;
         ImageView mImageViewThumbnail;
+        ImageView mImageViewReport;
 
 
         public CustomViewHolder(@NonNull View itemView) {
@@ -202,6 +210,14 @@ public class HotPostAdapter extends RecyclerView.Adapter<HotPostAdapter.CustomVi
                 @Override
                 public void onClick(View view) {
                     mHotPostAdapterListener.Click(mPosts.get(getAdapterPosition()).getPostNo(), getAdapterPosition());
+                }
+            });
+
+            mImageViewReport = itemView.findViewById(R.id.list_hot_post_iv_report);
+            mImageViewReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mHotPostAdapterListener.reportClick(mPosts.get(getAdapterPosition()).getPostNo(), getAdapterPosition());
                 }
             });
         }

@@ -43,6 +43,8 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
         void click(int postNo, int position);
 
         void likeClick(int postNo, int position);
+
+        void reportClick(int postNo, int position);
     }
 
     @NonNull
@@ -60,6 +62,11 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
         holder.mTextViewContent.setText(post.getContent());
         holder.mTextViewLikeCount.setText(post.getLikeCount() + "");
         holder.mTextViewCommentCount.setText(post.getCommentCount() + "");
+        if (post.getType()>1){
+            holder.mImageViewReport.setVisibility(View.GONE);
+        } else{
+            holder.mImageViewReport.setVisibility(View.VISIBLE);
+        }
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -90,15 +97,18 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
 
             if(post.getHtmlContent() == null){
                 holder.mTextViewContent.setText(mPosts.get(position).getContent());
+                holder.mImageViewReport.setVisibility(View.VISIBLE);
             }
             else if(post.getHtmlContent().length() <2){
                 holder.mTextViewContent.setText(mPosts.get(position).getContent());
+                holder.mImageViewReport.setVisibility(View.VISIBLE);
             }
             else{//html가능
                 String html = mPosts.get(position).getHtmlContent();
                 HtmlTagHandler tagHandler = new HtmlTagHandler();
                 Spanned styledText = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY, null, tagHandler);
                 holder.mTextViewContent.setText(styledText);
+                holder.mImageViewReport.setVisibility(View.GONE);
             }
 
             if(post.getImageUrl()!=null){
@@ -136,6 +146,7 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
         ImageButton mImageBtnLike;
         ImageView mImageViewComment;
         ImageView mImageViewThumbnail;
+        ImageView mImageViewReport;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -167,7 +178,13 @@ public class NewPostAdapter extends RecyclerView.Adapter<NewPostAdapter.CustomVi
                     mNewPostAdapterListener.click(mPosts.get(getAdapterPosition()).getPostNo(), getAdapterPosition());
                 }
             });
-
+            mImageViewReport = itemView.findViewById(R.id.list_new_post_iv_report);
+            mImageViewReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mNewPostAdapterListener.reportClick(mPosts.get(getAdapterPosition()).getPostNo(), getAdapterPosition());
+                }
+            });
         }
     }
 }
