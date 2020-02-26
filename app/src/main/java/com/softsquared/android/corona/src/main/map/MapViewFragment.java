@@ -97,6 +97,10 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 
     private boolean newRoute = false;
 
+
+    ArrayList<ArrayList<Infected>> mRegionList = new ArrayList<>();
+
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_map, container, false);
@@ -590,6 +594,11 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         mInfectedList = arrayList;
 //        showCustomToast(arrayList.size() + "");
         updateSelectedInfectedArr();
+
+//        hideProgressDialog();
+//        for(int i=0; i< arrayList.size(); i++){
+//
+//        }
     }
 
 

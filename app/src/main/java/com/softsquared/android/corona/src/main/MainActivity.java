@@ -320,6 +320,9 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         mLinearNoti.setVisibility(View.GONE);
                         mTextViewTitle.setText("지도");
                         IS_WEBVIEW_MODE = 0;
+                        if(adView!=null){
+                            adView.setVisibility(View.VISIBLE);
+                        }
                         break;
 
                     case NEWS_FRAGMENT:
@@ -328,6 +331,9 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         mLinearNoti.setVisibility(View.GONE);
                         mTextViewTitle.setText("뉴스");
                         IS_WEBVIEW_MODE = 1;
+                        if(adView!=null){
+                            adView.setVisibility(View.GONE);
+                        }
                         break;
 
                     case COMMUNITY_FRAGMENT:
@@ -336,23 +342,30 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         mLinearNoti.setVisibility(View.VISIBLE);
                         mTextViewTitle.setText("커뮤니티");
                         IS_WEBVIEW_MODE = 0;
+                        if(adView!=null){
+                            adView.setVisibility(View.VISIBLE);
+                        }
 
                         break;
                     case INFO_FRAGMENT:
                         mRelativeTopBar.setVisibility(View.VISIBLE);
                         mTextViewTitle.setVisibility(View.VISIBLE);
                         mLinearNoti.setVisibility(View.VISIBLE);
-
                         mTextViewTitle.setText("감염 정보");
                         IS_WEBVIEW_MODE = 0;
+                        if(adView!=null){
+                            adView.setVisibility(View.VISIBLE);
+                        }
                         break;
                     case FAQ_FRAGMENT:
                         mRelativeTopBar.setVisibility(View.VISIBLE);
                         mTextViewTitle.setVisibility(View.VISIBLE);
                         mLinearNoti.setVisibility(View.GONE);
-
                         mTextViewTitle.setText("질문 답변");
                         IS_WEBVIEW_MODE = 0;
+                        if(adView!=null){
+                            adView.setVisibility(View.GONE);
+                        }
                         break;
                 }
             }
