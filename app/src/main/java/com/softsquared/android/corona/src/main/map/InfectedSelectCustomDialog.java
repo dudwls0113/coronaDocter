@@ -32,6 +32,8 @@ public class InfectedSelectCustomDialog extends Dialog {
     private ImageView mImageViewAllSelect;
     private RecyclerView mRecyclerViewInfected;
     private InfectedSelectAdapter infectedSelectAdapter;
+//    private ExpandableInfectedSelectAdapter infectedSelectAdapter;
+
     private ArrayList<Infected> mArrayListInfected;
     private LinearLayoutManager mLayoutManager;
 
