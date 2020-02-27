@@ -29,6 +29,8 @@ allprojects {
             url 'https://navercorp.bintray.com/maps'
         }
         maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
+//        maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/'} // necessary for Adfit
+
         maven { url 'https://jitpack.io'}
 
     }

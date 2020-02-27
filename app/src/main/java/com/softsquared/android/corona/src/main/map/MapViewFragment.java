@@ -63,6 +63,8 @@ import static com.softsquared.android.corona.src.ApplicationClass.CAN_UPDATE_CLI
 import static com.softsquared.android.corona.src.ApplicationClass.CAN_UPDATE_HOSPITAL;
 import static com.softsquared.android.corona.src.ApplicationClass.CAN_UPDATE_ROUTE;
 import static com.softsquared.android.corona.src.ApplicationClass.sSharedPreferences;
+import static com.softsquared.android.corona.src.main.MainActivity.isFirstMapLoad;
+import static com.softsquared.android.corona.src.main.MainActivity.selectedInfectedArr;
 
 
 public class MapViewFragment extends BaseFragment implements OnMapReadyCallback, MapViewView {
@@ -78,8 +80,6 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     ArrayList<RouteResponse> routeResponses = new ArrayList<>();
     ArrayList<Marker> markers = new ArrayList<>();
     ArrayList<Infected> mInfectedList = new ArrayList<>();
-    ArrayList<Integer> selectedInfectedArr = new ArrayList<>();
-
     private boolean route1 = true;
     private boolean route2 = false;
     private boolean route3 = false;
@@ -123,7 +123,6 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 //        canUpdateRoute = spf.getBoolean(CAN_UPDATE_ROUTE, true);
 //        canUpdateClinic = spf.getBoolean(CAN_UPDATE_CLINIC, true);
 //        canUpdateHospital = spf.getBoolean(CAN_UPDATE_HOSPITAL, true);
-
 
 
     }
@@ -460,14 +459,12 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                 latLngs.add(new LatLng(routeResponses.get(i).getRouteRes().get(j).getLatitude(), routeResponses.get(i).getRouteRes().get(j).getLongtitude()));
                 Marker marker = new Marker();
                 marker.setPosition(new LatLng(routeResponses.get(i).getRouteRes().get(j).getLatitude(), routeResponses.get(i).getRouteRes().get(j).getLongtitude()));
-                if(routeResponses.get(i).getRouteRes().get(j).getNewRoute() == 0){
+                if (routeResponses.get(i).getRouteRes().get(j).getNewRoute() == 0) {
                     marker.setIcon(oldMarker);
-                }
-                else{
-                    if (i%2==0){
+                } else {
+                    if (i % 2 == 0) {
                         marker.setIcon(marker1);
-                    }
-                    else if(i%2==1){
+                    } else if (i % 2 == 1) {
                         marker.setIcon(marker3);
                     }
                 }
@@ -490,20 +487,19 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
             if (latLngs.size() >= 2) {
                 PathOverlay path = new PathOverlay();
                 path.setCoords(latLngs);
-                if (routeResponses.get(i).getRouteRes().get(0).getNewRoute() == 1){
-                    if (i%2==0){
+                if (routeResponses.get(i).getRouteRes().get(0).getNewRoute() == 1) {
+                    if (i % 2 == 0) {
                         path.setWidth(10);
                         path.setColor(Color.parseColor("#ff8353"));
                         path.setOutlineWidth(1);
                         path.setOutlineColor(Color.parseColor("#ff8353"));
-                    }else if (i%2==1){
+                    } else if (i % 2 == 1) {
                         path.setWidth(10);
                         path.setColor(Color.parseColor("#091ab3"));
                         path.setOutlineWidth(1);
                         path.setOutlineColor(Color.parseColor("#091ab3"));
                     }
-                }
-                else{
+                } else {
                     path.setWidth(10);
                     path.setColor(Color.parseColor("#948793"));
                     path.setOutlineWidth(1);
@@ -515,7 +511,8 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
             }
         }
         hideProgressDialog();
-
+        updateMarkerAndLine();
+        updateLine();
 //        markers.clear();
 //        pathOverlays.clear();
 //        final SharedPreferences.Editor editor = sSharedPreferences.edit();
@@ -590,15 +587,27 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 
     @Override
     public void validateGetInfectedSuccess(ArrayList<Infected> arrayList) {
-        hideProgressDialog();
-        mInfectedList = arrayList;
+//        mInfectedList = arrayList;
 //        showCustomToast(arrayList.size() + "");
-        updateSelectedInfectedArr();
-
+        mInfectedList.clear();
 //        hideProgressDialog();
-//        for(int i=0; i< arrayList.size(); i++){
-//
-//        }
+        if (isFirstMapLoad) {
+            mInfectedList.addAll(arrayList);
+            isFirstMapLoad = false;
+        } else {
+            for (int i = 0; i < arrayList.size(); i++) {
+                Infected tmpInfected = arrayList.get(i);
+                if (selectedInfectedArr.contains((Integer) arrayList.get(i).getInfectedNo())) {
+                    tmpInfected.setSelected(true);
+                    mInfectedList.add(tmpInfected);
+                } else {
+                    tmpInfected.setSelected(false);
+                    mInfectedList.add(tmpInfected);
+                }
+            }
+        }
+        updateSelectedInfectedArr();
+        hideProgressDialog();
     }
 
     @Override

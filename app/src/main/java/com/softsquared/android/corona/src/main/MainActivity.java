@@ -1,5 +1,6 @@
 package com.softsquared.android.corona.src.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -32,6 +33,15 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.google.android.material.snackbar.Snackbar;
 import com.kakao.adfit.ads.AdListener;
 import com.kakao.adfit.ads.ba.BannerAdView;
+import com.mobon.sdk.AdItem;
+import com.mobon.sdk.BannerType;
+import com.mobon.sdk.InterstitialDialog;
+import com.mobon.sdk.Key;
+import com.mobon.sdk.MobonSDK;
+import com.mobon.sdk.RectBannerView;
+import com.mobon.sdk.callback.iMobonAdCallback;
+import com.mobon.sdk.callback.iMobonBannerCallback;
+import com.mobon.sdk.callback.iMobonInterstitialAdCallback;
 import com.softsquared.android.corona.R;
 import com.softsquared.android.corona.src.BaseActivity;
 import com.softsquared.android.corona.src.BaseFragment;
@@ -42,6 +52,10 @@ import com.softsquared.android.corona.src.main.interfaces.MainActivityView;
 import com.softsquared.android.corona.src.main.map.MapViewFragment;
 import com.softsquared.android.corona.src.main.news.NewsFragment;
 import com.softsquared.android.corona.src.main.community.CommunityFragment;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -87,6 +101,15 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
 
     public static final String AD_TEST_KEY_BANNER = "ca-app-pub-3940256099942544/6300978111";
+
+    public static ArrayList<Integer> selectedInfectedArr = new ArrayList<>();
+    public static boolean isFirstMapLoad = true;
+
+    LinearLayout banner_container;
+    RectBannerView rectBannerView;
+    InterstitialDialog interstitialDialog;
+    MobonSDK mMobonSDK;
+    Context mContext;
 //    public static final String AD_TEST_KEY_INTERESTITIAL = "ca-app-pub-3940256099942544/1033173712";
 
 //      [주의] 실제키로 빌드하면안됨
@@ -98,6 +121,9 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContext = this;
+        mMobonSDK = new MobonSDK(this, "YOUR_MEDIA_CODE"); //두번째 인자에 발급받은 미디어코드로 수정하세요.
+        MobonSDK.init(getApplication());
 
 //        mInterstitialAd = new InterstitialAd(this);
 //        mInterstitialAd.setAdUnitId(AD_TEST_KEY_INTERESTITIAL);
@@ -165,53 +191,54 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mLinear.addView(mAdView, params);
         loadBanner();*/
 
-        adView = findViewById(R.id.adView);  // 배너 광고 뷰
-        adView.setClientId("DAN-us3hebllllk2");  // 할당 받은 광고 단위(clientId) 설정
-        adView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-//                showCustomToast("Banner is loaded");
-
-            }
-
-            @Override
-            public void onAdFailed(int i) {
-//                showCustomToast("Failed to load banner :: errorCode = " + i);
-
-            }
-
-            @Override
-            public void onAdClicked() {
-//                showCustomToast("Banner is clicked");
-
-            }
-        });
-        adView.loadAd();  // 광고 요청
-
-
-        getLifecycle().addObserver(new LifecycleObserver() {
-
-            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-            public void onResume() {
-                if (adView == null) return;
-                adView.resume();
-            }
-
-            @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-            public void onPause() {
-                if (adView == null) return;
-                adView.pause();
-            }
-
-            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-            public void onDestroy() {
-                if (adView == null) return;
-                adView.destroy();
-                adView = null;
-            }
-
-        });
+//        adView = findViewById(R.id.adView);  // 배너 광고 뷰
+//        adView.setClientId("DAN-us3hebllllk2");  // 할당 받은 광고 단위(clientId) 설정
+//        adView.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdLoaded() {
+////                showCustomToast("Banner is loaded");
+//
+//            }
+//
+//            @Override
+//            public void onAdFailed(int i) {
+////                showCustomToast("Failed to load banner :: errorCode = " + i);
+//
+//            }
+//
+//            @Override
+//            public void onAdClicked() {
+////                showCustomToast("Banner is clicked");
+//
+//            }
+//        });
+//        adView.loadAd();  // 광고 요청
+//
+//
+//        getLifecycle().addObserver(new LifecycleObserver() {
+//
+//            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+//            public void onResume() {
+//                if (adView == null) return;
+//                adView.resume();
+//            }
+//
+//            @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+//            public void onPause() {
+//                if (adView == null) return;
+//                adView.pause();
+//            }
+//
+//            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+//            public void onDestroy() {
+//                if (adView == null) return;
+//                adView.destroy();
+//                adView = null;
+//            }
+//
+//        });
     }
+
 
     private void moveToCommunityTab() {
         int postNo = getIntent().getIntExtra("postNo", 0);
@@ -228,6 +255,112 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         }
     }
 
+//    void setMobonAdJson() {
+//        //두번째 인자 : 받을 광고의 개수
+//        //세번째 인자 : 발급받은 UnitId 로 교체하세요.
+//        //네번째 인자 : 광고 호출 callback Listener
+//        mMobonSDK.getMobonAdData(this, 1, "unitId", new iMobonAdCallback() {
+//            @Override
+//            public void onLoadedMobonAdData(boolean result, JSONObject objData, String errorStr) {
+//                if (result) {
+//                    try {
+//                        JSONObject jObj = objData.getJSONArray("client").getJSONObject(0);
+//                        JSONArray jArray = jObj.getJSONArray("data");
+//                        int length = jObj.getInt("length");
+//                        String AdType = jObj.getString("target");
+//                        for (int i = 0; i < length; i++) {
+//                            AdItem item = new AdItem(mContext, AdType, jArray.getJSONObject(i));
+//                            //광고 데이터 처리...
+//                        }
+//
+//
+//                    } catch (JSONException e) {
+//                        // TODO Auto-generated catch block
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    if (errorStr.equals(Key.NOFILL)) {//광고 없음
+//                    } else {//통신 오류
+//                    }
+//                }
+//            }
+//        });
+//    }
+
+    void iniMobonBanner() {
+// 각 광고 뷰 당 발급받은 UNIT_ID 값을 필수로 넣어주어야 합니다.
+        rectBannerView = new RectBannerView(this, BannerType.BANNER_FILLx60).setBannerUnitId("");
+// 배너뷰의 리스너를 등록합니다.
+        rectBannerView.setAdListener(new iMobonBannerCallback() {
+            @Override
+            public void onLoadedAdInfo(boolean result, String errorcode) {
+                if (result) {
+                    //배너 광고 로딩 성공
+                    showCustomToast("배너 광고로딩");
+                    // 광고를 띄우고자 하는 layout 에 배너뷰를 삽입합니다.
+                    banner_container.addView(rectBannerView);
+                } else {
+                    showCustomToast("광고실패 : " + errorcode);
+                    rectBannerView.destroyAd();
+                    rectBannerView = null;
+                }
+            }
+
+            @Override
+            public void onAdClicked() {
+                System.out.println("광고클릭");
+            }
+        });
+        // 광고를 호출합니다.
+        rectBannerView.loadAd();
+    }
+
+    void initInterstitialDialog() {
+        //전면 배너를 선언하시고 발급받은 UnitId 로 교체하세요.
+        interstitialDialog = new InterstitialDialog(this).setType(Key.INTERSTITIAL_TYPE.SMALL).setUnitId("").build();
+        //전면 배너 리스너를 등록합니다.
+        interstitialDialog.setAdListener(new iMobonInterstitialAdCallback() {
+            @Override
+            public void onLoadedAdInfo(boolean result, final String errorStr) {
+                if (result) {
+                    //광고 성공
+                } else {
+                    //광고 실패
+                    showCustomToast("onLoadedAdInfo fail" + errorStr);
+                }
+            }
+
+            @Override
+            public void onClickEvent(Key.INTERSTITIAL_KEYCODE event_code) {
+                if (event_code == Key.INTERSTITIAL_KEYCODE.CLOSE) {
+//                    if (interstitialDialog != null)
+//                        interstitialDialog.loadAd();
+                } else if (event_code == Key.INTERSTITIAL_KEYCODE.ADCLICK) {
+                    showCustomToast("Interstitial Ad Click");
+                    if (interstitialDialog != null)
+                        interstitialDialog.close();
+                }
+            }
+
+            @Override
+            public void onOpened() {
+
+            }
+
+            @Override
+            public void onClosed() {
+
+            }
+        });
+
+        //광고를 호출합니다
+        interstitialDialog.loadAd();
+
+        //전면 광고를 띄웁니다.
+        if (interstitialDialog.isLoaded())
+            interstitialDialog.show();
+    }
+
     private void initView() {
         mMapFragments = new MapViewFragment();
         mCommunityFragment = new CommunityFragment();
@@ -239,6 +372,9 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         mRelativeTopBar = findViewById(R.id.activity_main_relative_top);
         mLinearNoti = findViewById(R.id.activity_main_linear_noti);
         mImageViewNoti = findViewById(R.id.activity_main_iv_noti);
+
+        banner_container = findViewById(R.id.activity_main_linear);
+
 //        mTextViewTitle = findViewById(R.id.activity_main_tv);
 //        mImageViewTitle = findViewById(R.id.activity_main_iv_title);
 
@@ -320,7 +456,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         mLinearNoti.setVisibility(View.GONE);
                         mTextViewTitle.setText("지도");
                         IS_WEBVIEW_MODE = 0;
-                        if(adView!=null){
+                        if (adView != null) {
                             adView.setVisibility(View.VISIBLE);
                         }
                         break;
@@ -331,7 +467,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         mLinearNoti.setVisibility(View.GONE);
                         mTextViewTitle.setText("뉴스");
                         IS_WEBVIEW_MODE = 1;
-                        if(adView!=null){
+                        if (adView != null) {
                             adView.setVisibility(View.GONE);
                         }
                         break;
@@ -342,7 +478,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         mLinearNoti.setVisibility(View.VISIBLE);
                         mTextViewTitle.setText("커뮤니티");
                         IS_WEBVIEW_MODE = 0;
-                        if(adView!=null){
+                        if (adView != null) {
                             adView.setVisibility(View.VISIBLE);
                         }
 
@@ -353,7 +489,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         mLinearNoti.setVisibility(View.VISIBLE);
                         mTextViewTitle.setText("감염 정보");
                         IS_WEBVIEW_MODE = 0;
-                        if(adView!=null){
+                        if (adView != null) {
                             adView.setVisibility(View.VISIBLE);
                         }
                         break;
@@ -363,7 +499,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
                         mLinearNoti.setVisibility(View.GONE);
                         mTextViewTitle.setText("질문 답변");
                         IS_WEBVIEW_MODE = 0;
-                        if(adView!=null){
+                        if (adView != null) {
                             adView.setVisibility(View.GONE);
                         }
                         break;

@@ -36,7 +36,7 @@ public abstract class BaseFragment extends Fragment {
 
 
     public void hideProgressDialog() {
-        if (!activity.isDestroyed() && activity!=null){
+        if (!getActivity().isDestroyed() && activity!=null){
             if (mProgressDialog != null && mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
             }
