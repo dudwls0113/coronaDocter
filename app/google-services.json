@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:839807434055:android:9cd3e9a627503bc151e062",
         "android_client_info": {
-          "package_name": "com.softsquared.android.corona"
+          "package_name": "com.softsquared.android.coronadoctor"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "839807434055-554alngt6160qs573mdbjv3gvjju0v7o.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.softsquared.android.corona",
+            "package_name": "com.softsquared.android.coronadoctor",
             "certificate_hash": "0539a298123ec30132071df52db6b33f1525184e"
           }
         },

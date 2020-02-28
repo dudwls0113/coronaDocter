@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.softsquared.android.corona">
+    package="com.softsquared.android.coronadoctor">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,23 +17,23 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon">
-        <activity android:name=".src.tutorial.TutorialActivity"></activity>
-        <activity android:name=".src.main.community.PostDetailActivity" />
-        <activity android:name=".src.splash.SplashActivity">
+        <activity android:name="com.softsquared.android.coronadoctor.src.tutorial.TutorialActivity"></activity>
+        <activity android:name="com.softsquared.android.coronadoctor.src.main.community.PostDetailActivity" />
+        <activity android:name="com.softsquared.android.coronadoctor.src.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".src.main.community.OrderWebViewActivity" />
+        <activity android:name="com.softsquared.android.coronadoctor.src.main.community.OrderWebViewActivity" />
         <activity
-            android:name=".src.main.MainActivity"
-            android:parentActivityName=".src.splash.SplashActivity" />
+            android:name="com.softsquared.android.coronadoctor.src.main.MainActivity"
+            android:parentActivityName="com.softsquared.android.coronadoctor.src.splash.SplashActivity" />
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="2ewm9w05dc" />
+            android:value="3l0l59tbok" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -44,7 +44,7 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-2165488373168832~3857853680"/>
         <service
-            android:name=".src.FireBaseMessagingService"
+            android:name="com.softsquared.android.coronadoctor.src.FireBaseMessagingService"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
