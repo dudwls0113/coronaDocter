@@ -299,11 +299,11 @@ public class MainActivity extends BaseActivity implements MainActivityView {
             public void onLoadedAdInfo(boolean result, String errorcode) {
                 if (result) {
                     //배너 광고 로딩 성공
-                    showCustomToast("배너 광고로딩");
+//                    showCustomToast("배너 광고로딩");
                     // 광고를 띄우고자 하는 layout 에 배너뷰를 삽입합니다.
                     banner_container.addView(rectBannerView);
                 } else {
-                    showCustomToast("광고실패 : " + errorcode);
+//                    showCustomToast("광고실패 : " + errorcode);
                     rectBannerView.destroyAd();
                     rectBannerView = null;
                 }
@@ -326,10 +326,13 @@ public class MainActivity extends BaseActivity implements MainActivityView {
             @Override
             public void onLoadedAdInfo(boolean result, final String errorStr) {
                 if (result) {
+                    //전면 광고를 띄웁니다.
+                    if (interstitialDialog.isLoaded())
+                        interstitialDialog.show();
                     //광고 성공
                 } else {
                     //광고 실패
-                    showCustomToast("onLoadedAdInfo fail" + errorStr);
+//                    showCustomToast("onLoadedAdInfo fail" + errorStr);
                 }
             }
 
@@ -339,7 +342,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 //                    if (interstitialDialog != null)
 //                        interstitialDialog.loadAd();
                 } else if (event_code == Key.INTERSTITIAL_KEYCODE.ADCLICK) {
-                    showCustomToast("Interstitial Ad Click");
+//                    showCustomToast("Interstitial Ad Click");
                     if (interstitialDialog != null)
                         interstitialDialog.close();
                 }
@@ -357,11 +360,8 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         });
 
         //광고를 호출합니다
-        interstitialDialog.loadAd();
+//        interstitialDialog.loadAd();
 
-        //전면 광고를 띄웁니다.
-        if (interstitialDialog.isLoaded())
-            interstitialDialog.show();
     }
 
     private void initView() {
