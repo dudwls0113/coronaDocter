@@ -73,7 +73,7 @@
 <!--                android:layout_height="wrap_content" />-->
         </LinearLayout>
 
-        <com.softsquared.android.coronadoctor.src.main.MainViewPager
+        <com.softsquared.android.corona.src.main.MainViewPager
             android:id="@+id/vpMainViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
