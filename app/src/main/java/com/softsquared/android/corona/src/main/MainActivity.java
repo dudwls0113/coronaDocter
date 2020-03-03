@@ -122,8 +122,9 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = this;
-        mMobonSDK = new MobonSDK(this, "YOUR_MEDIA_CODE"); //두번째 인자에 발급받은 미디어코드로 수정하세요.
+        mMobonSDK = new MobonSDK(this, "coronadocter"); //두번째 인자에 발급받은 미디어코드로 수정하세요.
         MobonSDK.init(getApplication());
+//        setMobonAdJson();
 
 //        mInterstitialAd = new InterstitialAd(this);
 //        mInterstitialAd.setAdUnitId(AD_TEST_KEY_INTERESTITIAL);
@@ -139,6 +140,8 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
         initView();
         moveToCommunityTab();
+        initInterstitialDialog();
+        iniMobonBanner();
 
 /*        mAdView = new AdView(this);
         mAdView.setAdUnitId(AD_TEST_KEY_BANNER);
@@ -255,41 +258,41 @@ public class MainActivity extends BaseActivity implements MainActivityView {
         }
     }
 
-//    void setMobonAdJson() {
-//        //두번째 인자 : 받을 광고의 개수
-//        //세번째 인자 : 발급받은 UnitId 로 교체하세요.
-//        //네번째 인자 : 광고 호출 callback Listener
-//        mMobonSDK.getMobonAdData(this, 1, "unitId", new iMobonAdCallback() {
-//            @Override
-//            public void onLoadedMobonAdData(boolean result, JSONObject objData, String errorStr) {
-//                if (result) {
-//                    try {
-//                        JSONObject jObj = objData.getJSONArray("client").getJSONObject(0);
-//                        JSONArray jArray = jObj.getJSONArray("data");
-//                        int length = jObj.getInt("length");
-//                        String AdType = jObj.getString("target");
-//                        for (int i = 0; i < length; i++) {
-//                            AdItem item = new AdItem(mContext, AdType, jArray.getJSONObject(i));
-//                            //광고 데이터 처리...
-//                        }
-//
-//
-//                    } catch (JSONException e) {
-//                        // TODO Auto-generated catch block
-//                        e.printStackTrace();
-//                    }
-//                } else {
-//                    if (errorStr.equals(Key.NOFILL)) {//광고 없음
-//                    } else {//통신 오류
-//                    }
-//                }
-//            }
-//        });
-//    }
+    void setMobonAdJson() {
+        //두번째 인자 : 받을 광고의 개수
+        //세번째 인자 : 발급받은 UnitId 로 교체하세요.
+        //네번째 인자 : 광고 호출 callback Listener
+        mMobonSDK.getMobonAdData(this, 1, "unitId", new iMobonAdCallback() {
+            @Override
+            public void onLoadedMobonAdData(boolean result, JSONObject objData, String errorStr) {
+                if (result) {
+                    try {
+                        JSONObject jObj = objData.getJSONArray("client").getJSONObject(0);
+                        JSONArray jArray = jObj.getJSONArray("data");
+                        int length = jObj.getInt("length");
+                        String AdType = jObj.getString("target");
+                        for (int i = 0; i < length; i++) {
+                            AdItem item = new AdItem(mContext, AdType, jArray.getJSONObject(i));
+                            //광고 데이터 처리...
+                        }
+
+
+                    } catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                } else {
+                    if (errorStr.equals(Key.NOFILL)) {//광고 없음
+                    } else {//통신 오류
+                    }
+                }
+            }
+        });
+    }
 
     void iniMobonBanner() {
 // 각 광고 뷰 당 발급받은 UNIT_ID 값을 필수로 넣어주어야 합니다.
-        rectBannerView = new RectBannerView(this, BannerType.BANNER_FILLx60).setBannerUnitId("");
+        rectBannerView = new RectBannerView(this, BannerType.BANNER_FILLx60).setBannerUnitId("287942");
 // 배너뷰의 리스너를 등록합니다.
         rectBannerView.setAdListener(new iMobonBannerCallback() {
             @Override
@@ -317,7 +320,7 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
     void initInterstitialDialog() {
         //전면 배너를 선언하시고 발급받은 UnitId 로 교체하세요.
-        interstitialDialog = new InterstitialDialog(this).setType(Key.INTERSTITIAL_TYPE.SMALL).setUnitId("").build();
+        interstitialDialog = new InterstitialDialog(this).setType(Key.INTERSTITIAL_TYPE.SMALL).setUnitId("287941").build();
         //전면 배너 리스너를 등록합니다.
         interstitialDialog.setAdListener(new iMobonInterstitialAdCallback() {
             @Override
