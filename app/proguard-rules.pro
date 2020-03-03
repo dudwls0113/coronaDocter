@@ -19,3 +19,15 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-dontwarn com.httpmodule.**
+-dontwarn com.imgmodule.**
+-keep class com.httpmodule.** { *; }
+-keep class com.imgmodule.** { *; }
+-keep public class com.mobon.**{
+ public *;
+}
+
+# mediation keep options
+-keep class com.kakao.adfit.** { *; }
+-keep class com.admixer.** { *; }
+-keep class com.criteo.** { *; }

@@ -14,10 +14,19 @@ android {
         versionName "1.2.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            proguardFile 'proguard-rules.pro'
+        }
+        debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            proguardFile 'proguard-rules.pro'
         }
     }
 }
@@ -85,6 +94,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads-identifier:16.0.0'
     implementation 'com.google.android.gms:play-services-base:16.0.1'
     implementation 'com.mobon.sdk:adapter-criteo:0.9.0.9'
+
+
+    implementation 'com.mobon.sdk:adapter-adfit:0.9.0.7'
+
 
     //Mobon SDK
     implementation fileTree(dir: 'libs', include: ['*.jar'])
