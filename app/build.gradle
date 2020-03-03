@@ -86,7 +86,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-base:16.0.1'
     implementation 'com.mobon.sdk:adapter-criteo:0.9.0.9'
 
-        //Mobon SDK
+    //Mobon SDK
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation('com.mobon.sdk:com.mobon.sdk:1.0.4.4') {
         transitive = true
